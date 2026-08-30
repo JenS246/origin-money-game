@@ -119,12 +119,16 @@ function addResultToMap(savedGuess = guess) {
   if (!mapReady || !savedGuess) return;
   clearMapResult();
   guess = savedGuess;
+  let answerLng = activeMoney.anchor.lng;
+  const longitudeDelta = answerLng - guess.lng;
+  if (longitudeDelta > 180) answerLng -= 360;
+  if (longitudeDelta < -180) answerLng += 360;
   guessMarker = L.marker([guess.lat, guess.lng], { icon: markerElement('guess-marker') })
     .addTo(map);
-  answerMarker = L.marker([activeMoney.anchor.lat, activeMoney.anchor.lng], { icon: markerElement('answer-marker') })
+  answerMarker = L.marker([activeMoney.anchor.lat, answerLng], { icon: markerElement('answer-marker') })
     .addTo(map);
   answerRoute = L.polyline(
-    [[guess.lat, guess.lng], [activeMoney.anchor.lat, activeMoney.anchor.lng]],
+    [[guess.lat, guess.lng], [activeMoney.anchor.lat, answerLng]],
     {
       color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
       weight: 2,
@@ -132,7 +136,7 @@ function addResultToMap(savedGuess = guess) {
       opacity: 0.9,
     },
   ).addTo(map);
-  const bounds = L.latLngBounds([guess.lat, guess.lng], [activeMoney.anchor.lat, activeMoney.anchor.lng]);
+  const bounds = L.latLngBounds([guess.lat, guess.lng], [activeMoney.anchor.lat, answerLng]);
   map.fitBounds(bounds, { padding: window.innerWidth < 760 ? [76, 76] : [180, 180], maxZoom: 5, animate: true, duration: 0.9 });
 }
 
@@ -170,7 +174,10 @@ function reveal(saved = null) {
   const distance = saved?.distance ?? distanceKm(savedGuess, activeMoney.anchor);
   const score = saved?.score ?? pointsForDistance(distance);
   lastResult = { distance, score, guess: savedGuess };
-  if (mode === 'daily' && !saved) saveDailyResult(utcDate(), lastResult);
+  if (mode === 'daily' && !saved) {
+    saveDailyResult(utcDate(), lastResult);
+    elements.startDaily.textContent = 'View today';
+  }
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
   elements.mapStatus.textContent = `${Math.round(distance).toLocaleString()} km away`;

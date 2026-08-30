@@ -14,6 +14,11 @@ test('distance matches the London to New York great-circle distance', () => {
   assert.ok(distance > 5550 && distance < 5600);
 });
 
+test('antipodal points are half an earth circumference apart', () => {
+  const distance = distanceKm({ lat: 0, lng: 0 }, { lat: 0, lng: 180 });
+  assert.ok(distance > 20_000 && distance < 20_020);
+});
+
 test('score is capped and decreases smoothly', () => {
   assert.equal(pointsForDistance(0), 5000);
   assert.ok(pointsForDistance(100) > pointsForDistance(1000));

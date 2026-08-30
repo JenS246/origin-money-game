@@ -40,6 +40,7 @@ async function request(api, params) {
 function plainText(value = '') {
   return value
     .replace(/<[^>]+>/g, ' ')
+    .replace(/[—–]/g, '-')
     .replace(/&nbsp;|&#160;/gi, ' ')
     .replace(/&amp;/gi, '&')
     .replace(/&quot;|&#34;/gi, '"')
