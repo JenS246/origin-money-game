@@ -67,7 +67,7 @@ function card(item, index) {
   link.href = item.articleUrl;
   link.target = '_blank';
   link.rel = 'noreferrer';
-  link.setAttribute('aria-label', `${item.title}. Open ANS record.`);
+  link.setAttribute('aria-label', `${item.title}. Open source record.`);
   link.setAttribute('aria-posinset', String(index + 1));
   link.setAttribute('aria-setsize', String(filtered.length));
 

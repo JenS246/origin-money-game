@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-08-30T15:17:00.683Z",
+  "source": "Bank of Canada Museum National Currency Collection",
+  "sourceSearch": "https://www.bankofcanadamuseum.ca/collection/search?adv=1&co=8",
+  "imageTerms": "https://www.bankofcanada.ca/terms/",
+  "admissionRules": [
+    "catalogued as a coin in the National Currency Collection",
+    "documented issue date from 1200 through 1925",
+    "specific mint or mint facility resolvable to an audited city already in the corpus",
+    "separate obverse and reverse collection photographs",
+    "non-generic object identity",
+    "not described as counterfeit, forgery, replica, reproduction, imitation, fantasy, modern copy, or questioned attribution",
+    "coin photographs only; Bank of Canada bank-note images are excluded because the Bank terms treat them separately"
+  ],
+  "listingPagesRead": 132,
+  "recordsDiscovered": 1584,
+  "recordsScanned": 1584,
+  "coinObjects": 1584,
+  "eligibleBeforeDeduplication": 257,
+  "accepted": 123,
+  "rejected": {
+    "missing_obverse_reverse_images": 614,
+    "missing_or_out_of_range_date": 692,
+    "missing_or_unresolved_specific_mint": 21
+  },
+  "excludedAfterValidation": {
+    "duplicate_title": 134
+  },
+  "unmatchedMints": [
+    {
+      "mint": "(missing)",
+      "count": 11
+    },
+    {
+      "mint": "Unknown",
+      "count": 8
+    },
+    {
+      "mint": "Amiens",
+      "count": 1
+    },
+    {
+      "mint": "Clermont",
+      "count": 1
+    }
+  ],
+  "combinedCorpus": 1587
+}

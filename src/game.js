@@ -290,7 +290,9 @@ function targetMethodLabel(method) {
 }
 
 function recordLabel(item) {
-  return item.id.startsWith('si-') ? 'Smithsonian record' : 'ANS record';
+  if (item.id.startsWith('si-')) return 'Smithsonian record';
+  if (item.id.startsWith('boc-')) return 'Bank of Canada Museum record';
+  return 'ANS record';
 }
 
 function populateResult(result) {
