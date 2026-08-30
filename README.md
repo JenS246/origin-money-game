@@ -77,7 +77,7 @@ The automated tests cover distance and scoring invariants. The game has also bee
 
 ## Design reference
 
-The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout, restrained cobalt accent, and in-place result reveal. The production interface was rebuilt as HTML, CSS, Leaflet, and sourced ANS object photography.
+The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout and in-place result reveal. The production interface uses a restrained archival gray-green palette, ledger-style display typography, HTML, CSS, Leaflet, and sourced ANS object photography.
 
 ## Important URLs and services
 

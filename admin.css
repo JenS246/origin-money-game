@@ -1,28 +1,28 @@
 :root {
   color-scheme: light dark;
-  --page: #f4f5f2;
-  --surface: #f9faf8;
-  --surface-strong: #e7e9e8;
-  --ink: #17191b;
-  --muted: #676c70;
-  --line: #d5d8d6;
-  --accent: #2457d6;
-  --image-stage: #e7e9e8;
-  --radius: 14px;
+  --page: #eef0e9;
+  --surface: #f7f8f2;
+  --surface-strong: #e1e5dc;
+  --ink: #18211c;
+  --muted: #667068;
+  --line: #cdd3c9;
+  --accent: #2e6652;
+  --image-stage: #e3e6de;
+  --radius: 10px;
   font-family: "Avenir Next", Avenir, "Segoe UI Variable", "Helvetica Neue", sans-serif;
   font-synthesis: none;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --page: #151719;
-    --surface: #1b1e20;
-    --surface-strong: #272b2e;
-    --ink: #f1f3f1;
-    --muted: #a4aaad;
-    --line: #34383b;
-    --accent: #6f92f3;
-    --image-stage: #dfe2df;
+    --page: #141a16;
+    --surface: #1b221d;
+    --surface-strong: #272f29;
+    --ink: #eef2eb;
+    --muted: #a3ada5;
+    --line: #374139;
+    --accent: #7eae96;
+    --image-stage: #dce1d9;
   }
 }
 
@@ -43,7 +43,7 @@ a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid 
   font-size: 13px;
 }
 .admin-header a:last-child { justify-self: end; color: var(--muted); }
-.admin-wordmark { justify-self: start; text-decoration: none; font-size: 19px; font-weight: 760; letter-spacing: -0.04em; }
+.admin-wordmark { justify-self: start; text-decoration: none; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 18px; font-weight: 700; letter-spacing: 0.12em; }
 .admin-main { height: calc(100dvh - 58px - env(safe-area-inset-top)); display: grid; grid-template-rows: auto minmax(0, 1fr); }
 .collection-controls {
   display: grid;
@@ -53,7 +53,7 @@ a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid 
   padding: 24px clamp(18px, 3vw, 44px);
   border-bottom: 1px solid var(--line);
 }
-.collection-controls h1 { margin: 0; font-size: clamp(28px, 3vw, 44px); line-height: 1; letter-spacing: -0.05em; }
+.collection-controls h1 { margin: 0; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: clamp(28px, 3vw, 44px); font-weight: 600; line-height: 1; letter-spacing: -0.035em; }
 .collection-controls p { margin: 7px 0 0; color: var(--muted); font-size: 13px; }
 .control-grid { display: grid; grid-template-columns: minmax(180px, 1.4fr) repeat(3, minmax(120px, 1fr)); gap: 10px; }
 .control-grid label { min-width: 0; display: grid; gap: 6px; }
@@ -94,10 +94,10 @@ a:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid 
 }
 .object-card:hover { border-color: color-mix(in srgb, var(--accent) 44%, var(--line)); }
 .object-images { min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; overflow: hidden; background: var(--line); }
-.object-images span { min-width: 0; display: grid; place-items: center; overflow: hidden; background: var(--image-stage); }
+.object-images span { min-width: 0; display: grid; place-items: center; overflow: hidden; background: repeating-linear-gradient(135deg, transparent 0 13px, rgb(24 33 28 / 0.018) 13px 14px), var(--image-stage); }
 .object-images img { display: block; width: 88%; height: 88%; object-fit: contain; mix-blend-mode: multiply; }
 .object-copy { min-width: 0; padding: 13px 14px; }
-.object-copy h2 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; letter-spacing: -0.025em; }
+.object-copy h2 { margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif; font-size: 15px; font-weight: 700; letter-spacing: -0.015em; }
 .object-copy p { margin: 6px 0 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
 .object-copy p:last-child { color: var(--accent); }
 .empty-collection { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--muted); }

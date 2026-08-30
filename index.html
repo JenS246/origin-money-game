@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#f4f5f2" />
+    <meta name="theme-color" content="#eef0e9" />
     <meta
       name="description"
       content="ORIGIN is a daily geography game about real coins and banknotes from the American Numismatic Society. Study both sides, then find where the object was made."
@@ -39,13 +39,12 @@
             </button>
             <span id="flip-label" class="flip-label" aria-hidden="true">Obverse / tap to flip</span>
           </div>
+          <div class="date-guess">
+            <input id="year-guess" aria-label="Estimated year" type="range" min="-500" max="2000" step="1" value="750" />
+            <output id="year-guess-value" for="year-guess">750</output>
+          </div>
           <div class="prompt-row">
             <p id="prompt-copy">Place its mint</p>
-            <div class="date-guess">
-              <label for="year-guess">Year</label>
-              <input id="year-guess" type="range" min="-500" max="2000" step="1" value="750" />
-              <output id="year-guess-value" for="year-guess">750</output>
-            </div>
             <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
           </div>
         </section>
