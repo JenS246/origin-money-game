@@ -14,6 +14,8 @@ test('every record has a playable target and auditable sources', () => {
     assert.ok(Number.isFinite(item.anchor.lat) && item.anchor.lat >= -90 && item.anchor.lat <= 90);
     assert.ok(Number.isFinite(item.anchor.lng) && item.anchor.lng >= -180 && item.anchor.lng <= 180);
     assert.ok(item.anchor.method);
+    assert.notEqual(item.anchor.method, 'representative_point');
+    assert.ok(Number.isFinite(item.anchor.radiusKm) && item.anchor.radiusKm >= 50 && item.anchor.radiusKm <= 1000);
     assert.match(item.articleUrl, /^https:\/\/en\.wikipedia\.org\/wiki\//);
     assert.match(item.image.url, /^https:\/\/upload\.wikimedia\.org\//);
     assert.match(item.image.filePage, /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);

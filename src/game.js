@@ -1,10 +1,11 @@
 import { MONEY } from './money.generated.js';
-import { distanceBand, distanceKm, pointsForDistance } from './scoring.js';
+import { distanceBand, distanceFromAcceptedArea, pointsForDistance } from './scoring.js';
 import { getDailyResult, getStats, saveDailyResult } from './storage.js';
 
 const LEAFLET_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js';
 const LAUNCH_DATE = Date.UTC(2026, 7, 29);
 const DAY_MS = 86_400_000;
+const SCORE_MODEL = 2;
 
 const elements = {
   home: document.querySelector('#home-screen'),
@@ -39,6 +40,7 @@ let mapReady = false;
 let guessMarker;
 let answerMarker;
 let answerRoute;
+let answerArea;
 let guess = null;
 let activeMoney = null;
 let mode = 'daily';
@@ -92,9 +94,11 @@ function clearMapResult() {
   if (guessMarker && map) map.removeLayer(guessMarker);
   if (answerMarker && map) map.removeLayer(answerMarker);
   if (answerRoute && map) map.removeLayer(answerRoute);
+  if (answerArea && map) map.removeLayer(answerArea);
   guessMarker = null;
   answerMarker = null;
   answerRoute = null;
+  answerArea = null;
 }
 
 function placeGuess(lngLat) {
@@ -127,6 +131,14 @@ function addResultToMap(savedGuess = guess) {
     .addTo(map);
   answerMarker = L.marker([activeMoney.anchor.lat, answerLng], { icon: markerElement('answer-marker') })
     .addTo(map);
+  answerArea = L.circle([activeMoney.anchor.lat, answerLng], {
+    radius: activeMoney.anchor.radiusKm * 1000,
+    color: getComputedStyle(document.documentElement).getPropertyValue('--accent').trim(),
+    weight: 1,
+    fillOpacity: 0.08,
+    opacity: 0.55,
+    interactive: false,
+  }).addTo(map);
   answerRoute = L.polyline(
     [[guess.lat, guess.lng], [activeMoney.anchor.lat, answerLng]],
     {
@@ -137,6 +149,7 @@ function addResultToMap(savedGuess = guess) {
     },
   ).addTo(map);
   const bounds = L.latLngBounds([guess.lat, guess.lng], [activeMoney.anchor.lat, answerLng]);
+  bounds.extend(answerArea.getBounds());
   map.fitBounds(bounds, { padding: window.innerWidth < 760 ? [76, 76] : [180, 180], maxZoom: 5, animate: true, duration: 0.9 });
 }
 
@@ -145,7 +158,8 @@ function targetMethodLabel(method) {
     mint_city: 'mint city',
     issuing_city: 'issuing city',
     issuing_authority_city: 'issuing authority city',
-    representative_point: 'representative point',
+    printing_facility: 'printing facility',
+    issuing_region: 'issuing region',
   }[method] || 'documented origin point';
 }
 
@@ -157,7 +171,7 @@ function populateResult(result) {
     : `${activeMoney.issuer}, ${activeMoney.anchor.label}`;
   elements.answerTitle.textContent = activeMoney.title;
   elements.blurb.textContent = activeMoney.blurb;
-  elements.targetNote.textContent = `Scored to the ${targetMethodLabel(activeMoney.anchor.method)}.`;
+  elements.targetNote.textContent = `Accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
   elements.article.href = activeMoney.articleUrl;
   elements.imageCredit.href = activeMoney.image.filePage;
   elements.imageCredit.title = `${activeMoney.image.author}, ${activeMoney.image.license}`;
@@ -171,16 +185,21 @@ function reveal(saved = null) {
   if (revealed || (!guess && !saved)) return;
   revealed = true;
   const savedGuess = saved?.guess || guess;
-  const distance = saved?.distance ?? distanceKm(savedGuess, activeMoney.anchor);
-  const score = saved?.score ?? pointsForDistance(distance);
-  lastResult = { distance, score, guess: savedGuess };
-  if (mode === 'daily' && !saved) {
+  const measured = distanceFromAcceptedArea(savedGuess, activeMoney.anchor);
+  const canReuseSavedScore = saved?.model === SCORE_MODEL;
+  const distance = canReuseSavedScore ? saved.distance : measured.distance;
+  const rawDistance = canReuseSavedScore ? saved.rawDistance : measured.rawDistance;
+  const score = canReuseSavedScore ? saved.score : pointsForDistance(distance);
+  lastResult = { model: SCORE_MODEL, distance, rawDistance, score, guess: savedGuess };
+  if (mode === 'daily' && (!saved || saved.model !== SCORE_MODEL)) {
     saveDailyResult(utcDate(), lastResult);
     elements.startDaily.textContent = 'View today';
   }
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
-  elements.mapStatus.textContent = `${Math.round(distance).toLocaleString()} km away`;
+  elements.mapStatus.textContent = distance < 1
+    ? 'Inside the accepted area'
+    : `${Math.round(distance).toLocaleString()} km outside the accepted area`;
   populateResult(lastResult);
   addResultToMap(savedGuess);
   updateStats();
@@ -196,7 +215,7 @@ function resetRound(item) {
   elements.mobileSubmit.removeAttribute('style');
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
-  elements.prompt.textContent = 'Place its origin';
+  elements.prompt.textContent = 'Place its issuing area';
   elements.mapStatus.textContent = mapReady ? 'Tap anywhere on the map' : 'Loading map';
   setImage(item);
   if (mapReady) map.setView([18, 8], window.innerWidth < 760 ? 1 : 2, { animate: false });

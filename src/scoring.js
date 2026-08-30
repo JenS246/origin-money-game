@@ -15,6 +15,15 @@ export function distanceKm(from, to) {
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(haversine));
 }
 
+export function distanceFromAcceptedArea(from, anchor) {
+  const rawDistance = distanceKm(from, anchor);
+  const radius = Number.isFinite(anchor.radiusKm) ? Math.max(0, anchor.radiusKm) : 0;
+  return {
+    rawDistance,
+    distance: Math.max(0, rawDistance - radius),
+  };
+}
+
 export function pointsForDistance(kilometers) {
   if (!Number.isFinite(kilometers) || kilometers < 0) return 0;
   if (kilometers < 1) return 5000;

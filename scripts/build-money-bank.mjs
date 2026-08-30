@@ -5,6 +5,7 @@ import process from 'node:process';
 const ROOT = path.resolve(import.meta.dirname, '..');
 const curatedSeeds = JSON.parse(await readFile(path.join(ROOT, 'data/seeds.json'), 'utf8'));
 const discoveredSeeds = JSON.parse(await readFile(path.join(ROOT, 'data/wikidata-seeds.json'), 'utf8'));
+const anchorOverrides = JSON.parse(await readFile(path.join(ROOT, 'data/anchor-overrides.json'), 'utf8'));
 const blockedArticles = new Set([
   'Achaemenid coinage',
   'Banknotes of the Ukrainian hryvnia',
@@ -14,10 +15,21 @@ const blockedArticles = new Set([
   'Goryeo coinage',
   'Israeli new shekel',
   'Mogadishu currency',
+  'Manghir',
+  'Tieqian',
   'Ukrainian Archangel Michael coins',
 ]);
 const seedByArticle = new Map();
 for (const seed of [...discoveredSeeds, ...curatedSeeds]) seedByArticle.set(seed.article, seed);
+for (const [article, override] of Object.entries(anchorOverrides)) {
+  const seed = seedByArticle.get(article);
+  if (!seed) throw new Error(`Anchor override has no seed: ${article}`);
+  seedByArticle.set(article, {
+    ...seed,
+    ...override,
+    anchor: { ...seed.anchor, ...override.anchor },
+  });
+}
 const seeds = [...seedByArticle.values()].filter((seed) => !blockedArticles.has(seed.article));
 const WIKIPEDIA_API = 'https://en.wikipedia.org/w/api.php';
 const COMMONS_API = 'https://commons.wikimedia.org/w/api.php';
@@ -145,7 +157,16 @@ const money = pageResults.flatMap(({ seed, page }) => {
     type: itemType(page.title),
     issuer: seed.issuer,
     year: seed.year || '',
-    anchor: seed.anchor,
+    anchor: {
+      ...seed.anchor,
+      radiusKm: seed.anchor.radiusKm ?? {
+        mint_city: 100,
+        issuing_city: 180,
+        issuing_authority_city: 500,
+        printing_facility: 80,
+        issuing_region: 400,
+      }[seed.anchor.method] ?? 250,
+    },
     blurb: firstSentence(page.extract),
     articleUrl: page.fullurl,
     wikidataUrl: seed.wikidataUrl || '',

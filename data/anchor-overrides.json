@@ -1,0 +1,19 @@
+{
+  "10,000 yen note": {"issuer":"Japan","anchor":{"lat":35.6762,"lng":139.6503,"label":"Tokyo","method":"issuing_authority_city","radiusKm":350}},
+  "1804 dollar": {"issuer":"United States","anchor":{"lat":39.9526,"lng":-75.1652,"label":"Philadelphia","method":"mint_city","radiusKm":100}},
+  "50 yen note": {"issuer":"Japan","anchor":{"lat":35.6762,"lng":139.6503,"label":"Tokyo","method":"issuing_authority_city","radiusKm":350}},
+  "5000 yen note": {"issuer":"Japan","anchor":{"lat":35.6762,"lng":139.6503,"label":"Tokyo","method":"issuing_authority_city","radiusKm":350}},
+  "Bangladeshi fifty-poysha coin": {"issuer":"Bangladesh","anchor":{"lat":23.8103,"lng":90.4125,"label":"Dhaka","method":"issuing_authority_city","radiusKm":300}},
+  "Battle of Antietam half dollar": {"issuer":"United States","anchor":{"lat":39.9526,"lng":-75.1652,"label":"Philadelphia","method":"mint_city","radiusKm":100}},
+  "Bolskan": {"issuer":"Bolskan","anchor":{"lat":42.1401,"lng":-0.4089,"label":"Huesca","method":"mint_city","radiusKm":80}},
+  "Chinese customs gold unit": {"issuer":"Republic of China","anchor":{"lat":31.2304,"lng":121.4737,"label":"Shanghai","method":"issuing_authority_city","radiusKm":450}},
+  "Del Monte note": {"issuer":"United States","anchor":{"lat":32.7555,"lng":-97.3308,"label":"Fort Worth","method":"printing_facility","radiusKm":80}},
+  "Denarius of L. Censorinus": {"issuer":"Roman Republic","anchor":{"lat":41.9028,"lng":12.4964,"label":"Rome","method":"mint_city","radiusKm":120}},
+  "Duit": {"issuer":"Dutch Republic","anchor":{"lat":52.1326,"lng":5.2913,"label":"Netherlands","method":"issuing_region","radiusKm":220}},
+  "Guter Groschen": {"issuer":"Northern German states","anchor":{"lat":52.3759,"lng":9.732,"label":"Northern Germany","method":"issuing_region","radiusKm":350}},
+  "Hawaii overprint note": {"issuer":"United States","anchor":{"lat":21.3099,"lng":-157.8581,"label":"Hawaii","method":"issuing_region","radiusKm":280}},
+  "Indian 10-rupee note": {"issuer":"India","anchor":{"lat":19.076,"lng":72.8777,"label":"Mumbai","method":"issuing_authority_city","radiusKm":700}},
+  "Louis d'or": {"issuer":"Kingdom of France","anchor":{"lat":48.8566,"lng":2.3522,"label":"Paris","method":"mint_city","radiusKm":120}},
+  "Tribute penny": {"issuer":"Roman Empire","anchor":{"lat":41.9028,"lng":12.4964,"label":"Rome","method":"mint_city","radiusKm":150}},
+  "Wendenthaler": {"issuer":"Lüneburg","anchor":{"lat":53.2464,"lng":10.4115,"label":"Lüneburg","method":"mint_city","radiusKm":80}}
+}

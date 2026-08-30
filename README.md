@@ -1,6 +1,6 @@
 # ORIGIN
 
-ORIGIN is a daily geography game about real money. A player studies a coin or banknote image, places one pin on a world map, and receives a score based on the great-circle distance to the documented origin point.
+ORIGIN is a daily geography game about real money. A player studies a coin or banknote image, places one pin on a world map, and receives a score based on distance from a documented accepted area.
 
 The interface is deliberately spare: one specimen, one map, one decision. After the guess, the map connects the player's pin to the answer and a compact result sheet explains the object, target method, source, and image license.
 
@@ -9,9 +9,9 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - One UTC-dated puzzle is shared by every player each day.
 - Practice mode draws a different random specimen from the same checked-in corpus.
 - Pins can be moved or dragged until the player selects **Lock pin**.
-- Distance uses the haversine formula. Score starts at 5,000 and follows a smooth exponential distance curve.
-- Each target records its meaning as `mint_city`, `issuing_city`, `issuing_authority_city`, or `representative_point`.
-- Results show the target method instead of pretending every historical currency has one self-evident exact origin.
+- Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the score starts at 5,000 and follows a smooth exponential distance curve.
+- Each target records its meaning as `mint_city`, `issuing_city`, `issuing_authority_city`, `printing_facility`, or `issuing_region`.
+- Results show the target method and tolerance instead of pretending every historical currency has one self-evident exact origin.
 - Daily results, averages, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
 - Share text includes only the edition, score, distance, and distance band. It never reveals the answer.
 
@@ -19,14 +19,14 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 
 The shipped game does not scrape Wikipedia at runtime. `npm run data:build` performs a build-time ingestion:
 
-1. Read the hand-curated candidates in `data/seeds.json` and candidates discovered through the checked-in Wikidata SPARQL query.
+1. Read the hand-curated candidates in `data/seeds.json`, candidates discovered through the checked-in Wikidata SPARQL query, and reviewed corrections in `data/anchor-overrides.json`.
 2. Request the English Wikipedia PageImages and extracts APIs in batches.
 3. Resolve each selected file through the Wikimedia Commons ImageInfo API.
 4. Reject missing, small, non-raster, diagram, logo, montage, and known aggregate images.
 5. Write `src/money.generated.js` with article links, display thumbnails, author, license, license URL, Commons file page, origin coordinates, and target method.
 6. Write `data/quality-report.json` so the accepted/rejected counts are auditable.
 
-The current corpus contains 39 verified playable records selected from 104 modern and historical candidates. The browser uses committed metadata, so gameplay does not depend on live API availability. Display images remain hosted by Wikimedia Commons and retain their per-file credit and license.
+The browser uses committed metadata, so gameplay does not depend on live API availability. Display images remain hosted by Wikimedia Commons and retain their per-file credit and license. Image metadata is never used to infer the answer location.
 
 To refresh the corpus:
 
@@ -84,4 +84,3 @@ The generated composition study that preceded implementation is preserved at `do
 ## Licensing
 
 Application code is MIT licensed. Wikipedia extracts are available under CC BY-SA. Wikimedia Commons media has per-file licensing; ORIGIN displays the author and license with a link to the source file on every result.
-

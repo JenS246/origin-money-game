@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { distanceKm, pointsForDistance } from '../src/scoring.js';
+import { distanceFromAcceptedArea, distanceKm, pointsForDistance } from '../src/scoring.js';
 
 test('distance is zero for the same point', () => {
   assert.equal(distanceKm({ lat: 10, lng: 20 }, { lat: 10, lng: 20 }), 0);
@@ -24,4 +24,13 @@ test('score is capped and decreases smoothly', () => {
   assert.ok(pointsForDistance(100) > pointsForDistance(1000));
   assert.ok(pointsForDistance(1000) > pointsForDistance(5000));
   assert.equal(pointsForDistance(-1), 0);
+});
+
+test('accepted areas forgive distance inside their documented radius', () => {
+  const anchor = { lat: 0, lng: 0, radiusKm: 150 };
+  const inside = distanceFromAcceptedArea({ lat: 1, lng: 0 }, anchor);
+  const outside = distanceFromAcceptedArea({ lat: 3, lng: 0 }, anchor);
+  assert.equal(inside.distance, 0);
+  assert.ok(inside.rawDistance > 100);
+  assert.ok(outside.distance > 180 && outside.distance < 190);
 });

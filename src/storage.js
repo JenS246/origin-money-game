@@ -31,7 +31,9 @@ export function getDailyResult(date) {
 
 export function saveDailyResult(date, result) {
   const state = read();
-  if (!state.results[date]) {
+  const previousModel = Number(state.results[date]?.model) || 0;
+  const nextModel = Number(result.model) || 0;
+  if (!state.results[date] || nextModel > previousModel) {
     state.results[date] = result;
     write(state);
   }

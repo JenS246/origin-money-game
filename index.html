@@ -22,7 +22,7 @@
         <button id="home-button" class="wordmark" type="button" aria-label="Go to home">ORIGIN</button>
         <div id="edition-label" class="edition-label" aria-live="polite"></div>
         <nav class="header-actions" aria-label="Game menu">
-          <button class="text-button" type="button" data-open-dialog="how-to-dialog">How to play</button>
+          <button class="text-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">How</button>
           <button class="text-button" type="button" data-open-dialog="stats-dialog">Stats</button>
         </nav>
       </header>
@@ -34,7 +34,7 @@
             <img id="money-image" class="money-image" alt="" decoding="async" />
           </div>
           <div class="prompt-row">
-            <p id="prompt-copy">Place its origin</p>
+            <p id="prompt-copy">Place its issuing area</p>
             <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
           </div>
         </section>
@@ -53,7 +53,7 @@
           </div>
           <div class="result-number">
             <strong id="distance-value">0</strong>
-            <span>km</span>
+            <span>km off</span>
           </div>
           <div class="result-number score-number">
             <strong id="score-value">0</strong>
@@ -101,9 +101,9 @@
         <ol class="rules-list">
           <li>Study the currency image. Labels, portraits, scripts, and symbols are all clues.</li>
           <li>Place one pin where you think it was issued. You can move it before locking.</li>
-          <li>Score up to 5,000 points based on distance from the documented target.</li>
+          <li>Score up to 5,000 points based on distance outside the documented accepted area.</li>
         </ol>
-        <p class="dialog-note">Targets use a mint, issuing authority city, or representative point. The method is shown after each guess.</p>
+        <p class="dialog-note">The photo comes from Wikimedia Commons, but its file location is never used as the answer. Each target is reviewed as a mint, printing facility, issuing authority city, or issuing region. The method and tolerance are shown after each guess.</p>
       </form>
     </dialog>
 
