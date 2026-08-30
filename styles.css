@@ -73,7 +73,7 @@
   .home-map {
     filter: invert(1) grayscale(1) contrast(0.92);
     mix-blend-mode: screen;
-    opacity: 0.07;
+    opacity: 0.125;
   }
 }
 
@@ -124,47 +124,19 @@ button:focus-visible, a:focus-visible {
 }
 .wordmark-coin {
   position: relative;
-  flex: 0 0 30px;
-  width: 30px;
-  height: 30px;
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
   display: inline-block;
   margin-right: 0.12em;
-  border: 1px solid var(--coin-copper-dark);
+  border: 0;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--coin-copper-light) 72%, transparent) 0 5%, transparent 6%),
-    conic-gradient(from 32deg,
-      var(--coin-copper-dark),
-      var(--coin-copper) 21%,
-      var(--coin-copper-light) 43%,
-      color-mix(in srgb, var(--coin-copper) 78%, var(--coin-copper-dark)) 70%,
-      var(--coin-copper));
-  box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--coin-copper-light) 48%, transparent),
-    inset 0 0 0 5px color-mix(in srgb, var(--coin-copper) 76%, var(--coin-copper-dark)),
-    inset 1px 2px 2px color-mix(in srgb, var(--coin-copper-light) 44%, transparent),
-    0 1px 2px color-mix(in srgb, var(--ink) 24%, transparent);
-  transform: rotate(-7deg);
+  background: url("assets/origin-coin.webp") center / contain no-repeat;
+  filter: brightness(1.12) saturate(1.1) contrast(1.07) drop-shadow(0 2px 2px color-mix(in srgb, var(--ink) 30%, transparent));
+  transform: rotate(-5deg);
 }
-.wordmark-coin::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 7px;
-  height: 7px;
-  border: 1px solid var(--coin-copper-dark);
-  background: var(--page);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--coin-copper-light) 32%, transparent);
-  transform: translate(-50%, -50%);
-}
-.wordmark-coin::after {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border: 1px solid color-mix(in srgb, var(--coin-copper-light) 54%, transparent);
-  border-radius: 50%;
-}
+.wordmark-coin::before,
+.wordmark-coin::after { content: none; }
 .edition-label {
   color: var(--ink);
   font-family: "Newsreader", Georgia, serif;
@@ -444,9 +416,9 @@ button:focus-visible, a:focus-visible {
   position: absolute;
   inset: -9%;
   background: url("assets/home-world-map.webp") center / cover no-repeat;
-  filter: grayscale(1) contrast(1.1);
+  filter: grayscale(1) contrast(1.28);
   mix-blend-mode: multiply;
-  opacity: 0.095;
+  opacity: 0.16;
   transform: scale(1.045) rotate(-0.35deg);
   transform-origin: 50% 48%;
   will-change: transform;
@@ -474,27 +446,16 @@ button:focus-visible, a:focus-visible {
   position: absolute;
   left: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
-  border: 1px solid var(--coin-copper-dark);
+  width: 24px;
+  height: 24px;
+  border: 0;
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 33% 27%, var(--coin-copper-light) 0 7%, transparent 8%),
-    conic-gradient(from 28deg, var(--coin-copper-dark), var(--coin-copper) 28%, var(--coin-copper-light) 48%, var(--coin-copper-dark) 76%, var(--coin-copper));
-  box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--coin-copper-light) 42%, transparent),
-    inset 0 0 0 5px color-mix(in srgb, var(--coin-copper) 74%, var(--coin-copper-dark)),
-    0 3px 7px color-mix(in srgb, var(--ink) 24%, transparent);
+  background: url("assets/origin-coin.webp") center / contain no-repeat;
+  filter: brightness(1.1) saturate(1.1) contrast(1.08) drop-shadow(0 3px 4px color-mix(in srgb, var(--ink) 34%, transparent));
   opacity: 0;
   will-change: transform, opacity;
 }
-.home-journey-coin::after {
-  content: "";
-  position: absolute;
-  inset: 5px;
-  border: 1px solid color-mix(in srgb, var(--coin-copper-light) 58%, transparent);
-  border-radius: 50%;
-}
+.home-journey-coin::after { content: none; }
 .home-copy { position: relative; z-index: 1; align-self: center; }
 .home-copy h1 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-size: clamp(40px, 3.8vw, 58px); line-height: 1.01; letter-spacing: -0.04em; font-weight: 600; }
 .home-title-flip {
@@ -586,24 +547,14 @@ button:focus-visible, a:focus-visible {
   width: 0.82em;
   aspect-ratio: 1;
   margin-right: 0.09em;
-  border: 1px solid #6f3724;
+  border: 0;
   border-radius: 50%;
-  background: conic-gradient(from 32deg, #6f3724, #b66f42 24%, #d69a66 47%, #7d412b 72%, #b66f42);
-  box-shadow: inset 0 0 0 2px rgb(244 197 154 / 28%), inset 0 0 0 4px #8f5032;
+  background: url("assets/origin-coin.webp") center / contain no-repeat;
+  filter: brightness(1.1) saturate(1.1) contrast(1.07) drop-shadow(0 2px 2px rgb(24 33 28 / 28%));
   vertical-align: -0.1em;
   transform: rotate(-7deg);
 }
-.share-wordmark-coin::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 20%;
-  aspect-ratio: 1;
-  border: 1px solid #6f3724;
-  background: #e8ece5;
-  transform: translate(-50%, -50%);
-}
+.share-wordmark-coin::before { content: none; }
 
 @media (min-width: 761px) and (max-width: 1100px) {
   .result-panel { grid-template-columns: var(--specimen-width) minmax(0, 1fr); align-items: start; }
@@ -656,13 +607,13 @@ button:focus-visible, a:focus-visible {
 }
 @keyframes home-coin-journey {
   0% { opacity: 0; transform: translate3d(-7vw, 70dvh, 0) rotate(0deg); }
-  4% { opacity: 0.72; }
+  4% { opacity: 0.84; }
   20% { transform: translate3d(13vw, 58dvh, 0) rotate(210deg); }
   36% { transform: translate3d(34vw, 71dvh, 0) rotate(420deg); }
   52% { transform: translate3d(52vw, 57dvh, 0) rotate(610deg); }
   68% { transform: translate3d(69vw, 31dvh, 0) rotate(820deg); }
   83% { transform: translate3d(85vw, 43dvh, 0) rotate(1020deg); }
-  96% { opacity: 0.72; transform: translate3d(105vw, 62dvh, 0) rotate(1240deg); }
+  96% { opacity: 0.84; transform: translate3d(105vw, 62dvh, 0) rotate(1240deg); }
   100% { opacity: 0; transform: translate3d(108vw, 62dvh, 0) rotate(1280deg); }
 }
 
@@ -683,8 +634,7 @@ button:focus-visible, a:focus-visible {
     padding: env(safe-area-inset-top) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
   }
   .wordmark { font-size: 22px; }
-  .wordmark-coin { flex-basis: 26px; width: 26px; height: 26px; }
-  .wordmark-coin::before { width: 6px; height: 6px; }
+  .wordmark-coin { flex-basis: 28px; width: 28px; height: 28px; }
   .edition-label { display: none; }
   .header-actions { gap: 0; }
   .text-button { min-height: 44px; padding: 0 9px; font-size: 16px; }

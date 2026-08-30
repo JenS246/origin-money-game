@@ -7,6 +7,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
   const homeMap = await readFile(new URL('../assets/home-world-map.webp', import.meta.url));
+  const originCoin = await readFile(new URL('../assets/origin-coin.webp', import.meta.url));
   assert.match(html, /Flip the currency/);
   assert.match(html, /Guess its origin/);
   assert.match(html, /Pin the currency to its place of origin/);
@@ -19,8 +20,10 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.doesNotMatch(`${html}\n${game}`, /Flip the coin|View today|Play today/);
   assert.match(styles, /--coin-copper:/);
   assert.match(styles, /home-world-map\.webp/);
+  assert.match(styles, /origin-coin\.webp/);
   assert.match(styles, /@media \(prefers-reduced-motion: no-preference\)/);
   assert.ok(homeMap.byteLength < 100_000, 'the atmospheric map should stay lightweight');
+  assert.ok(originCoin.byteLength < 50_000, 'the photographic coin mark should stay lightweight');
 });
 
 test('results use the branded share card instead of the native share sheet', async () => {

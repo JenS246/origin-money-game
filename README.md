@@ -105,4 +105,6 @@ The generated composition study that preceded implementation is preserved at `do
 
 Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. Bank of Canada Museum coin photographs are used with attribution under the Bank's website reuse terms; bank-note images from that source are excluded. Admitted British Museum photographs are credited to the Trustees and linked to image pages carrying the CC BY-NC-SA 4.0 notice, so those photographs are for non-commercial use and remain under that license. Every result links to its source record, image terms, and source institution.
 
+The ORIGIN wordmark and route marker use a cropped image of an [1876 Canadian cent](https://numismatics.org/collection/0000.999.30169) from the American Numismatic Society, marked as public domain.
+
 The bundled Newsreader and IBM Plex Sans Condensed fonts are redistributed under the SIL Open Font License. Their license texts are included in `assets/fonts/`.
