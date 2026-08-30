@@ -299,6 +299,7 @@ function targetMethodLabel(method) {
 function recordLabel(item) {
   if (item.id.startsWith('si-')) return 'Smithsonian record';
   if (item.id.startsWith('boc-')) return 'Bank of Canada Museum record';
+  if (item.id.startsWith('bm-')) return 'British Museum record';
   return 'ANS record';
 }
 

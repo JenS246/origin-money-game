@@ -1,0 +1,286 @@
+{
+  "generatedAt": "2026-08-30T16:49:07.116Z",
+  "source": "British Museum, Money and Medals",
+  "sourceCollection": "https://www.britishmuseum.org/collection/search?object=coin",
+  "sourceSearchApi": "https://www.britishmuseum.org/api/_search",
+  "imageTerms": "https://www.britishmuseum.org/terms-use/copyright-and-permissions/images-and-photography",
+  "license": "CC BY-NC-SA 4.0",
+  "sourceLimit": 750,
+  "perMintVarietyCap": 20,
+  "discoveryMethod": "Top production-place facets in 19 date bands are matched to the existing audited mint gazetteer, then queried directly. Detail records are deterministically interleaved across date bands.",
+  "admissionRules": [
+    "catalogued only as a coin by the British Museum Department of Money and Medals",
+    "documented production date from 500 BCE through 1925 with a range no wider than 100 years",
+    "specific production place resolvable to an audited mint-city coordinate already in the corpus",
+    "documented denomination and non-generic issue identity",
+    "separate obverse and reverse descriptions",
+    "an unambiguous pair of separate obverse and reverse photographs, excluding composites, contact sheets, group images, and plural-side assets",
+    "both side photographs explicitly marked public and free with no warning and credited to the Trustees",
+    "photographs presented under the Museum image page CC BY-NC-SA 4.0 notice",
+    "not described as counterfeit, forged, replica, reproduction, modern copy, electrotype, imitation, fantasy, false, or fake",
+    "deduplicated against existing issues and capped per mint for geographic variety"
+  ],
+  "dateBands": [
+    "500-401-bce",
+    "400-301-bce",
+    "300-201-bce",
+    "200-101-bce",
+    "100-1-bce",
+    "1-199",
+    "200-399",
+    "400-599",
+    "600-799",
+    "800-999",
+    "1000-1199",
+    "1200-1399",
+    "1400-1499",
+    "1500-1599",
+    "1600-1699",
+    "1700-1799",
+    "1800-1849",
+    "1850-1899",
+    "1900-1925"
+  ],
+  "dateBandQueries": 19,
+  "placeFacetsMatched": 196,
+  "targetedPlaceQueries": 196,
+  "listingPagesRead": 504,
+  "searchHitsSeen": 42403,
+  "candidatesDiscovered": 3051,
+  "detailRecordsScanned": 3051,
+  "eligibleBeforeSelection": 807,
+  "rejectedBeforeDetail": {
+    "missing_paired_free_public_images": 35659,
+    "not_exactly_one_coin_object_type": 1579,
+    "missing_unique_object_id": 49,
+    "missing_date_or_production_place": 47
+  },
+  "rejected": {
+    "missing_imprecise_or_out_of_range_date": 125,
+    "missing_unambiguous_paired_licensed_side_images": 643,
+    "missing_denomination_or_museum_number": 776,
+    "missing_obverse_or_reverse_description": 530,
+    "missing_or_unresolved_specific_mint": 133,
+    "not_money_and_medals": 9,
+    "inauthentic_or_non_currency_object": 27,
+    "not_catalogued_as_a_coin": 1
+  },
+  "excludedAfterValidation": {
+    "duplicate_issue_title": 333,
+    "per_mint_variety_cap": 347
+  },
+  "accepted": 127,
+  "acceptedMints": 19,
+  "coins": 127,
+  "unmatchedProductionPlaces": [
+    {
+      "place": "Minted in: India (historic - pre-1947)",
+      "count": 13
+    },
+    {
+      "place": "Minted in: Gandhara (historic - Pakistan)",
+      "count": 11
+    },
+    {
+      "place": "Minted in: England",
+      "count": 9
+    },
+    {
+      "place": "Minted in: Lycia (historic)",
+      "count": 9
+    },
+    {
+      "place": "Minted in: Smyrna (historic)",
+      "count": 7
+    },
+    {
+      "place": "Minted in: Afghanistan, Principal mint (Phase II) (Exact location of principal mint uncertain)",
+      "count": 6
+    },
+    {
+      "place": "Minted in: Knidos (historic)",
+      "count": 6
+    },
+    {
+      "place": "Minted in: Ticinum (historic) (possibly)",
+      "count": 5
+    },
+    {
+      "place": "Minted in: Bactria",
+      "count": 4
+    },
+    {
+      "place": "Minted in: Ilium (historic)",
+      "count": 4
+    },
+    {
+      "place": "Minted in: Adramyteum (historic)",
+      "count": 3
+    },
+    {
+      "place": "Minted in: Afghanistan",
+      "count": 3
+    },
+    {
+      "place": "Minted in: Afghanistan, Principal mint (Phase I) (Exact location of principal mint uncertain)",
+      "count": 3
+    },
+    {
+      "place": "Minted in: Metapontum (historic - city) (possibly)",
+      "count": 3
+    },
+    {
+      "place": "Minted in: Pergamon (historic)",
+      "count": 3
+    },
+    {
+      "place": "Minted in: Antiochia ad Orontem (historic)",
+      "count": 2
+    },
+    {
+      "place": "Minted in: Apollonia Mordiaeum (historic) (?)",
+      "count": 2
+    },
+    {
+      "place": "Minted in: Astyra (historic - Mysia)",
+      "count": 2
+    },
+    {
+      "place": "Minted in: Bursa",
+      "count": 2
+    },
+    {
+      "place": "Minted in: Edirne (city)",
+      "count": 2
+    },
+    {
+      "place": "Minted in: Patara (historic)",
+      "count": 2
+    },
+    {
+      "place": "Minted in: ST",
+      "count": 2
+    },
+    {
+      "place": "Minted in: AHM",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Antandrus (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Asia (historic - Roman Province)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Attuda (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Ayathuluq (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Caria (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Cilicia (historic) (uncertain)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Clazomenae (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Cologne (city) (Gallic empire mint II)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Cologne (city) (Possibly - Gallic empire mint II)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Damascus (minted AH 598)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Elaea",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Gandhara (historic - Pakistan), Phase II (Exact location of mint uncertain)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Heraclea Pontica (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Italy (Brundisium and Rome?)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Konya (city)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Mathura",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Mayafarikin (historic) (minted AH 586)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Merv",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Myriandrus (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Nihavand",
+      "count": 1
+    },
+    {
+      "place": "Minted in: NY",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Nysa (historic - Lydia)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Ravenna (city) (minted in Classe)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Seleucia ad Hedyphon (historic)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: SK",
+      "count": 1
+    },
+    {
+      "place": "Minted in: ST (STHLY)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Trier (Gallic empire mint I)",
+      "count": 1
+    },
+    {
+      "place": "Minted in: Trier (probably (Gallic Mint I))",
+      "count": 1
+    },
+    {
+      "place": "Minted in: WH",
+      "count": 1
+    }
+  ],
+  "combinedCorpus": 1714
+}

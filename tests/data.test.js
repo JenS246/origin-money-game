@@ -10,6 +10,7 @@ test('the shipped corpus is large enough for varied play', () => {
   assert.ok(MONEY.filter((item) => item.type === 'banknote').length >= 8);
   assert.ok(MONEY.filter((item) => item.id.startsWith('si-')).length >= 10);
   assert.ok(MONEY.filter((item) => item.id.startsWith('boc-')).length >= 100);
+  assert.ok(MONEY.filter((item) => item.id.startsWith('bm-')).length >= 100);
   assert.ok(new Set(MONEY.map((item) => item.anchor.label)).size >= 40);
 });
 
@@ -37,13 +38,13 @@ test('every record has a playable target and auditable sources', () => {
     assert.ok(item.anchor.method);
     assert.notEqual(item.anchor.method, 'representative_point');
     assert.ok(Number.isFinite(item.anchor.radiusKm) && item.anchor.radiusKm >= 50 && item.anchor.radiusKm <= 1000);
-    assert.match(item.articleUrl, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/|www\.bankofcanadamuseum\.ca\/collection\/artefact\/view\/)/);
+    assert.match(item.articleUrl, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/|www\.bankofcanadamuseum\.ca\/collection\/artefact\/view\/|www\.britishmuseum\.org\/collection\/object\/)/);
     assert.match(item.anchor.sourceUrl, /^https?:\/\//);
-    assert.match(item.image.url, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService|www\.bankofcanadamuseum\.ca\/collection\/images\/)/);
-    assert.match(item.image.backUrl, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService|www\.bankofcanadamuseum\.ca\/collection\/images\/)/);
-    assert.match(item.image.filePage, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/|www\.bankofcanadamuseum\.ca\/collection\/artefact\/view\/)/);
+    assert.match(item.image.url, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService|www\.bankofcanadamuseum\.ca\/collection\/images\/|media\.britishmuseum\.org\/media\/)/);
+    assert.match(item.image.backUrl, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService|www\.bankofcanadamuseum\.ca\/collection\/images\/|media\.britishmuseum\.org\/media\/)/);
+    assert.match(item.image.filePage, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/|www\.bankofcanadamuseum\.ca\/collection\/artefact\/view\/|www\.britishmuseum\.org\/collection\/image\/)/);
     assert.ok(item.image.author);
-    assert.ok(['Public Domain Mark', 'CC0', 'Bank of Canada permitted reuse'].includes(item.image.license));
+    assert.ok(['Public Domain Mark', 'CC0', 'Bank of Canada permitted reuse', 'CC BY-NC-SA 4.0'].includes(item.image.license));
   }
 });
 

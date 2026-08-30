@@ -24,7 +24,7 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 
 ## Data pipeline
 
-The shipped game does not call collection APIs at runtime. `npm run data:build` performs three build-time ingestions:
+The shipped game does not call collection APIs at runtime. `npm run data:build` performs four build-time ingestions:
 
 1. Query the American Numismatic Society MANTIS Atom feed for records with images, dates, production places, and an eligible object type.
 2. Fetch complete NUDS/XML object records in batches.
@@ -35,9 +35,11 @@ The shipped game does not call collection APIs at runtime. `npm run data:build` 
 7. Scan all 1.3 million current National Museum of American History Open Access metadata records and retain Smithsonian currency only when it has a date, a geocoded production area more specific than a country, paired CC0 images, and descriptions for both sides.
 8. Read all 1,584 digitized coins in the Bank of Canada Museum search, then retain only pre-1926 objects with paired photographs and a named mint that resolves to an audited city coordinate. Bank-note images are excluded because the Bank's image policy treats them separately.
 9. Deduplicate accepted Bank of Canada Museum issues against the combined corpus.
-10. Write the merged local metadata bank to `src/money.generated.js`, the deterministic hash-shuffled daily order to `src/daily.generated.js`, and auditable filter summaries under `data/`.
+10. Query the British Museum's public collection search in 19 date bands, match its returned place facets to the existing audited mint-city gazetteer, and query only those exact place/date combinations.
+11. Open each British Museum detail record and require a Money and Medals coin, a date from 500 BCE through 1925 with no more than 100 years of uncertainty, a denomination, a specific resolvable mint, both side descriptions, and an unambiguous pair of separate public/free photographs credited to the Trustees. Composite images, country/region-only origins, and inauthentic or modern-copy objects are rejected. Exact issues are deduplicated and repeated mints are capped for variety.
+12. Write the merged local metadata bank to `src/money.generated.js`, the deterministic hash-shuffled daily order to `src/daily.generated.js`, and auditable filter summaries under `data/`.
 
-The current corpus contains 1,587 checked objects: 1,324 coins and 263 banknotes. MANTIS contributes 1,452 objects. The complete Smithsonian NMAH scan found only 20 currency records meeting every hard rule; eight duplicated issues already represented by MANTIS, leaving 12 additional coins. The Bank of Canada Museum pass adds 123 more coins after rejecting records without paired sides, a usable historic date, or a specific resolvable mint and removing duplicate issues.
+The current corpus contains 1,714 checked objects: 1,451 coins and 263 banknotes. MANTIS contributes 1,452 objects. The complete Smithsonian NMAH scan found only 20 currency records meeting every hard rule; eight duplicated issues already represented by MANTIS, leaving 12 additional coins. The Bank of Canada Museum pass adds 123 coins. The British Museum pass inspected 42,403 targeted search hits and 3,051 candidate detail records, then admitted 127 additional coins across 19 specific mints after the side-image, date, place, authenticity, deduplication, and variety checks.
 
 Both daily and practice play use this committed local corpus. Practice does not query any museum on demand because runtime queries would make quality, availability, and puzzle behavior depend on external services. Photographs remain hosted by the source institutions and load only when needed. The daily schedule is a deterministic hash shuffle of object IDs, not corpus, title, date, or import order.
 
@@ -47,7 +49,7 @@ To refresh the corpus:
 npm run data:build
 ```
 
-The ingestion requires network access. The Smithsonian refresh reads 256 public metadata shards, so it is substantially larger than the other refreshes. The hard admission rules are intentional: all three collections are much larger than the shipped game, and incomplete records are expected to be rejected.
+The ingestion requires network access. The Smithsonian refresh reads 256 public metadata shards, so it is substantially larger than the other refreshes. The British Museum importer uses the collection site's public search and object JSON endpoints; no API key or secret is stored. The hard admission rules are intentional: all four collections are much larger than the shipped game, and incomplete records are expected to be rejected.
 
 ## Run locally
 
@@ -94,12 +96,13 @@ The generated composition study that preceded implementation is preserved at `do
 - Object records and media: [American Numismatic Society MANTIS](https://numismatics.org/search/)
 - Object records and media: [Smithsonian Open Access](https://www.si.edu/openaccess)
 - Object records and media: [Bank of Canada Museum National Currency Collection](https://www.bankofcanadamuseum.ca/collection/search)
+- Object records and media: [British Museum Collection](https://www.britishmuseum.org/collection)
 - Mint identifiers and coordinates: [Nomisma](https://nomisma.org/)
 - Hosting: GitHub Pages
 - Backend services: none
 
 ## Licensing
 
-Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. Bank of Canada Museum coin photographs are used with attribution under the Bank's website reuse terms; bank-note images from that source are excluded. Every result links to its source record, image terms, and source institution.
+Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. Bank of Canada Museum coin photographs are used with attribution under the Bank's website reuse terms; bank-note images from that source are excluded. Admitted British Museum photographs are credited to the Trustees and linked to image pages carrying the CC BY-NC-SA 4.0 notice, so those photographs are for non-commercial use and remain under that license. Every result links to its source record, image terms, and source institution.
 
 The bundled Newsreader and IBM Plex Sans Condensed fonts are redistributed under the SIL Open Font License. Their license texts are included in `assets/fonts/`.
