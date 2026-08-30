@@ -1,6 +1,6 @@
 # ORIGIN
 
-ORIGIN is a daily geography game about real money. A player studies both sides of a documented coin or banknote, places one pin on a world map, and receives a score based on distance from its mint or printing location.
+ORIGIN is a daily geography game about real money. A player studies both sides of a documented coin or banknote, estimates its date, places one pin on a world map, and receives a combined score for time and place.
 
 The interface is deliberately spare: one specimen, one map, one decision. After the guess, the map connects the player's pin to the answer and a compact result sheet explains the object, target method, source, and image license.
 
@@ -9,12 +9,18 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - One UTC-dated puzzle is shared by every player each day.
 - Practice mode draws a different random specimen from the same checked-in corpus.
 - Every specimen can be flipped between its matched obverse and reverse photographs.
+- A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
-- Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the score starts at 5,000 and follows a smooth exponential distance curve.
+- Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before scoring. Geography contributes 4,000 points and date accuracy contributes 1,000, preserving a 5,000-point total.
 - Each target is a documented `mint_city` or `printing_facility` linked from the source record.
 - Results show the object date, production method, tolerance, ANS record, and image rights.
 - Daily results, averages, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
 - Share text includes only the edition, score, distance, and distance band. It never reveals the answer.
+- Light, edge-connected studio backgrounds are removed in the browser after an ANS photograph loads. The original image URL is still used and no processed image library is checked into the repository.
+
+## Collection explorer
+
+`admin.html` is a static collection explorer for inspecting the full playable corpus. MiniSearch provides fuzzy, prefix-aware full-text search across object metadata. TanStack Virtual mounts only the rows near the viewport, while the photographs inside those rows use native lazy loading.
 
 ## Data pipeline
 
@@ -76,6 +82,7 @@ The generated composition study that preceded implementation is preserved at `do
 ## Important URLs and services
 
 - Production site: https://jens246.github.io/origin-money-game/
+- Collection explorer: https://jens246.github.io/origin-money-game/admin.html
 - Source repository: https://github.com/JenS246/origin-money-game
 - Map interaction: [Leaflet](https://leafletjs.com/)
 - Map tiles/data: [OpenStreetMap](https://www.openstreetmap.org/copyright)

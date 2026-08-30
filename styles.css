@@ -9,6 +9,7 @@
   --accent: #2457d6;
   --accent-ink: #f8faff;
   --map-filter: saturate(0.28) contrast(0.92) brightness(1.04);
+  --photo-stage: #e7e9e8;
   --radius: 14px;
   --header-height: 58px;
   --topbar-height: calc(var(--header-height) + env(safe-area-inset-top));
@@ -28,6 +29,7 @@
     --accent: #6f92f3;
     --accent-ink: #0d1938;
     --map-filter: saturate(0.22) brightness(0.66) contrast(1.05);
+    --photo-stage: #dfe2df;
   }
 }
 
@@ -99,6 +101,7 @@ button:focus-visible, a:focus-visible {
   background: var(--surface);
   position: relative;
   z-index: 2;
+  container-type: inline-size;
 }
 .specimen-stage {
   min-height: 0;
@@ -183,6 +186,33 @@ button:focus-visible, a:focus-visible {
   border-top: 1px solid var(--line);
 }
 .prompt-row p { margin: 0; font-size: 15px; }
+.date-guess {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto minmax(72px, 1fr) 62px;
+  align-items: center;
+  gap: 9px;
+  max-width: 270px;
+}
+.date-guess label { color: var(--muted); font-size: 12px; }
+.date-guess output {
+  min-width: 0;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 680;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.date-guess input {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: ew-resize;
+}
+.date-guess input:disabled { opacity: 0.5; cursor: default; }
 .primary-button, .secondary-button {
   min-height: 44px;
   border-radius: var(--radius);
@@ -247,10 +277,10 @@ button:focus-visible, a:focus-visible {
   bottom: 0;
   min-height: 182px;
   display: grid;
-  grid-template-columns: 170px 150px 150px minmax(280px, 1fr) auto;
+  grid-template-columns: minmax(76px, 110px) repeat(3, minmax(88px, 120px)) minmax(220px, 1fr) auto;
   align-items: center;
-  gap: 22px;
-  padding: 22px 28px;
+  gap: clamp(10px, 1.35vw, 22px);
+  padding: 22px clamp(16px, 2vw, 28px);
   border-top: 1px solid var(--line);
   background: color-mix(in srgb, var(--surface) 97%, transparent);
   backdrop-filter: blur(16px);
@@ -264,7 +294,7 @@ button:focus-visible, a:focus-visible {
 .result-number { min-width: 0; font-variant-numeric: tabular-nums; }
 .result-number strong { display: inline; font-size: clamp(28px, 3vw, 46px); line-height: 1; letter-spacing: -0.055em; }
 .result-number span { margin-left: 5px; color: var(--muted); font-size: 13px; }
-.score-number { padding-left: 22px; border-left: 1px solid var(--line); }
+.date-result-number, .score-number { padding-left: clamp(10px, 1.4vw, 22px); border-left: 1px solid var(--line); }
 .result-story { min-width: 0; }
 .answer-place { margin: 0 0 3px; color: var(--accent); font-size: 13px; font-weight: 680; }
 .result-story h1 { margin: 0; font-size: 20px; letter-spacing: -0.03em; }
@@ -292,8 +322,9 @@ button:focus-visible, a:focus-visible {
 .home-copy h1 { max-width: 720px; margin: 0; font-size: clamp(40px, 4.35vw, 68px); line-height: 0.98; letter-spacing: -0.06em; font-weight: 680; }
 .home-copy p { max-width: 340px; margin: 24px 0 28px; color: var(--muted); font-size: 17px; line-height: 1.5; }
 .home-actions { display: flex; gap: 10px; }
-.home-specimen { --specimen-inset: clamp(56px, 10vw, 128px); display: grid; place-items: center; height: min(62dvh, 640px); min-height: 320px; background: var(--surface-strong); border-radius: var(--radius); overflow: hidden; }
-.home-specimen img { display: block; width: calc(100% - var(--specimen-inset)); height: calc(100% - var(--specimen-inset)); min-width: 0; min-height: 0; object-fit: contain; filter: drop-shadow(0 26px 32px color-mix(in srgb, var(--ink) 16%, transparent)); }
+.home-specimen { --specimen-inset: clamp(56px, 10vw, 128px); display: grid; place-items: center; height: min(62dvh, 640px); min-height: 320px; background: var(--photo-stage); border-radius: var(--radius); overflow: hidden; }
+.home-specimen img { display: block; width: calc(100% - var(--specimen-inset)); height: calc(100% - var(--specimen-inset)); min-width: 0; min-height: 0; object-fit: contain; mix-blend-mode: multiply; filter: drop-shadow(0 26px 32px color-mix(in srgb, var(--ink) 16%, transparent)); opacity: 0; transition: opacity 300ms ease; }
+.home-specimen img.loaded { opacity: 1; }
 .home-source { position: absolute; right: clamp(28px, 7vw, 112px); bottom: 18px; margin: 0; color: var(--muted); font-size: 11px; }
 
 .sheet-dialog {
@@ -354,8 +385,9 @@ button:focus-visible, a:focus-visible {
   .specimen-stage { padding: 12px 20px 6px; }
   .money-image { max-height: calc(34dvh - 58px); filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--ink) 12%, transparent)); }
   .image-skeleton { width: min(44%, 150px); }
-  .prompt-row { min-height: 48px; padding: 6px 12px; }
-  .prompt-row p { font-size: 13px; }
+  .prompt-row { min-height: 52px; padding: 6px 12px; }
+  .prompt-row p { display: none; }
+  .date-guess { max-width: none; grid-template-columns: auto minmax(90px, 1fr) 62px; }
   .prompt-row .primary-button { display: none; }
   .map-panel { grid-row: 2; }
   .map-status { top: 10px; padding: 8px 11px; font-size: 12px; }
@@ -381,7 +413,7 @@ button:focus-visible, a:focus-visible {
     max-height: min(58dvh, 480px);
     overflow-y: auto;
     overscroll-behavior: contain;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: start;
     gap: 14px 10px;
     padding: 16px 14px calc(12px + env(safe-area-inset-bottom));
@@ -393,7 +425,7 @@ button:focus-visible, a:focus-visible {
   .result-number { padding: 0 4px 12px; border-bottom: 1px solid var(--line); }
   .result-number strong { font-size: clamp(30px, 9vw, 40px); }
   .result-number span { display: block; margin: 4px 0 0; font-size: 11px; }
-  .score-number { padding-left: 12px; border-left: 1px solid var(--line); }
+  .date-result-number, .score-number { padding-left: 9px; border-left: 1px solid var(--line); }
   .result-story, .result-actions { grid-column: 1 / -1; }
   .answer-place { margin-bottom: 2px; font-size: 12px; }
   .result-story h1 { font-size: 18px; line-height: 1.1; }
@@ -430,6 +462,11 @@ button:focus-visible, a:focus-visible {
   .rules-list { margin: 20px 0; }
   .rules-list li { margin-bottom: 12px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@container (max-width: 430px) {
+  .prompt-row p { display: none; }
+  .date-guess { max-width: none; }
 }
 
 @media (max-width: 360px) {

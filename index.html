@@ -33,14 +33,19 @@
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
             <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
               <span id="money-card" class="money-card">
-                <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
-                <img id="money-image-back" class="money-image money-image-back" alt="" decoding="async" />
+                <img id="money-image" class="money-image money-image-front" alt="" crossorigin="anonymous" decoding="async" />
+                <img id="money-image-back" class="money-image money-image-back" alt="" crossorigin="anonymous" decoding="async" />
               </span>
             </button>
             <span id="flip-label" class="flip-label" aria-hidden="true">Obverse / tap to flip</span>
           </div>
           <div class="prompt-row">
             <p id="prompt-copy">Place its mint</p>
+            <div class="date-guess">
+              <label for="year-guess">Year</label>
+              <input id="year-guess" type="range" min="-500" max="2000" step="1" value="750" />
+              <output id="year-guess-value" for="year-guess">750</output>
+            </div>
             <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
           </div>
         </section>
@@ -60,6 +65,10 @@
           <div class="result-number">
             <strong id="distance-value">0</strong>
             <span>km off</span>
+          </div>
+          <div class="result-number date-result-number">
+            <strong id="date-distance-value">0</strong>
+            <span>years off</span>
           </div>
           <div class="result-number score-number">
             <strong id="score-value">0</strong>
@@ -92,7 +101,7 @@
           </div>
         </div>
         <div class="home-specimen" aria-hidden="true">
-          <img id="home-image" alt="" />
+          <img id="home-image" alt="" crossorigin="anonymous" decoding="async" />
         </div>
         <p class="home-source">Objects from the American Numismatic Society</p>
       </section>
@@ -106,8 +115,8 @@
         </div>
         <ol class="rules-list">
           <li>Study the object. Tap it to inspect both the obverse and reverse.</li>
-          <li>Place one pin at the documented mint or printing location. You can move it before locking.</li>
-          <li>Score up to 5,000 points based on distance outside the documented accepted area.</li>
+          <li>Place one pin at the documented mint or printing location, then estimate its date.</li>
+          <li>Lock both guesses. The map contributes 4,000 points and the date contributes 1,000.</li>
         </ol>
         <p class="dialog-note">Every object is an approved American Numismatic Society record with a documented date, linked production place, matched front and back images, and public-domain image rights. Incomplete and inauthentic records are excluded.</p>
       </form>

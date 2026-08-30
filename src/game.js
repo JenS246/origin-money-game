@@ -1,11 +1,20 @@
 import { MONEY } from './money.generated.js';
-import { distanceBand, distanceFromAcceptedArea, pointsForDistance } from './scoring.js';
+import { removeLightEdgeBackground } from './image-matte.js';
+import {
+  combinedPoints,
+  distanceBand,
+  distanceFromAcceptedArea,
+  formatYear,
+  pointsForDistance,
+  pointsForYear,
+  yearDistance,
+} from './scoring.js';
 import { getDailyResult, getStats, saveDailyResult } from './storage.js';
 
 const LEAFLET_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js';
 const LAUNCH_DATE = Date.UTC(2026, 7, 29);
 const DAY_MS = 86_400_000;
-const SCORE_MODEL = 3;
+const SCORE_MODEL = 4;
 
 const elements = {
   home: document.querySelector('#home-screen'),
@@ -21,11 +30,14 @@ const elements = {
   flipLabel: document.querySelector('#flip-label'),
   skeleton: document.querySelector('#image-skeleton'),
   prompt: document.querySelector('#prompt-copy'),
+  yearGuess: document.querySelector('#year-guess'),
+  yearGuessValue: document.querySelector('#year-guess-value'),
   submit: document.querySelector('#submit-button'),
   mobileSubmit: document.querySelector('#mobile-submit-button'),
   mapStatus: document.querySelector('#map-status'),
   result: document.querySelector('#result-panel'),
   distance: document.querySelector('#distance-value'),
+  dateDistance: document.querySelector('#date-distance-value'),
   score: document.querySelector('#score-value'),
   answerPlace: document.querySelector('#answer-place'),
   answerTitle: document.querySelector('#answer-title'),
@@ -50,6 +62,8 @@ let activeMoney = null;
 let mode = 'daily';
 let revealed = false;
 let lastResult = null;
+let yearGuess = 750;
+let imageLoadSequence = 0;
 
 function utcDate() {
   return new Date().toISOString().slice(0, 10);
@@ -70,6 +84,47 @@ function practiceMoney() {
   return choices[Math.floor(Math.random() * choices.length)];
 }
 
+function loadMattedImage(image, source, onReady, onError) {
+  const previousObjectUrl = image.dataset.objectUrl;
+  if (previousObjectUrl) URL.revokeObjectURL(previousObjectUrl);
+  const token = String(imageLoadSequence += 1);
+  image.dataset.loadToken = token;
+  delete image.dataset.objectUrl;
+  delete image.dataset.matteApplied;
+  image.classList.remove('loaded', 'background-removed');
+  image.onload = async () => {
+    if (image.dataset.loadToken !== token) return;
+    if (image.dataset.matteApplied === 'true') {
+      image.classList.add('loaded', 'background-removed');
+      onReady?.();
+      return;
+    }
+    try {
+      const blob = await removeLightEdgeBackground(image);
+      if (image.dataset.loadToken !== token) return;
+      if (blob) {
+        const objectUrl = URL.createObjectURL(blob);
+        image.dataset.objectUrl = objectUrl;
+        image.dataset.matteApplied = 'true';
+        image.src = objectUrl;
+        return;
+      }
+    } catch {
+      // If canvas processing is unavailable, keep the original photograph.
+    }
+    image.classList.add('loaded');
+    onReady?.();
+  };
+  image.onerror = onError;
+  image.src = source;
+}
+
+function loadPreviewImage(image, source) {
+  image.classList.remove('loaded');
+  image.onload = () => image.classList.add('loaded');
+  image.src = source;
+}
+
 function setImage(item) {
   elements.image.classList.remove('loaded');
   elements.backImage.classList.remove('loaded');
@@ -80,25 +135,27 @@ function setImage(item) {
   elements.flipLabel.textContent = 'Obverse / tap to flip';
   elements.skeleton.classList.remove('hidden');
   elements.image.alt = item.image.alt;
-  elements.image.onload = () => {
+  loadMattedImage(elements.image, item.image.url, () => {
     elements.skeleton.classList.add('hidden');
-    elements.image.classList.add('loaded');
     elements.card.classList.add('ready');
-  };
-  elements.image.onerror = () => {
+  }, () => {
     elements.skeleton.classList.add('hidden');
     elements.prompt.textContent = 'The image could not be loaded';
-  };
+  });
   elements.backImage.alt = item.image.backAlt;
-  elements.backImage.onload = () => {
-    elements.backImage.classList.add('loaded');
+  loadMattedImage(elements.backImage, item.image.backUrl, () => {
     elements.flip.disabled = false;
-  };
-  elements.backImage.onerror = () => {
+  }, () => {
     elements.flipLabel.textContent = 'Obverse';
-  };
-  elements.image.src = item.image.url;
-  elements.backImage.src = item.image.backUrl;
+  });
+}
+
+function setYearGuess(value) {
+  yearGuess = Number(value);
+  const label = formatYear(yearGuess);
+  elements.yearGuess.value = String(yearGuess);
+  elements.yearGuessValue.value = label;
+  elements.yearGuess.setAttribute('aria-valuetext', label);
 }
 
 function toggleSide() {
@@ -194,13 +251,14 @@ function targetMethodLabel(method) {
 
 function populateResult(result) {
   elements.distance.textContent = Math.round(result.distance).toLocaleString();
+  elements.dateDistance.textContent = Math.round(result.dateDistance).toLocaleString();
   elements.score.textContent = result.score.toLocaleString();
   elements.answerPlace.textContent = activeMoney.anchor.label.toLowerCase() === activeMoney.issuer.toLowerCase()
     ? activeMoney.issuer
     : `${activeMoney.issuer}, ${activeMoney.anchor.label}`;
   elements.answerTitle.textContent = activeMoney.title;
   elements.blurb.textContent = activeMoney.blurb;
-  elements.targetNote.textContent = `${activeMoney.year}. Accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
+  elements.targetNote.textContent = `You guessed ${formatYear(result.yearGuess)}. Date: ${activeMoney.year}. Map accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
   elements.article.href = activeMoney.articleUrl;
   elements.article.textContent = 'ANS record';
   elements.imageCredit.href = activeMoney.image.filePage;
@@ -219,8 +277,25 @@ function reveal(saved = null) {
   const canReuseSavedScore = saved?.model === SCORE_MODEL && saved?.moneyId === activeMoney.id;
   const distance = canReuseSavedScore ? saved.distance : measured.distance;
   const rawDistance = canReuseSavedScore ? saved.rawDistance : measured.rawDistance;
-  const score = canReuseSavedScore ? saved.score : pointsForDistance(distance);
-  lastResult = { model: SCORE_MODEL, moneyId: activeMoney.id, distance, rawDistance, score, guess: savedGuess };
+  const savedYearGuess = canReuseSavedScore ? saved.yearGuess : yearGuess;
+  const dateDistance = canReuseSavedScore ? saved.dateDistance : yearDistance(savedYearGuess, activeMoney.year);
+  const mapPoints = canReuseSavedScore ? saved.mapPoints : pointsForDistance(distance);
+  const datePoints = canReuseSavedScore ? saved.datePoints : pointsForYear(dateDistance);
+  const score = canReuseSavedScore ? saved.score : combinedPoints(mapPoints, datePoints);
+  setYearGuess(savedYearGuess);
+  elements.yearGuess.disabled = true;
+  lastResult = {
+    model: SCORE_MODEL,
+    moneyId: activeMoney.id,
+    distance,
+    rawDistance,
+    dateDistance,
+    yearGuess: savedYearGuess,
+    mapPoints,
+    datePoints,
+    score,
+    guess: savedGuess,
+  };
   if (mode === 'daily' && (!saved || !canReuseSavedScore)) {
     saveDailyResult(utcDate(), lastResult);
     elements.startDaily.textContent = 'View today';
@@ -245,6 +320,8 @@ function resetRound(item) {
   elements.mobileSubmit.removeAttribute('style');
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
+  elements.yearGuess.disabled = false;
+  setYearGuess(750);
   elements.prompt.textContent = item.type === 'banknote' ? 'Place its print location' : 'Place its mint';
   elements.mapStatus.textContent = mapReady ? 'Tap anywhere on the map' : 'Loading map';
   setImage(item);
@@ -258,7 +335,7 @@ function start(selectedMode) {
   const item = mode === 'daily' ? dailyMoney() : practiceMoney();
   resetRound(item);
   const saved = mode === 'daily' ? getDailyResult(utcDate()) : null;
-  if (saved) {
+  if (saved?.model === SCORE_MODEL && saved?.moneyId === item.id) {
     const waitForMap = () => {
       if (mapReady) reveal(saved);
       else window.setTimeout(waitForMap, 100);
@@ -284,7 +361,7 @@ function showToast(message) {
 async function shareResult() {
   if (!lastResult) return;
   const title = mode === 'daily' ? `ORIGIN #${editionNumber()}` : 'ORIGIN Practice';
-  const text = `${title}\n${lastResult.score.toLocaleString()} / 5,000\n${Math.round(lastResult.distance).toLocaleString()} km, ${distanceBand(lastResult.distance)}`;
+  const text = `${title}\n${lastResult.score.toLocaleString()} / 5,000\n${Math.round(lastResult.distance).toLocaleString()} km, ${distanceBand(lastResult.distance)}\n${Math.round(lastResult.dateDistance).toLocaleString()} years off`;
   try {
     if (navigator.share) await navigator.share({ text });
     else {
@@ -334,6 +411,7 @@ function wireEvents() {
   elements.homeButton.addEventListener('click', () => elements.home.classList.remove('dismissed'));
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
+  elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));
   elements.flip.addEventListener('click', toggleSide);
   elements.share.addEventListener('click', shareResult);
   elements.next.addEventListener('click', () => start('practice'));
@@ -348,8 +426,9 @@ function boot() {
     return;
   }
   const today = dailyMoney();
-  elements.homeImage.src = today.image.url;
-  elements.startDaily.textContent = getDailyResult(utcDate()) ? 'View today' : 'Play today';
+  loadPreviewImage(elements.homeImage, today.image.url);
+  const saved = getDailyResult(utcDate());
+  elements.startDaily.textContent = saved?.model === SCORE_MODEL && saved?.moneyId === today.id ? 'View today' : 'Play today';
   elements.edition.textContent = `Daily ${editionNumber()}`;
   updateStats();
   wireEvents();
