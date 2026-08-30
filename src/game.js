@@ -29,7 +29,6 @@ const elements = {
   card: document.querySelector('#money-card'),
   flipLabel: document.querySelector('#flip-label'),
   skeleton: document.querySelector('#image-skeleton'),
-  prompt: document.querySelector('#prompt-copy'),
   yearGuess: document.querySelector('#year-guess'),
   yearGuessValue: document.querySelector('#year-guess-value'),
   submit: document.querySelector('#submit-button'),
@@ -64,6 +63,7 @@ let revealed = false;
 let lastResult = null;
 let yearGuess = 750;
 let imageLoadSequence = 0;
+let flipDemoTimers = [];
 
 function utcDate() {
   return new Date().toISOString().slice(0, 10);
@@ -126,25 +126,35 @@ function loadPreviewImage(image, source) {
 }
 
 function setImage(item) {
+  clearFlipDemo();
+  let frontReady = false;
+  let backReady = false;
+  const maybeStartFlipDemo = () => {
+    if (frontReady && backReady) startFlipDemo();
+  };
   elements.image.classList.remove('loaded');
   elements.backImage.classList.remove('loaded');
   elements.card.classList.remove('ready', 'flipped');
   elements.flip.disabled = true;
   elements.flip.setAttribute('aria-pressed', 'false');
   elements.flip.setAttribute('aria-label', 'Show reverse side');
-  elements.flipLabel.textContent = 'Obverse / tap to flip';
+  elements.flipLabel.textContent = 'Obverse';
   elements.skeleton.classList.remove('hidden');
   elements.image.alt = item.image.alt;
   loadMattedImage(elements.image, item.image.url, () => {
+    frontReady = true;
     elements.skeleton.classList.add('hidden');
     elements.card.classList.add('ready');
+    maybeStartFlipDemo();
   }, () => {
     elements.skeleton.classList.add('hidden');
-    elements.prompt.textContent = 'The image could not be loaded';
+    elements.mapStatus.textContent = 'The object image could not be loaded';
   });
   elements.backImage.alt = item.image.backAlt;
   loadMattedImage(elements.backImage, item.image.backUrl, () => {
+    backReady = true;
     elements.flip.disabled = false;
+    maybeStartFlipDemo();
   }, () => {
     elements.flipLabel.textContent = 'Obverse';
   });
@@ -158,13 +168,39 @@ function setYearGuess(value) {
   elements.yearGuess.setAttribute('aria-valuetext', label);
 }
 
-function toggleSide() {
-  if (elements.flip.disabled) return;
-  const flipped = !elements.card.classList.contains('flipped');
+function setFlipSide(flipped) {
   elements.card.classList.toggle('flipped', flipped);
   elements.flip.setAttribute('aria-pressed', String(flipped));
   elements.flip.setAttribute('aria-label', flipped ? 'Show obverse side' : 'Show reverse side');
-  elements.flipLabel.textContent = flipped ? 'Reverse / tap to flip' : 'Obverse / tap to flip';
+  elements.flipLabel.textContent = flipped ? 'Reverse' : 'Obverse';
+}
+
+function clearFlipDemo() {
+  for (const timer of flipDemoTimers) window.clearTimeout(timer);
+  flipDemoTimers = [];
+  elements.flip.classList.remove('flip-pulse');
+}
+
+function pulseFlip() {
+  elements.flip.classList.remove('flip-pulse');
+  void elements.flip.offsetWidth;
+  elements.flip.classList.add('flip-pulse');
+}
+
+function startFlipDemo() {
+  clearFlipDemo();
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  flipDemoTimers = [
+    window.setTimeout(pulseFlip, 650),
+    window.setTimeout(() => setFlipSide(true), 1550),
+    window.setTimeout(pulseFlip, 2350),
+  ];
+}
+
+function toggleSide() {
+  if (elements.flip.disabled) return;
+  clearFlipDemo();
+  setFlipSide(!elements.card.classList.contains('flipped'));
 }
 
 function markerElement(className) {
@@ -322,7 +358,6 @@ function resetRound(item) {
   elements.mobileSubmit.disabled = true;
   elements.yearGuess.disabled = false;
   setYearGuess(750);
-  elements.prompt.textContent = item.type === 'banknote' ? 'Place its print location' : 'Place its mint';
   elements.mapStatus.textContent = mapReady ? 'Tap anywhere on the map' : 'Loading map';
   setImage(item);
   if (mapReady) map.setView([18, 8], window.innerWidth < 760 ? 1 : 2, { animate: false });
@@ -408,7 +443,10 @@ async function initializeMap() {
 function wireEvents() {
   elements.startDaily.addEventListener('click', () => start('daily'));
   elements.startPractice.addEventListener('click', () => start('practice'));
-  elements.homeButton.addEventListener('click', () => elements.home.classList.remove('dismissed'));
+  elements.homeButton.addEventListener('click', () => {
+    clearFlipDemo();
+    elements.home.classList.remove('dismissed');
+  });
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
   elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));

@@ -97,7 +97,7 @@ button:focus-visible, a:focus-visible {
 .specimen-panel {
   min-width: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   border-right: 1px solid var(--line);
   background: var(--surface);
   position: relative;
@@ -127,6 +127,7 @@ button:focus-visible, a:focus-visible {
   cursor: pointer;
 }
 .money-flip:disabled { cursor: default; }
+.money-flip.flip-pulse { animation: flip-pulse 760ms var(--ease) 2; will-change: transform; }
 .money-card {
   position: relative;
   display: block;
@@ -158,15 +159,13 @@ button:focus-visible, a:focus-visible {
   position: absolute;
   right: 14px;
   top: 12px;
-  padding: 5px 7px;
-  border: 1px solid var(--line);
-  border-radius: 7px;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: var(--muted);
   font-size: 11px;
   line-height: 1;
   white-space: nowrap;
-  backdrop-filter: blur(8px);
   pointer-events: none;
 }
 .image-skeleton {
@@ -178,31 +177,22 @@ button:focus-visible, a:focus-visible {
   opacity: 0.72;
 }
 .image-skeleton.hidden { display: none; }
-.prompt-row {
-  min-height: 78px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 16px 22px;
-  border-top: 1px solid var(--line);
-}
-.prompt-row p { margin: 0; font-size: 15px; }
 .date-guess {
   display: grid;
-  grid-template-columns: minmax(140px, 230px) 66px;
+  grid-template-columns: auto minmax(170px, 270px) 72px auto;
   justify-content: center;
   align-items: center;
-  gap: 14px;
-  min-height: 48px;
-  padding: 8px 20px;
+  gap: 16px;
+  min-height: 64px;
+  padding: 10px 22px;
   border-top: 1px solid var(--line);
   background: var(--surface);
 }
+.date-guess label { color: var(--ink); font-size: 14px; font-weight: 650; white-space: nowrap; }
 .date-guess output {
   min-width: 0;
   color: var(--ink);
-  font-size: 13px;
+  font-size: 17px;
   font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   font-weight: 700;
   text-align: left;
@@ -214,16 +204,16 @@ button:focus-visible, a:focus-visible {
   appearance: none;
   width: 100%;
   min-width: 0;
-  height: 28px;
+  height: 34px;
   margin: 0;
   background: transparent;
   cursor: ew-resize;
 }
 .date-guess input::-webkit-slider-runnable-track { height: 1px; background: var(--line); }
-.date-guess input::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; margin-top: -7px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
+.date-guess input::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; margin-top: -8.5px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
 .date-guess input::-moz-range-track { height: 1px; border: 0; background: var(--line); }
 .date-guess input::-moz-range-progress { height: 1px; background: var(--accent); }
-.date-guess input::-moz-range-thumb { width: 11px; height: 11px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
+.date-guess input::-moz-range-thumb { width: 14px; height: 14px; border: 2px solid var(--accent); border-radius: 50%; background: var(--surface); }
 .date-guess input:disabled { opacity: 0.5; cursor: default; }
 .primary-button, .secondary-button {
   min-height: 44px;
@@ -380,6 +370,7 @@ button:focus-visible, a:focus-visible {
 
 @keyframes result-in { from { opacity: 0; transform: translateY(100%); } to { opacity: 1; transform: translateY(0); } }
 @keyframes route-in { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: 1; } }
+@keyframes flip-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
 
 @media (max-width: 760px) {
   :root { --header-height: 52px; }
@@ -397,8 +388,10 @@ button:focus-visible, a:focus-visible {
   .specimen-stage { padding: 12px 20px 6px; }
   .money-image { max-height: calc(34dvh - 58px); filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--ink) 12%, transparent)); }
   .image-skeleton { width: min(44%, 150px); }
-  .date-guess { grid-template-columns: minmax(150px, 250px) 62px; min-height: 48px; padding: 7px 16px; }
-  .prompt-row { display: none; }
+  .date-guess { grid-template-columns: auto minmax(100px, 1fr) 58px; gap: 10px; min-height: 58px; padding: 8px 14px; }
+  .date-guess label { font-size: 12px; }
+  .date-guess output { font-size: 15px; }
+  .date-guess .primary-button { display: none; }
   .map-panel { grid-row: 2; }
   .map-status { top: 10px; padding: 8px 11px; font-size: 12px; }
   .mobile-submit {

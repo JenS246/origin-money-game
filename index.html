@@ -37,14 +37,12 @@
                 <img id="money-image-back" class="money-image money-image-back" alt="" crossorigin="anonymous" decoding="async" />
               </span>
             </button>
-            <span id="flip-label" class="flip-label" aria-hidden="true">Obverse / tap to flip</span>
+            <span id="flip-label" class="flip-label" aria-hidden="true">Obverse</span>
           </div>
           <div class="date-guess">
-            <input id="year-guess" aria-label="Estimated year" type="range" min="-500" max="2000" step="1" value="750" />
+            <label for="year-guess">Estimate year</label>
+            <input id="year-guess" type="range" min="-500" max="2000" step="1" value="750" />
             <output id="year-guess-value" for="year-guess">750</output>
-          </div>
-          <div class="prompt-row">
-            <p id="prompt-copy">Place its mint</p>
             <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
           </div>
         </section>
