@@ -18,6 +18,7 @@ test('results use the branded share card instead of the native share sheet', asy
 
   assert.match(html, /id="share-dialog"/);
   assert.match(html, /id="share-card"/);
+  assert.match(html, /class="result-metrics"/);
   assert.doesNotMatch(html, /distance-visual/);
   assert.match(source, /shareDialog\.showModal\(\)/);
   assert.match(source, /saveShareCard/);
