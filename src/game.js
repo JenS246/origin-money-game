@@ -1,4 +1,5 @@
 import { MONEY } from './money.generated.js';
+import { DAILY_IDS } from './daily.generated.js';
 import { removeLightEdgeBackground } from './image-matte.js';
 import {
   combinedPoints,
@@ -64,6 +65,7 @@ let lastResult = null;
 let yearGuess = 750;
 let imageLoadSequence = 0;
 let flipDemoTimers = [];
+const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 
 function utcDate() {
   return new Date().toISOString().slice(0, 10);
@@ -75,7 +77,8 @@ function editionNumber() {
 }
 
 function dailyMoney() {
-  return MONEY[(editionNumber() - 1) % MONEY.length];
+  const scheduledId = DAILY_IDS[(editionNumber() - 1) % DAILY_IDS.length];
+  return moneyById.get(scheduledId) || MONEY[(editionNumber() - 1) % MONEY.length];
 }
 
 function practiceMoney() {

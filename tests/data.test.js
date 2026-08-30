@@ -1,13 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { MONEY } from '../src/money.generated.js';
+import { DAILY_IDS } from '../src/daily.generated.js';
 
 test('the shipped corpus is large enough for varied play', () => {
-  assert.ok(MONEY.length >= 50);
+  assert.ok(MONEY.length >= 1000);
   assert.equal(new Set(MONEY.map((item) => item.id)).size, MONEY.length);
   assert.equal(new Set(MONEY.map((item) => item.title.toLowerCase())).size, MONEY.length);
   assert.ok(MONEY.filter((item) => item.type === 'banknote').length >= 8);
   assert.ok(new Set(MONEY.map((item) => item.anchor.label)).size >= 40);
+});
+
+test('every playable object appears exactly once in the checked-in daily schedule', () => {
+  assert.equal(DAILY_IDS.length, MONEY.length);
+  assert.equal(new Set(DAILY_IDS).size, DAILY_IDS.length);
+  assert.deepEqual(new Set(DAILY_IDS), new Set(MONEY.map((item) => item.id)));
 });
 
 test('every record has a playable target and auditable sources', () => {

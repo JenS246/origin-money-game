@@ -2,6 +2,10 @@
 
 ORIGIN's content bank is assembled from the American Numismatic Society's MANTIS collection at build time.
 
+The checked-in dataset contains validated metadata and remote image URLs. `src/daily.generated.js` provides a stable shuffled schedule for daily play; practice mode draws from the same local bank. The game never queries MANTIS at runtime.
+
+The importer samples twelve evenly spaced result pages across the complete result range of each coin department and scans every matching paper-money result. This gives broad chronological and collection coverage without sending more than a thousand bulk requests to exhaust all 123,000-plus coin records. `data/quality-report.json` records the upstream result count, examined count, hard rejections, eligible count, and post-validation curation separately.
+
 ## APIs
 
 - MANTIS Atom search: `https://numismatics.org/search/feed/`

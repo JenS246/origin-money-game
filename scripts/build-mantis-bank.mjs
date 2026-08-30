@@ -7,14 +7,14 @@ const NUDS_URL = 'https://numismatics.org/search/apis/getNuds';
 const USER_AGENT = 'OriginMoneyGame/2.0 (https://github.com/JenS246/origin-money-game)';
 const BASE_QUERY = 'imagesavailable:true AND year_num:[* TO 1925] AND productionPlace_facet:[* TO *]';
 const DEPARTMENTS = ['Byzantine', 'East Asian', 'Greek', 'Islamic', 'Latin American', 'Medieval', 'North American', 'Roman', 'South Asian'];
-const COINS_PER_DEPARTMENT = 7;
-const PAPER_STREAMS = [
-  { place: 'New York', relatedPlace: 'United States', quota: 4 },
-  { place: 'New York City (N.Y.)', relatedPlace: 'United States', quota: 3 },
-  { place: 'Philadelphia (Pa.)', relatedPlace: 'United States', quota: 4 },
-  { place: 'Boston (Mass.)', relatedPlace: 'United States', quota: 3 },
-  { place: 'New Orleans (La.)', relatedPlace: 'United States', quota: 2 },
-];
+const FEED_PAGE_SIZE = 100;
+const COIN_PAGES_PER_DEPARTMENT = 12;
+const COINS_PER_DEPARTMENT = 300;
+const PAPER_MONEY_LIMIT = 600;
+const COINS_PER_MINT = 24;
+const NOTES_PER_PRINTING_PLACE = 80;
+const FETCH_CONCURRENCY = 5;
+const PLACE_CONCURRENCY = 8;
 const PLACE_OVERRIDES = new Map([
   ['New York', { lat: 40.7128, lng: -74.006, label: 'New York' }],
   ['New York City (N.Y.)', { lat: 40.7128, lng: -74.006, label: 'New York' }],
@@ -24,14 +24,21 @@ const PLACE_OVERRIDES = new Map([
 ]);
 
 const counters = {
+  sourceMatches: 0,
+  feedPages: 0,
   fetched: 0,
   parsed: 0,
   rejected: {},
+  excluded: {},
 };
 
 function reject(reason) {
   counters.rejected[reason] = (counters.rejected[reason] || 0) + 1;
   return null;
+}
+
+function addCount(bucket, reason, amount = 1) {
+  counters[bucket][reason] = (counters[bucket][reason] || 0) + amount;
 }
 
 async function fetchText(url) {
@@ -53,6 +60,20 @@ function chunks(items, size) {
   return Array.from({ length: Math.ceil(items.length / size) }, (_, index) =>
     items.slice(index * size, (index + 1) * size),
   );
+}
+
+async function mapLimit(items, limit, task) {
+  const results = new Array(items.length);
+  let cursor = 0;
+  const workers = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await task(items[index], index);
+    }
+  });
+  await Promise.all(workers);
+  return results;
 }
 
 function decodeXml(value = '') {
@@ -226,23 +247,46 @@ function parseRecord(xml) {
   };
 }
 
-async function feedIds(query, starts) {
-  const pages = await Promise.all(starts.map(async (start) => {
-    const url = `${FEED_URL}?q=${encodeURIComponent(query)}&start=${start}`;
-    const xml = await fetchText(url);
-    return [...xml.matchAll(/<entry>[\s\S]*?<id>([^<]+)<\/id>/g)].map((match) => cleanText(match[1]));
-  }));
-  return [...new Set(pages.flat())];
+function sampledPageStarts(total, maximumPages) {
+  const pageCount = Math.ceil(total / FEED_PAGE_SIZE);
+  if (pageCount <= maximumPages) {
+    return Array.from({ length: pageCount }, (_, index) => index * FEED_PAGE_SIZE);
+  }
+  const starts = Array.from({ length: maximumPages }, (_, index) => {
+    const page = Math.round((index * (pageCount - 1)) / (maximumPages - 1));
+    return page * FEED_PAGE_SIZE;
+  });
+  return [...new Set(starts)];
+}
+
+function parseFeed(xml) {
+  const total = Number(xml.match(/<opensearch:totalResults>(\d+)<\/opensearch:totalResults>/)?.[1] || 0);
+  const ids = [...xml.matchAll(/<entry>[\s\S]*?<id>([^<]+)<\/id>/g)].map((match) => cleanText(match[1]));
+  return { total, ids };
+}
+
+async function feedIds(query, maximumPages) {
+  const firstXml = await fetchText(`${FEED_URL}?q=${encodeURIComponent(query)}&start=0`);
+  const first = parseFeed(firstXml);
+  counters.sourceMatches += first.total;
+  const starts = sampledPageStarts(first.total, maximumPages);
+  const remainingStarts = starts.filter((start) => start !== 0);
+  const remaining = await mapLimit(remainingStarts, FETCH_CONCURRENCY, async (start) => {
+    const xml = await fetchText(`${FEED_URL}?q=${encodeURIComponent(query)}&start=${start}`);
+    return parseFeed(xml).ids;
+  });
+  counters.feedPages += starts.length;
+  return [...new Set([...first.ids, ...remaining.flat()])];
 }
 
 async function fetchRecords(ids) {
-  const records = [];
-  for (const batch of chunks(ids, 100)) {
+  const batches = chunks(ids, 100);
+  const records = await mapLimit(batches, FETCH_CONCURRENCY, async (batch) => {
     const xml = await fetchText(`${NUDS_URL}?identifiers=${encodeURIComponent(batch.join('|'))}`);
     counters.fetched += batch.length;
-    records.push(...(xml.match(/<nuds(?:\s[^>]*)?>[\s\S]*?<\/nuds>/g) || []));
-  }
-  return records.map(parseRecord).filter(Boolean);
+    return xml.match(/<nuds(?:\s[^>]*)?>[\s\S]*?<\/nuds>/g) || [];
+  });
+  return records.flat().map(parseRecord).filter(Boolean);
 }
 
 const coordinateCache = new Map();
@@ -309,22 +353,20 @@ async function resolveCoordinates(candidate) {
   }
 }
 
-async function selectCandidates(candidates, quota, usedPlaces, usedTitles, method, uniquePlaces = true) {
-  const selected = [];
-  const ordered = [...candidates].sort((a, b) => hash(a.recordId) - hash(b.recordId));
-  for (const candidate of ordered) {
-    if (selected.length >= quota) break;
-    if (uniquePlaces && usedPlaces.has(candidate.place.href)) continue;
-    const titleKey = candidate.title.toLowerCase();
-    if (usedTitles.has(titleKey)) continue;
-    const coordinates = await resolveCoordinates(candidate);
+async function addCoordinates(candidates, method) {
+  const byPlace = new Map();
+  for (const candidate of candidates) {
+    if (!byPlace.has(candidate.place.href)) byPlace.set(candidate.place.href, []);
+    byPlace.get(candidate.place.href).push(candidate);
+  }
+  const placeGroups = [...byPlace.values()];
+  const resolvedGroups = await mapLimit(placeGroups, PLACE_CONCURRENCY, async (group) => {
+    const coordinates = await resolveCoordinates(group[0]);
     if (!coordinates || !Number.isFinite(coordinates.lat) || !Number.isFinite(coordinates.lng)) {
-      reject('unresolvable_coordinates');
-      continue;
+      addCount('rejected', 'unresolvable_coordinates', group.length);
+      return [];
     }
-    if (uniquePlaces) usedPlaces.add(candidate.place.href);
-    usedTitles.add(titleKey);
-    selected.push({
+    return group.map((candidate) => ({
       ...candidate,
       anchor: {
         ...coordinates,
@@ -334,36 +376,74 @@ async function selectCandidates(candidates, quota, usedPlaces, usedTitles, metho
       },
       articleUrl: candidate.sourceUrl,
       image: { ...candidate.image, filePage: candidate.sourceUrl },
-    });
+    }));
+  });
+  return resolvedGroups.flat();
+}
+
+function selectCandidates(candidates, limit, usedTitles, perPlaceLimit) {
+  const selected = [];
+  const placeCounts = new Map();
+  const ordered = [...candidates].sort((a, b) => hash(a.recordId) - hash(b.recordId));
+  for (const candidate of ordered) {
+    const titleKey = candidate.title.toLowerCase();
+    if (usedTitles.has(titleKey)) {
+      addCount('excluded', 'duplicate_title');
+      continue;
+    }
+    const placeCount = placeCounts.get(candidate.place.href) || 0;
+    if (placeCount >= perPlaceLimit) {
+      addCount('excluded', 'per_place_cap');
+      continue;
+    }
+    if (selected.length >= limit) {
+      addCount('excluded', 'corpus_size_cap');
+      continue;
+    }
+    usedTitles.add(titleKey);
+    placeCounts.set(candidate.place.href, placeCount + 1);
+    selected.push(candidate);
   }
   return selected;
 }
 
-const usedPlaces = new Set();
 const usedTitles = new Set();
 const selected = [];
+const eligible = [];
 
 for (const department of DEPARTMENTS) {
+  console.log(`Scanning ${department} coins...`);
   const query = `${BASE_QUERY} AND objectType_facet:"Coin" AND department_facet:"${department}"`;
-  const ids = await feedIds(query, [0, 100]);
-  const candidates = (await fetchRecords(ids)).filter((item) => item.department === department);
-  selected.push(...await selectCandidates(candidates, COINS_PER_DEPARTMENT, usedPlaces, usedTitles, 'mint_city'));
+  const ids = await feedIds(query, COIN_PAGES_PER_DEPARTMENT);
+  const parsed = (await fetchRecords(ids)).filter((item) => item.department === department && item.type === 'coin');
+  const located = await addCoordinates(parsed, 'mint_city');
+  eligible.push(...located);
+  selected.push(...selectCandidates(located, COINS_PER_DEPARTMENT, usedTitles, COINS_PER_MINT));
 }
 
-for (const stream of PAPER_STREAMS) {
-  const query = `${BASE_QUERY} AND objectType_facet:"Paper Money" AND productionPlace_facet:"${stream.place}" AND relatedPlace_facet:"${stream.relatedPlace}"`;
-  const ids = await feedIds(query, [0, 100]);
-  const candidates = (await fetchRecords(ids)).filter((item) => item.type === 'banknote' && item.place.label === stream.place);
-  selected.push(...await selectCandidates(candidates, stream.quota, new Set(), usedTitles, 'printing_facility', false));
-}
+console.log('Scanning all paper money...');
+const paperQuery = `${BASE_QUERY} AND objectType_facet:"Paper Money"`;
+const paperFirstPage = parseFeed(await fetchText(`${FEED_URL}?q=${encodeURIComponent(paperQuery)}&start=0`));
+const paperIds = await feedIds(paperQuery, Math.ceil(paperFirstPage.total / FEED_PAGE_SIZE));
+const paperParsed = (await fetchRecords(paperIds)).filter((item) => item.type === 'banknote');
+const locatedPaper = await addCoordinates(paperParsed, 'printing_facility');
+eligible.push(...locatedPaper);
+selected.push(...selectCandidates(locatedPaper, PAPER_MONEY_LIMIT, usedTitles, NOTES_PER_PRINTING_PLACE));
 
 selected.sort((a, b) => a.id.localeCompare(b.id));
 const generatedAt = new Date().toISOString();
 const js = `// Generated by scripts/build-mantis-bank.mjs on ${generatedAt}.\n` +
   `// MANTIS metadata: ODbL. Shipped ANS object images: Public Domain Mark.\n` +
   `export const MONEY = ${JSON.stringify(selected, null, 2)};\n`;
+const dailyIds = [...selected]
+  .sort((a, b) => hash(`daily:${a.recordId}`) - hash(`daily:${b.recordId}`) || a.id.localeCompare(b.id))
+  .map((item) => item.id);
+const dailyJs = `// Generated by scripts/build-mantis-bank.mjs on ${generatedAt}.\n` +
+  `// This checked-in order is the deterministic daily puzzle schedule.\n` +
+  `export const DAILY_IDS = ${JSON.stringify(dailyIds, null, 2)};\n`;
 
 await writeFile(path.join(ROOT, 'src/money.generated.js'), js);
+await writeFile(path.join(ROOT, 'src/daily.generated.js'), dailyJs);
 await writeFile(
   path.join(ROOT, 'data/quality-report.json'),
   `${JSON.stringify({
@@ -381,10 +461,14 @@ await writeFile(
     ],
     fetched: counters.fetched,
     parsed: counters.parsed,
+    sourceMatchesAcrossQueries: counters.sourceMatches,
+    feedPagesRead: counters.feedPages,
+    eligibleBeforeCuration: eligible.length,
     accepted: selected.length,
     coins: selected.filter((item) => item.type === 'coin').length,
     banknotes: selected.filter((item) => item.type === 'banknote').length,
     rejected: counters.rejected,
+    excludedAfterValidation: counters.excluded,
   }, null, 2)}\n`,
 );
 

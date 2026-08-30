@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-30T05:30:39.453Z",
+  "generatedAt": "2026-08-30T06:34:17.904Z",
   "source": "American Numismatic Society MANTIS",
   "admissionRules": [
     "approved physical coin or paper money record",
@@ -11,19 +11,27 @@
     "denomination and descriptions for both sides",
     "not marked as a forgery, counterfeit, replica, or modern copy"
   ],
-  "fetched": 1917,
-  "parsed": 1917,
-  "accepted": 60,
-  "coins": 49,
-  "banknotes": 11,
+  "fetched": 10060,
+  "parsed": 10060,
+  "sourceMatchesAcrossQueries": 124160,
+  "feedPagesRead": 105,
+  "eligibleBeforeCuration": 5288,
+  "accepted": 1452,
+  "coins": 1189,
+  "banknotes": 263,
   "rejected": {
-    "unlinked_production_place": 106,
-    "missing_side_descriptions": 314,
-    "missing_denomination": 78,
-    "not_authentic": 22,
-    "missing_or_late_date": 6,
-    "unresolvable_coordinates": 35,
-    "images_not_public_domain": 5,
-    "missing_paired_images": 48
+    "unlinked_production_place": 799,
+    "missing_side_descriptions": 2180,
+    "missing_denomination": 1143,
+    "not_authentic": 96,
+    "missing_or_late_date": 33,
+    "missing_paired_images": 172,
+    "unresolvable_coordinates": 303,
+    "images_not_public_domain": 46
+  },
+  "excludedAfterValidation": {
+    "duplicate_title": 2189,
+    "per_place_cap": 1535,
+    "corpus_size_cap": 112
   }
 }

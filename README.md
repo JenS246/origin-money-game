@@ -6,7 +6,7 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 
 ## How it works
 
-- One UTC-dated puzzle is shared by every player each day.
+- One UTC-dated puzzle is shared by every player each day. Its object ID comes from a checked-in generated schedule, so the answer is stable and auditable.
 - Practice mode draws a different random specimen from the same checked-in corpus.
 - Every specimen can be flipped between its matched obverse and reverse photographs.
 - A compact year slider records the player's date estimate before the round is locked.
@@ -31,10 +31,12 @@ The shipped game does not call MANTIS at runtime. `npm run data:build` performs 
 3. Require an approved record, a documented date no later than 1925, a denomination, matched obverse and reverse images, descriptions for both sides, and an explicit Public Domain Mark.
 4. Reject records marked as forgeries, counterfeits, replicas, or modern copies.
 5. Resolve controlled production-place identifiers through Nomisma, GeoNames, or Wikidata and reject unresolved locations.
-6. Select a geographically varied corpus while avoiding duplicate issues and repeated coin mints.
-7. Write `src/money.generated.js` and an auditable rejection summary in `data/quality-report.json`.
+6. Deduplicate exact issues and cap repeated objects from one production place so the collection remains varied without discarding historically important mints.
+7. Write the local metadata bank to `src/money.generated.js`, the deterministic daily order to `src/daily.generated.js`, and an auditable filter summary to `data/quality-report.json`.
 
-The current corpus contains 50 or more checked objects across at least 40 production locations, including coins and paper money. The browser uses committed metadata, so gameplay does not depend on live API availability. Images remain hosted by the ANS.
+The current corpus contains 1,452 checked objects: 1,189 coins and 263 banknotes. The ingestion measured 124,160 upstream search matches, examined 10,060 records sampled across the full span of every coin department, and scanned the complete 788-record paper-money result set. Of those examined records, 5,288 passed every hard admission rule before duplicate and geographic-variety curation.
+
+Both daily and practice play use this committed local corpus. Practice does not query MANTIS on demand because runtime queries would make quality, availability, and puzzle behavior depend on an external service. The object photographs remain hosted by the ANS and load only when needed.
 
 To refresh the corpus:
 
