@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f4f5f2" />
+    <meta
+      name="description"
+      content="ORIGIN is a daily geography game about the money people carry. Study a real coin or banknote, then place its origin on the map."
+    />
+    <meta property="og:title" content="ORIGIN - A daily money map" />
+    <meta property="og:description" content="Study the money. Place its origin." />
+    <title>ORIGIN - A daily money map</title>
+    <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
+    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <button id="home-button" class="wordmark" type="button" aria-label="Go to home">ORIGIN</button>
+        <div id="edition-label" class="edition-label" aria-live="polite"></div>
+        <nav class="header-actions" aria-label="Game menu">
+          <button class="text-button" type="button" data-open-dialog="how-to-dialog">How to play</button>
+          <button class="text-button" type="button" data-open-dialog="stats-dialog">Stats</button>
+        </nav>
+      </header>
+
+      <main id="game" class="game" aria-live="polite">
+        <section class="specimen-panel" aria-label="Currency specimen">
+          <div class="specimen-stage">
+            <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
+            <img id="money-image" class="money-image" alt="" decoding="async" />
+          </div>
+          <div class="prompt-row">
+            <p id="prompt-copy">Place its origin</p>
+            <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
+          </div>
+        </section>
+
+        <section class="map-panel" aria-label="World map. Select a place, then lock your pin.">
+          <div id="map" class="map" role="application" aria-label="Interactive world map"></div>
+          <p id="map-status" class="map-status">Tap anywhere on the map</p>
+          <button id="mobile-submit-button" class="primary-button mobile-submit" type="button" disabled>Lock pin</button>
+        </section>
+
+        <section id="result-panel" class="result-panel" hidden aria-label="Round result">
+          <div class="distance-visual" aria-hidden="true">
+            <span class="pin-symbol filled"></span>
+            <span class="route-line"></span>
+            <span class="pin-symbol answer"></span>
+          </div>
+          <div class="result-number">
+            <strong id="distance-value">0</strong>
+            <span>km</span>
+          </div>
+          <div class="result-number score-number">
+            <strong id="score-value">0</strong>
+            <span>points</span>
+          </div>
+          <div class="result-story">
+            <p id="answer-place" class="answer-place"></p>
+            <h1 id="answer-title"></h1>
+            <p id="answer-blurb" class="answer-blurb"></p>
+            <p id="target-note" class="target-note"></p>
+            <div class="source-links">
+              <a id="article-link" href="#" target="_blank" rel="noreferrer">Wikipedia</a>
+              <a id="image-credit-link" href="#" target="_blank" rel="noreferrer">Image credit</a>
+            </div>
+          </div>
+          <div class="result-actions">
+            <button id="share-button" class="secondary-button" type="button">Share</button>
+            <button id="next-button" class="primary-button" type="button">Practice</button>
+          </div>
+        </section>
+      </main>
+
+      <section id="home-screen" class="home-screen" aria-labelledby="home-title">
+        <div class="home-copy">
+          <h1 id="home-title">Study the money.<br />Place its origin.</h1>
+          <p>A real coin or banknote, one map, one pin.</p>
+          <div class="home-actions">
+            <button id="start-daily" class="primary-button large-button" type="button">Play today</button>
+            <button id="start-practice" class="secondary-button large-button" type="button">Practice</button>
+          </div>
+        </div>
+        <div class="home-specimen" aria-hidden="true">
+          <img id="home-image" alt="" />
+        </div>
+        <p class="home-source">Images from Wikimedia Commons</p>
+      </section>
+    </div>
+
+    <dialog id="how-to-dialog" class="sheet-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2>How to play</h2>
+          <button class="close-button" value="close" aria-label="Close">Close</button>
+        </div>
+        <ol class="rules-list">
+          <li>Study the currency image. Labels, portraits, scripts, and symbols are all clues.</li>
+          <li>Place one pin where you think it was issued. You can move it before locking.</li>
+          <li>Score up to 5,000 points based on distance from the documented target.</li>
+        </ol>
+        <p class="dialog-note">Targets use a mint, issuing authority city, or representative point. The method is shown after each guess.</p>
+      </form>
+    </dialog>
+
+    <dialog id="stats-dialog" class="sheet-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2>Your stats</h2>
+          <button class="close-button" value="close" aria-label="Close">Close</button>
+        </div>
+        <dl class="stats-grid">
+          <div><dt>Played</dt><dd id="stat-played">0</dd></div>
+          <div><dt>Average</dt><dd id="stat-average">0</dd></div>
+          <div><dt>Streak</dt><dd id="stat-streak">0</dd></div>
+          <div><dt>Best</dt><dd id="stat-best">0</dd></div>
+        </dl>
+        <p class="dialog-note">Stored only in this browser. Practice rounds do not affect your daily streak.</p>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <noscript>ORIGIN needs JavaScript to run the map and score your guess.</noscript>
+    <script type="module" src="src/game.js"></script>
+  </body>
+</html>

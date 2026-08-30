@@ -1,0 +1,618 @@
+[
+  {
+    "article": "Dutch rijksdaalder",
+    "issuer": "Dutch Republic",
+    "anchor": {
+      "lat": 52.08,
+      "lng": 4.3,
+      "label": "Dutch Republic",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q554157"
+  },
+  {
+    "article": "Kuruş",
+    "issuer": "Turkey",
+    "anchor": {
+      "lat": 39,
+      "lng": 36,
+      "label": "Turkey",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q661854"
+  },
+  {
+    "article": "Stuiver",
+    "issuer": "Germany",
+    "anchor": {
+      "lat": 51,
+      "lng": 10,
+      "label": "Germany",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q705080"
+  },
+  {
+    "article": "Batzen",
+    "issuer": "Switzerland",
+    "anchor": {
+      "lat": 46.798562,
+      "lng": 8.231973,
+      "label": "Switzerland",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q688100"
+  },
+  {
+    "article": "Bolskan",
+    "issuer": "Spain",
+    "anchor": {
+      "lat": 40.2,
+      "lng": -3.5,
+      "label": "Spain",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q3571446"
+  },
+  {
+    "article": "Manghir",
+    "issuer": "Ottoman Empire",
+    "anchor": {
+      "lat": 41,
+      "lng": 29,
+      "label": "Ottoman Empire",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q6075947"
+  },
+  {
+    "article": "Denarius of L. Censorinus",
+    "issuer": "Ancient Rome",
+    "anchor": {
+      "lat": 41.89,
+      "lng": 12.48,
+      "label": "Ancient Rome",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q5256588"
+  },
+  {
+    "article": "1804 dollar",
+    "issuer": "United States",
+    "anchor": {
+      "lat": 39.828175,
+      "lng": -98.5795,
+      "label": "United States",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4553821"
+  },
+  {
+    "article": "Giulio (coin)",
+    "issuer": "Papal States",
+    "anchor": {
+      "lat": 41.9,
+      "lng": 12.4875,
+      "label": "Papal States",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q3769469"
+  },
+  {
+    "article": "50 haleru (World War II Bohemian and Moravian coin)",
+    "issuer": "Nazi Germany",
+    "anchor": {
+      "lat": 52.511111111,
+      "lng": 13.379722222,
+      "label": "Nazi Germany",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4639898"
+  },
+  {
+    "article": "Australian one-cent coin",
+    "issuer": "Australia",
+    "anchor": {
+      "lat": -25,
+      "lng": 133,
+      "label": "Australia",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4209040"
+  },
+  {
+    "article": "Coinage of Upper Canada",
+    "issuer": "Canada",
+    "anchor": {
+      "lat": 56,
+      "lng": -109,
+      "label": "Canada",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q5141612"
+  },
+  {
+    "article": "Półtorak",
+    "issuer": "Grand Duchy of Lithuania",
+    "anchor": {
+      "lat": 54.68333333,
+      "lng": 25.28333333,
+      "label": "Grand Duchy of Lithuania",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1393192"
+  },
+  {
+    "article": "Duit",
+    "issuer": "Germany",
+    "anchor": {
+      "lat": 51,
+      "lng": 10,
+      "label": "Germany",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1201698"
+  },
+  {
+    "article": "Maravedí",
+    "issuer": "Spain",
+    "anchor": {
+      "lat": 40.2,
+      "lng": -3.5,
+      "label": "Spain",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1248202"
+  },
+  {
+    "article": "Nomisma",
+    "issuer": "Byzantine Empire",
+    "anchor": {
+      "lat": 41.0125,
+      "lng": 28.98,
+      "label": "Byzantine Empire",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1198478"
+  },
+  {
+    "article": "Louis d'or",
+    "issuer": "Kingdom of France",
+    "anchor": {
+      "lat": 47,
+      "lng": 2,
+      "label": "Kingdom of France",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1430760"
+  },
+  {
+    "article": "Mogadishu currency",
+    "issuer": "Sultanate of Mogadishu",
+    "anchor": {
+      "lat": 2.039166669,
+      "lng": 45.341944438,
+      "label": "Sultanate of Mogadishu",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q6890412"
+  },
+  {
+    "article": "Tribute penny",
+    "issuer": "Ancient Rome",
+    "anchor": {
+      "lat": 41.89,
+      "lng": 12.48,
+      "label": "Ancient Rome",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q7840538"
+  },
+  {
+    "article": "Achaemenid coinage",
+    "issuer": "Achaemenid Empire",
+    "anchor": {
+      "lat": 32.53638889,
+      "lng": 44.42083333,
+      "label": "Achaemenid Empire",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q8215485"
+  },
+  {
+    "article": "Tieqian",
+    "issuer": "Chinese Empire",
+    "anchor": {
+      "lat": 40,
+      "lng": 110,
+      "label": "Chinese Empire",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q91229011"
+  },
+  {
+    "article": "Half guilder coin (Netherlands)",
+    "issuer": "Netherlands",
+    "anchor": {
+      "lat": 52.316666666,
+      "lng": 5.55,
+      "label": "Netherlands",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q1823058"
+  },
+  {
+    "article": "Two and a half cent coin (Netherlands)",
+    "issuer": "Netherlands",
+    "anchor": {
+      "lat": 52.316666666,
+      "lng": 5.55,
+      "label": "Netherlands",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q2352228"
+  },
+  {
+    "article": "Wendenthaler",
+    "issuer": "Lüneburg",
+    "anchor": {
+      "lat": 53.2525,
+      "lng": 10.414444444,
+      "label": "Lüneburg",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q2559108"
+  },
+  {
+    "article": "Goryeo coinage",
+    "issuer": "Goryeo",
+    "anchor": {
+      "lat": 37.966666666,
+      "lng": 126.55,
+      "label": "Goryeo",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q16183980"
+  },
+  {
+    "article": "Ukrainian Archangel Michael coins",
+    "issuer": "Ukraine",
+    "anchor": {
+      "lat": 49,
+      "lng": 32,
+      "label": "Ukraine",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q16626354"
+  },
+  {
+    "article": "Ragusan perpera",
+    "issuer": "Republic of Ragusa",
+    "anchor": {
+      "lat": 42.65,
+      "lng": 18.06666667,
+      "label": "Republic of Ragusa",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q15281128"
+  },
+  {
+    "article": "Farthing (Irish coin)",
+    "issuer": "Ireland",
+    "anchor": {
+      "lat": 53,
+      "lng": -8,
+      "label": "Ireland",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q17053248"
+  },
+  {
+    "article": "Bangladeshi fifty-poysha coin",
+    "issuer": "Bangladesh",
+    "anchor": {
+      "lat": 24.016666666,
+      "lng": 89.866666666,
+      "label": "Bangladesh",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q21862903"
+  },
+  {
+    "article": "Guter Groschen",
+    "issuer": "Kingdom of Hanover",
+    "anchor": {
+      "lat": 52.366666666,
+      "lng": 9.716666666,
+      "label": "Kingdom of Hanover",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q21490990"
+  },
+  {
+    "article": "50 sen coin",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q27342037"
+  },
+  {
+    "article": "Battle of Antietam half dollar",
+    "issuer": "United States",
+    "anchor": {
+      "lat": 39.828175,
+      "lng": -98.5795,
+      "label": "United States",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q28121418"
+  },
+  {
+    "article": "Ukrainian shah",
+    "issuer": "Ukrainian People's Republic",
+    "anchor": {
+      "lat": 50.45,
+      "lng": 30.5,
+      "label": "Ukrainian People's Republic",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q2389783"
+  },
+  {
+    "article": "Del Monte note",
+    "issuer": "United States",
+    "anchor": {
+      "lat": 39.828175,
+      "lng": -98.5795,
+      "label": "United States",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q5252944"
+  },
+  {
+    "article": "Indian 10-rupee note",
+    "issuer": "India",
+    "anchor": {
+      "lat": 22.8,
+      "lng": 83,
+      "label": "India",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q6022874"
+  },
+  {
+    "article": "5000 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q6134165"
+  },
+  {
+    "article": "1000 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4546060"
+  },
+  {
+    "article": "Banknotes of the Ukrainian hryvnia",
+    "issuer": "Ukraine",
+    "anchor": {
+      "lat": 49,
+      "lng": 32,
+      "label": "Ukraine",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4077366"
+  },
+  {
+    "article": "Chinese customs gold unit",
+    "issuer": "Republic of China",
+    "anchor": {
+      "lat": 40,
+      "lng": 110,
+      "label": "Republic of China",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q5100749"
+  },
+  {
+    "article": "Hawaii overprint note",
+    "issuer": "United States",
+    "anchor": {
+      "lat": 39.828175,
+      "lng": -98.5795,
+      "label": "United States",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q5684486"
+  },
+  {
+    "article": "10,000 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4545898"
+  },
+  {
+    "article": "5 krooni",
+    "issuer": "Estonia",
+    "anchor": {
+      "lat": 59,
+      "lng": 26,
+      "label": "Estonia",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4641185"
+  },
+  {
+    "article": "1 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q4596054"
+  },
+  {
+    "article": "50 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11372060"
+  },
+  {
+    "article": "10 sen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11405191"
+  },
+  {
+    "article": "5 sen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11372718"
+  },
+  {
+    "article": "10 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11404887"
+  },
+  {
+    "article": "Dajōkansatsu",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11444010"
+  },
+  {
+    "article": "50 sen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q17991289"
+  },
+  {
+    "article": "Bank of England 10 shilling note",
+    "issuer": "United Kingdom",
+    "anchor": {
+      "lat": 54.6,
+      "lng": -2,
+      "label": "United Kingdom",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q24039446"
+  },
+  {
+    "article": "500 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11372556"
+  },
+  {
+    "article": "200 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11371736"
+  },
+  {
+    "article": "Bank of England £1 note",
+    "issuer": "United Kingdom",
+    "anchor": {
+      "lat": 54.6,
+      "lng": -2,
+      "label": "United Kingdom",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q24039439"
+  },
+  {
+    "article": "5 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11372034"
+  },
+  {
+    "article": "100 yen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q11580690"
+  },
+  {
+    "article": "20 sen note",
+    "issuer": "Japan",
+    "anchor": {
+      "lat": 35,
+      "lng": 136,
+      "label": "Japan",
+      "method": "representative_point"
+    },
+    "wikidataUrl": "http://www.wikidata.org/entity/Q18337678"
+  }
+]

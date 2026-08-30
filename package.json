@@ -1,0 +1,12 @@
+{
+  "name": "origin-money-game",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python3 -m http.server 4174",
+    "data:build": "node scripts/build-money-bank.mjs",
+    "test": "node --test",
+    "check": "node --check src/game.js && node --check src/scoring.js && node --check src/storage.js && node --check src/money.generated.js && node --check scripts/build-money-bank.mjs"
+  }
+}
