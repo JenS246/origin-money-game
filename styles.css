@@ -107,8 +107,36 @@ button:focus-visible, a:focus-visible {
   padding: clamp(24px, 4vw, 64px);
   overflow: hidden;
   background: var(--surface);
+  position: relative;
 }
+.money-flip {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius);
+  background: transparent;
+  perspective: 1200px;
+  cursor: pointer;
+}
+.money-flip:disabled { cursor: default; }
+.money-card {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transform: scale(0.97);
+  transform-style: preserve-3d;
+  transition: opacity 420ms var(--ease), transform 640ms var(--ease);
+}
+.money-card.ready { opacity: 1; transform: scale(1); }
+.money-card.ready.flipped { transform: rotateY(180deg) scale(1); }
 .money-image {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
@@ -116,10 +144,26 @@ button:focus-visible, a:focus-visible {
   object-fit: contain;
   filter: drop-shadow(0 18px 26px color-mix(in srgb, var(--ink) 13%, transparent));
   opacity: 0;
-  transform: scale(0.97);
-  transition: opacity 500ms var(--ease), transform 700ms var(--ease);
+  backface-visibility: hidden;
+  transition: opacity 300ms ease;
 }
-.money-image.loaded { opacity: 1; transform: scale(1); }
+.money-image.loaded { opacity: 1; }
+.money-image-back { transform: rotateY(180deg); }
+.flip-label {
+  position: absolute;
+  right: 14px;
+  top: 12px;
+  padding: 5px 7px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  pointer-events: none;
+}
 .image-skeleton {
   position: absolute;
   width: 55%;
@@ -354,6 +398,7 @@ button:focus-visible, a:focus-visible {
   .answer-place { margin-bottom: 2px; font-size: 12px; }
   .result-story h1 { font-size: 18px; line-height: 1.1; }
   .answer-blurb { margin-top: 6px; font-size: 12px; line-height: 1.4; }
+  .answer-blurb { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 4; }
   .target-note { margin-top: 5px; line-height: 1.35; }
   .source-links { gap: 7px 12px; margin-top: 7px; }
   .source-links a { font-size: 11px; }
@@ -392,6 +437,7 @@ button:focus-visible, a:focus-visible {
   .text-button { padding-inline: 6px; font-size: 11px; }
   .game { grid-template-rows: clamp(202px, 32dvh, 250px) minmax(0, 1fr); }
   .specimen-stage { padding-inline: 14px; }
+  .flip-label { top: 8px; right: 8px; font-size: 10px; }
   .money-image { max-height: calc(32dvh - 56px); }
   .result-panel { gap: 11px 8px; padding-inline: 12px; }
   .result-number strong { font-size: 29px; }

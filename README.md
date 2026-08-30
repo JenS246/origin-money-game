@@ -1,6 +1,6 @@
 # ORIGIN
 
-ORIGIN is a daily geography game about real money. A player studies a coin or banknote image, places one pin on a world map, and receives a score based on distance from a documented accepted area.
+ORIGIN is a daily geography game about real money. A player studies both sides of a documented coin or banknote, places one pin on a world map, and receives a score based on distance from its mint or printing location.
 
 The interface is deliberately spare: one specimen, one map, one decision. After the guess, the map connects the player's pin to the answer and a compact result sheet explains the object, target method, source, and image license.
 
@@ -8,25 +8,27 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 
 - One UTC-dated puzzle is shared by every player each day.
 - Practice mode draws a different random specimen from the same checked-in corpus.
+- Every specimen can be flipped between its matched obverse and reverse photographs.
 - Pins can be moved or dragged until the player selects **Lock pin**.
 - Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the score starts at 5,000 and follows a smooth exponential distance curve.
-- Each target records its meaning as `mint_city`, `issuing_city`, `issuing_authority_city`, `printing_facility`, or `issuing_region`.
-- Results show the target method and tolerance instead of pretending every historical currency has one self-evident exact origin.
+- Each target is a documented `mint_city` or `printing_facility` linked from the source record.
+- Results show the object date, production method, tolerance, ANS record, and image rights.
 - Daily results, averages, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
 - Share text includes only the edition, score, distance, and distance band. It never reveals the answer.
 
 ## Data pipeline
 
-The shipped game does not scrape Wikipedia at runtime. `npm run data:build` performs a build-time ingestion:
+The shipped game does not call MANTIS at runtime. `npm run data:build` performs a build-time ingestion:
 
-1. Read the hand-curated candidates in `data/seeds.json`, candidates discovered through the checked-in Wikidata SPARQL query, and reviewed corrections in `data/anchor-overrides.json`.
-2. Request the English Wikipedia PageImages and extracts APIs in batches.
-3. Resolve each selected file through the Wikimedia Commons ImageInfo API.
-4. Reject missing, small, non-raster, diagram, logo, montage, and known aggregate images.
-5. Write `src/money.generated.js` with article links, display thumbnails, author, license, license URL, Commons file page, origin coordinates, and target method.
-6. Write `data/quality-report.json` so the accepted/rejected counts are auditable.
+1. Query the American Numismatic Society MANTIS Atom feed for records with images, dates, production places, and an eligible object type.
+2. Fetch complete NUDS/XML object records in batches.
+3. Require an approved record, a documented date no later than 1925, a denomination, matched obverse and reverse images, descriptions for both sides, and an explicit Public Domain Mark.
+4. Reject records marked as forgeries, counterfeits, replicas, or modern copies.
+5. Resolve controlled production-place identifiers through Nomisma, GeoNames, or Wikidata and reject unresolved locations.
+6. Select a geographically varied corpus while avoiding duplicate issues and repeated coin mints.
+7. Write `src/money.generated.js` and an auditable rejection summary in `data/quality-report.json`.
 
-The browser uses committed metadata, so gameplay does not depend on live API availability. Display images remain hosted by Wikimedia Commons and retain their per-file credit and license. Image metadata is never used to infer the answer location.
+The current corpus contains 50 or more checked objects across at least 40 production locations, including coins and paper money. The browser uses committed metadata, so gameplay does not depend on live API availability. Images remain hosted by the ANS.
 
 To refresh the corpus:
 
@@ -34,7 +36,7 @@ To refresh the corpus:
 npm run data:build
 ```
 
-The ingestion call requires network access. Do not assume that every Commons file has the same license.
+The ingestion call requires network access. The hard admission rules are intentional: MANTIS is much larger than the shipped game, and incomplete records are expected to be rejected.
 
 ## Run locally
 
@@ -60,6 +62,7 @@ The automated tests cover distance and scoring invariants. The game has also bee
 - Semantic buttons, dialogs, headings, labels, and live regions
 - 44px minimum interactive targets
 - Keyboard-operable dialogs and controls
+- Keyboard-operable obverse and reverse flip control
 - Repositionable pin before confirmation
 - Strong focus indicators and color-independent answer text
 - System light/dark appearance
@@ -68,19 +71,19 @@ The automated tests cover distance and scoring invariants. The game has also bee
 
 ## Design reference
 
-The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout, restrained cobalt accent, and in-place result reveal. The production interface was then rebuilt as real HTML, CSS, Leaflet, and sourced Wikimedia images.
+The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout, restrained cobalt accent, and in-place result reveal. The production interface was rebuilt as HTML, CSS, Leaflet, and sourced ANS object photography.
 
 ## Important URLs and services
 
-- Planned production site: https://jens246.github.io/origin-money-game/
-- Planned source repository: https://github.com/JenS246/origin-money-game
+- Production site: https://jens246.github.io/origin-money-game/
+- Source repository: https://github.com/JenS246/origin-money-game
 - Map interaction: [Leaflet](https://leafletjs.com/)
 - Map tiles/data: [OpenStreetMap](https://www.openstreetmap.org/copyright)
-- Currency articles: [Wikipedia](https://www.wikipedia.org/)
-- Currency media: [Wikimedia Commons](https://commons.wikimedia.org/)
+- Object records and media: [American Numismatic Society MANTIS](https://numismatics.org/search/)
+- Mint identifiers and coordinates: [Nomisma](https://nomisma.org/)
 - Hosting: GitHub Pages
 - Backend services: none
 
 ## Licensing
 
-Application code is MIT licensed. Wikipedia extracts are available under CC BY-SA. Wikimedia Commons media has per-file licensing; ORIGIN displays the author and license with a link to the source file on every result.
+Application code is MIT licensed. MANTIS metadata is available under ODbL. The importer admits only object images explicitly marked as public domain in their NUDS record. Every result links to the stable ANS object record and credits the American Numismatic Society.

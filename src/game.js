@@ -5,7 +5,7 @@ import { getDailyResult, getStats, saveDailyResult } from './storage.js';
 const LEAFLET_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js';
 const LAUNCH_DATE = Date.UTC(2026, 7, 29);
 const DAY_MS = 86_400_000;
-const SCORE_MODEL = 2;
+const SCORE_MODEL = 3;
 
 const elements = {
   home: document.querySelector('#home-screen'),
@@ -15,6 +15,10 @@ const elements = {
   startPractice: document.querySelector('#start-practice'),
   edition: document.querySelector('#edition-label'),
   image: document.querySelector('#money-image'),
+  backImage: document.querySelector('#money-image-back'),
+  flip: document.querySelector('#money-flip'),
+  card: document.querySelector('#money-card'),
+  flipLabel: document.querySelector('#flip-label'),
   skeleton: document.querySelector('#image-skeleton'),
   prompt: document.querySelector('#prompt-copy'),
   submit: document.querySelector('#submit-button'),
@@ -68,17 +72,42 @@ function practiceMoney() {
 
 function setImage(item) {
   elements.image.classList.remove('loaded');
+  elements.backImage.classList.remove('loaded');
+  elements.card.classList.remove('ready', 'flipped');
+  elements.flip.disabled = true;
+  elements.flip.setAttribute('aria-pressed', 'false');
+  elements.flip.setAttribute('aria-label', 'Show reverse side');
+  elements.flipLabel.textContent = 'Obverse / tap to flip';
   elements.skeleton.classList.remove('hidden');
   elements.image.alt = item.image.alt;
   elements.image.onload = () => {
     elements.skeleton.classList.add('hidden');
     elements.image.classList.add('loaded');
+    elements.card.classList.add('ready');
   };
   elements.image.onerror = () => {
     elements.skeleton.classList.add('hidden');
     elements.prompt.textContent = 'The image could not be loaded';
   };
+  elements.backImage.alt = item.image.backAlt;
+  elements.backImage.onload = () => {
+    elements.backImage.classList.add('loaded');
+    elements.flip.disabled = false;
+  };
+  elements.backImage.onerror = () => {
+    elements.flipLabel.textContent = 'Obverse';
+  };
   elements.image.src = item.image.url;
+  elements.backImage.src = item.image.backUrl;
+}
+
+function toggleSide() {
+  if (elements.flip.disabled) return;
+  const flipped = !elements.card.classList.contains('flipped');
+  elements.card.classList.toggle('flipped', flipped);
+  elements.flip.setAttribute('aria-pressed', String(flipped));
+  elements.flip.setAttribute('aria-label', flipped ? 'Show obverse side' : 'Show reverse side');
+  elements.flipLabel.textContent = flipped ? 'Reverse / tap to flip' : 'Obverse / tap to flip';
 }
 
 function markerElement(className) {
@@ -171,11 +200,12 @@ function populateResult(result) {
     : `${activeMoney.issuer}, ${activeMoney.anchor.label}`;
   elements.answerTitle.textContent = activeMoney.title;
   elements.blurb.textContent = activeMoney.blurb;
-  elements.targetNote.textContent = `Accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
+  elements.targetNote.textContent = `${activeMoney.year}. Accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
   elements.article.href = activeMoney.articleUrl;
+  elements.article.textContent = 'ANS record';
   elements.imageCredit.href = activeMoney.image.filePage;
   elements.imageCredit.title = `${activeMoney.image.author}, ${activeMoney.image.license}`;
-  elements.imageCredit.textContent = `Image: ${activeMoney.image.author}, ${activeMoney.image.license}`;
+  elements.imageCredit.textContent = `Images: ${activeMoney.image.author}, ${activeMoney.image.license}`;
   elements.next.textContent = mode === 'daily' ? 'Practice' : 'Next';
   elements.result.hidden = false;
   elements.mobileSubmit.style.display = 'none';
@@ -186,12 +216,12 @@ function reveal(saved = null) {
   revealed = true;
   const savedGuess = saved?.guess || guess;
   const measured = distanceFromAcceptedArea(savedGuess, activeMoney.anchor);
-  const canReuseSavedScore = saved?.model === SCORE_MODEL;
+  const canReuseSavedScore = saved?.model === SCORE_MODEL && saved?.moneyId === activeMoney.id;
   const distance = canReuseSavedScore ? saved.distance : measured.distance;
   const rawDistance = canReuseSavedScore ? saved.rawDistance : measured.rawDistance;
   const score = canReuseSavedScore ? saved.score : pointsForDistance(distance);
-  lastResult = { model: SCORE_MODEL, distance, rawDistance, score, guess: savedGuess };
-  if (mode === 'daily' && (!saved || saved.model !== SCORE_MODEL)) {
+  lastResult = { model: SCORE_MODEL, moneyId: activeMoney.id, distance, rawDistance, score, guess: savedGuess };
+  if (mode === 'daily' && (!saved || !canReuseSavedScore)) {
     saveDailyResult(utcDate(), lastResult);
     elements.startDaily.textContent = 'View today';
   }
@@ -215,7 +245,7 @@ function resetRound(item) {
   elements.mobileSubmit.removeAttribute('style');
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
-  elements.prompt.textContent = 'Place its issuing area';
+  elements.prompt.textContent = item.type === 'banknote' ? 'Place its print location' : 'Place its mint';
   elements.mapStatus.textContent = mapReady ? 'Tap anywhere on the map' : 'Loading map';
   setImage(item);
   if (mapReady) map.setView([18, 8], window.innerWidth < 760 ? 1 : 2, { animate: false });
@@ -304,6 +334,7 @@ function wireEvents() {
   elements.homeButton.addEventListener('click', () => elements.home.classList.remove('dismissed'));
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
+  elements.flip.addEventListener('click', toggleSide);
   elements.share.addEventListener('click', shareResult);
   elements.next.addEventListener('click', () => start('practice'));
   for (const button of document.querySelectorAll('[data-open-dialog]')) {

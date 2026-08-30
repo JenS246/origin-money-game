@@ -6,13 +6,13 @@
     <meta name="theme-color" content="#f4f5f2" />
     <meta
       name="description"
-      content="ORIGIN is a daily geography game about the money people carry. Study a real coin or banknote, then place its origin on the map."
+      content="ORIGIN is a daily geography game about real coins and banknotes from the American Numismatic Society. Study both sides, then find where the object was made."
     />
     <meta property="og:title" content="ORIGIN - A daily money map" />
-    <meta property="og:description" content="Study the money. Place its origin." />
+    <meta property="og:description" content="Study both sides. Find where it was made." />
     <title>ORIGIN - A daily money map</title>
     <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
-    <link rel="preconnect" href="https://upload.wikimedia.org" crossorigin />
+    <link rel="preconnect" href="https://numismatics.org" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -31,10 +31,16 @@
         <section class="specimen-panel" aria-label="Currency specimen">
           <div class="specimen-stage">
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
-            <img id="money-image" class="money-image" alt="" decoding="async" />
+            <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
+              <span id="money-card" class="money-card">
+                <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
+                <img id="money-image-back" class="money-image money-image-back" alt="" decoding="async" />
+              </span>
+            </button>
+            <span id="flip-label" class="flip-label" aria-hidden="true">Obverse / tap to flip</span>
           </div>
           <div class="prompt-row">
-            <p id="prompt-copy">Place its issuing area</p>
+            <p id="prompt-copy">Place its mint</p>
             <button id="submit-button" class="primary-button" type="button" disabled>Lock pin</button>
           </div>
         </section>
@@ -65,8 +71,8 @@
             <p id="answer-blurb" class="answer-blurb"></p>
             <p id="target-note" class="target-note"></p>
             <div class="source-links">
-              <a id="article-link" href="#" target="_blank" rel="noreferrer">Wikipedia</a>
-              <a id="image-credit-link" href="#" target="_blank" rel="noreferrer">Image credit</a>
+              <a id="article-link" href="#" target="_blank" rel="noreferrer">ANS record</a>
+              <a id="image-credit-link" href="#" target="_blank" rel="noreferrer">Image source</a>
             </div>
           </div>
           <div class="result-actions">
@@ -78,8 +84,8 @@
 
       <section id="home-screen" class="home-screen" aria-labelledby="home-title">
         <div class="home-copy">
-          <h1 id="home-title">Study the money.<br />Place its origin.</h1>
-          <p>A real coin or banknote, one map, one pin.</p>
+          <h1 id="home-title">Study both sides.<br />Find where it was made.</h1>
+          <p>A documented object, one map, one pin.</p>
           <div class="home-actions">
             <button id="start-daily" class="primary-button large-button" type="button">Play today</button>
             <button id="start-practice" class="secondary-button large-button" type="button">Practice</button>
@@ -88,7 +94,7 @@
         <div class="home-specimen" aria-hidden="true">
           <img id="home-image" alt="" />
         </div>
-        <p class="home-source">Images from Wikimedia Commons</p>
+        <p class="home-source">Objects from the American Numismatic Society</p>
       </section>
     </div>
 
@@ -99,11 +105,11 @@
           <button class="close-button" value="close" aria-label="Close">Close</button>
         </div>
         <ol class="rules-list">
-          <li>Study the currency image. Labels, portraits, scripts, and symbols are all clues.</li>
-          <li>Place one pin where you think it was issued. You can move it before locking.</li>
+          <li>Study the object. Tap it to inspect both the obverse and reverse.</li>
+          <li>Place one pin at the documented mint or printing location. You can move it before locking.</li>
           <li>Score up to 5,000 points based on distance outside the documented accepted area.</li>
         </ol>
-        <p class="dialog-note">The photo comes from Wikimedia Commons, but its file location is never used as the answer. Each target is reviewed as a mint, printing facility, issuing authority city, or issuing region. The method and tolerance are shown after each guess.</p>
+        <p class="dialog-note">Every object is an approved American Numismatic Society record with a documented date, linked production place, matched front and back images, and public-domain image rights. Incomplete and inauthentic records are excluded.</p>
       </form>
     </dialog>
 

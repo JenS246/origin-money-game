@@ -1,6 +1,29 @@
 {
-  "generatedAt": "2026-08-30T04:52:41.092Z",
-  "seeds": 101,
-  "accepted": 37,
-  "rejected": 64
+  "generatedAt": "2026-08-30T05:30:39.453Z",
+  "source": "American Numismatic Society MANTIS",
+  "admissionRules": [
+    "approved physical coin or paper money record",
+    "documented date no later than 1925",
+    "linked production place with resolvable coordinates",
+    "production place is not described as a broad historical region or province",
+    "matched obverse and reverse images",
+    "Public Domain Mark image rights",
+    "denomination and descriptions for both sides",
+    "not marked as a forgery, counterfeit, replica, or modern copy"
+  ],
+  "fetched": 1917,
+  "parsed": 1917,
+  "accepted": 60,
+  "coins": 49,
+  "banknotes": 11,
+  "rejected": {
+    "unlinked_production_place": 106,
+    "missing_side_descriptions": 314,
+    "missing_denomination": 78,
+    "not_authentic": 22,
+    "missing_or_late_date": 6,
+    "unresolvable_coordinates": 35,
+    "images_not_public_domain": 5,
+    "missing_paired_images": 48
+  }
 }

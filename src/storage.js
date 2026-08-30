@@ -33,7 +33,7 @@ export function saveDailyResult(date, result) {
   const state = read();
   const previousModel = Number(state.results[date]?.model) || 0;
   const nextModel = Number(result.model) || 0;
-  if (!state.results[date] || nextModel > previousModel) {
+  if (!state.results[date] || nextModel > previousModel || state.results[date].moneyId !== result.moneyId) {
     state.results[date] = result;
     write(state);
   }

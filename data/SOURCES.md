@@ -1,26 +1,23 @@
 # Data sources
 
-ORIGIN's content bank is assembled from public Wikimedia APIs at build time.
+ORIGIN's content bank is assembled from the American Numismatic Society's MANTIS collection at build time.
 
 ## APIs
 
-- English Wikipedia Action API: `https://en.wikipedia.org/w/api.php`
-  - `prop=pageimages` for the selected free lead image
-  - `prop=extracts` for the introductory factual sentence
-  - `prop=info&inprop=url` for the canonical article URL
-- Wikimedia Commons Action API: `https://commons.wikimedia.org/w/api.php`
-  - `prop=imageinfo`
-  - `iiprop=url|mime|size|canonicaltitle|extmetadata`
-  - author, credit, license, license URL, and source file page are retained per record
-- Wikidata Query Service: `https://query.wikidata.org/sparql`
-  - `scripts/discover.sparql` discovers coin and banknote items with images, countries, coordinates, and English Wikipedia sitelinks
+- MANTIS Atom search: `https://numismatics.org/search/feed/`
+  - discovers approved physical objects with image, date, object type, and production-place filters
+- MANTIS NUDS/XML API: `https://numismatics.org/search/apis/getNuds`
+  - supplies dates, denominations, authorities, production-place identifiers, descriptions, rights, and matched obverse/reverse image groups
+- Nomisma JSON-LD: `https://nomisma.org/id/{id}.jsonld`
+  - resolves controlled mint identifiers to documented coordinates
+- GeoNames RDF and Wikidata entity JSON
+  - resolve linked production places that are not Nomisma mints
 
 ## Rights and attribution
 
-- Wikidata structured data is CC0.
-- Wikipedia text is CC BY-SA.
-- Wikimedia Commons files have individual licenses. The build never applies one global license to all images.
-- The game result view links to the Wikipedia article and displays the Commons author and license linked to the file page.
+- MANTIS metadata is available under the Open Database License.
+- The importer admits only records whose NUDS image rights explicitly carry the Public Domain Mark.
+- Every shipped object links to its stable ANS collection record and credits the American Numismatic Society.
 - OpenStreetMap attribution remains visible on the map.
 
-See Wikimedia's [reuse guidance](https://commons.wikimedia.org/wiki/Commons:Reusing_content_outside_Wikimedia) before redistributing or caching any image locally.
+See the [ANS API documentation](https://numismatics.org/search/apis) and [photography permissions](https://numismatics.org/collections/photography-permissions/).
