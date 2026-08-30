@@ -12,11 +12,11 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
 - Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before scoring. Geography contributes 4,000 points and date accuracy contributes 1,000, preserving a 5,000-point total.
-- Each target is a documented `mint_city` or `printing_facility` linked from the source record.
-- Results show the object date, production method, tolerance, ANS record, and image rights.
+- Each target is a documented mint, printing facility, or production area linked from the source record.
+- Results show the object date, production method, tolerance, museum record, and image rights.
 - Daily results, averages, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
 - Share text includes only the edition, score, distance, and distance band. It never reveals the answer.
-- Light, edge-connected studio backgrounds are removed in the browser after an ANS photograph loads. The original image URL is still used and no processed image library is checked into the repository.
+- Light, edge-connected studio backgrounds are removed in the browser after a photograph loads. The original image URL is still used and no processed image library is checked into the repository.
 
 ## Collection explorer
 
@@ -24,7 +24,7 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 
 ## Data pipeline
 
-The shipped game does not call MANTIS at runtime. `npm run data:build` performs a build-time ingestion:
+The shipped game does not call collection APIs at runtime. `npm run data:build` performs two build-time ingestions:
 
 1. Query the American Numismatic Society MANTIS Atom feed for records with images, dates, production places, and an eligible object type.
 2. Fetch complete NUDS/XML object records in batches.
@@ -32,11 +32,12 @@ The shipped game does not call MANTIS at runtime. `npm run data:build` performs 
 4. Reject records marked as forgeries, counterfeits, replicas, or modern copies.
 5. Resolve controlled production-place identifiers through Nomisma, GeoNames, or Wikidata and reject unresolved locations.
 6. Deduplicate exact issues and cap repeated objects from one production place so the collection remains varied without discarding historically important mints.
-7. Write the local metadata bank to `src/money.generated.js`, the deterministic daily order to `src/daily.generated.js`, and an auditable filter summary to `data/quality-report.json`.
+7. Scan all 1.3 million current National Museum of American History Open Access metadata records and retain Smithsonian currency only when it has a date, a geocoded production area more specific than a country, paired CC0 images, and descriptions for both sides.
+8. Write the merged local metadata bank to `src/money.generated.js`, the deterministic daily order to `src/daily.generated.js`, and auditable filter summaries under `data/`.
 
-The current corpus contains 1,452 checked objects: 1,189 coins and 263 banknotes. The ingestion measured 124,160 upstream search matches, examined 10,060 records sampled across the full span of every coin department, and scanned the complete 788-record paper-money result set. Of those examined records, 5,288 passed every hard admission rule before duplicate and geographic-variety curation.
+The current corpus contains 1,464 checked objects: 1,201 coins and 263 banknotes. MANTIS contributes 1,452 objects. The complete Smithsonian NMAH scan found only 20 currency records meeting every hard rule; eight duplicated issues already represented by MANTIS, leaving 12 additional coins. No Smithsonian banknote currently has the required combination of specific location, paired CC0 images, and side descriptions.
 
-Both daily and practice play use this committed local corpus. Practice does not query MANTIS on demand because runtime queries would make quality, availability, and puzzle behavior depend on an external service. The object photographs remain hosted by the ANS and load only when needed.
+Both daily and practice play use this committed local corpus. Practice does not query either museum on demand because runtime queries would make quality, availability, and puzzle behavior depend on external services. Photographs remain hosted by the source institutions and load only when needed.
 
 To refresh the corpus:
 
@@ -44,7 +45,7 @@ To refresh the corpus:
 npm run data:build
 ```
 
-The ingestion call requires network access. The hard admission rules are intentional: MANTIS is much larger than the shipped game, and incomplete records are expected to be rejected.
+The ingestion requires network access. The Smithsonian refresh reads 256 public metadata shards, so it is substantially larger than the MANTIS refresh. The hard admission rules are intentional: both collections are much larger than the shipped game, and incomplete records are expected to be rejected.
 
 ## Run locally
 
@@ -79,7 +80,7 @@ The automated tests cover distance and scoring invariants. The game has also bee
 
 ## Design reference
 
-The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout and in-place result reveal. The production interface uses a restrained archival gray-green palette, ledger-style display typography, HTML, CSS, Leaflet, and sourced ANS object photography.
+The generated composition study that preceded implementation is preserved at `docs/design-references/ui-direction.png`. It established the split specimen/map layout and in-place result reveal. The production interface uses a restrained archival gray-green palette, ledger-style display typography, HTML, CSS, Leaflet, and sourced museum photography.
 
 ## Important URLs and services
 
@@ -89,10 +90,11 @@ The generated composition study that preceded implementation is preserved at `do
 - Map interaction: [Leaflet](https://leafletjs.com/)
 - Map tiles/data: [OpenStreetMap](https://www.openstreetmap.org/copyright)
 - Object records and media: [American Numismatic Society MANTIS](https://numismatics.org/search/)
+- Object records and media: [Smithsonian Open Access](https://www.si.edu/openaccess)
 - Mint identifiers and coordinates: [Nomisma](https://nomisma.org/)
 - Hosting: GitHub Pages
 - Backend services: none
 
 ## Licensing
 
-Application code is MIT licensed. MANTIS metadata is available under ODbL. The importer admits only object images explicitly marked as public domain in their NUDS record. Every result links to the stable ANS object record and credits the American Numismatic Society.
+Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. The importers admit only object images explicitly marked as public domain or CC0. Every result links to its source record and credits the source institution.

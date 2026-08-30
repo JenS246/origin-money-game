@@ -8,6 +8,7 @@ test('the shipped corpus is large enough for varied play', () => {
   assert.equal(new Set(MONEY.map((item) => item.id)).size, MONEY.length);
   assert.equal(new Set(MONEY.map((item) => item.title.toLowerCase())).size, MONEY.length);
   assert.ok(MONEY.filter((item) => item.type === 'banknote').length >= 8);
+  assert.ok(MONEY.filter((item) => item.id.startsWith('si-')).length >= 10);
   assert.ok(new Set(MONEY.map((item) => item.anchor.label)).size >= 40);
 });
 
@@ -27,13 +28,13 @@ test('every record has a playable target and auditable sources', () => {
     assert.ok(item.anchor.method);
     assert.notEqual(item.anchor.method, 'representative_point');
     assert.ok(Number.isFinite(item.anchor.radiusKm) && item.anchor.radiusKm >= 50 && item.anchor.radiusKm <= 1000);
-    assert.match(item.articleUrl, /^https:\/\/numismatics\.org\/collection\//);
+    assert.match(item.articleUrl, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/)/);
     assert.match(item.anchor.sourceUrl, /^https?:\/\//);
-    assert.match(item.image.url, /^https:\/\/numismatics\.org\/collectionimages\//);
-    assert.match(item.image.backUrl, /^https:\/\/numismatics\.org\/collectionimages\//);
-    assert.match(item.image.filePage, /^https:\/\/numismatics\.org\/collection\//);
+    assert.match(item.image.url, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService)/);
+    assert.match(item.image.backUrl, /^https:\/\/(?:numismatics\.org\/collectionimages\/|ids\.si\.edu\/ids\/deliveryService)/);
+    assert.match(item.image.filePage, /^https:\/\/(?:numismatics\.org\/collection\/|americanhistory\.si\.edu\/collections\/object\/)/);
     assert.ok(item.image.author);
-    assert.equal(item.image.license, 'Public Domain Mark');
+    assert.ok(['Public Domain Mark', 'CC0'].includes(item.image.license));
   }
 });
 

@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-08-30T14:58:15.926Z",
+  "source": "Smithsonian National Museum of American History",
+  "sourceIndex": "https://smithsonian-open-access.s3-us-west-2.amazonaws.com/metadata/edan/nmah/index.txt",
+  "admissionRules": [
+    "coin or paper-money object in the National Museum of American History",
+    "documented date between 500 BCE and 1925",
+    "explicit geocoded place-made metadata more specific than a country",
+    "at least two CC0 image assets",
+    "descriptions for both obverse and reverse",
+    "non-generic object title",
+    "not an ingot, forgery, counterfeit, replica, modern copy, or object of questioned authenticity"
+  ],
+  "shardsRead": 256,
+  "recordsScanned": 1318744,
+  "currencyObjects": 101608,
+  "eligibleBeforeDeduplication": 20,
+  "accepted": 12,
+  "coins": 12,
+  "banknotes": 0,
+  "rejected": {
+    "missing_specific_geocoded_production_place": 56073,
+    "missing_paired_cc0_images": 15233,
+    "missing_or_out_of_range_date": 22420,
+    "generic_or_missing_title": 7253,
+    "inauthentic_or_questioned": 605,
+    "malformed_record": 30,
+    "missing_side_descriptions": 4
+  },
+  "excludedAfterValidation": {
+    "duplicate_title": 8
+  },
+  "combinedCorpus": 1464
+}

@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "python3 -m http.server 4174",
-    "data:build": "node scripts/build-mantis-bank.mjs",
+    "data:build": "npm run data:build:mantis && npm run data:build:smithsonian",
+    "data:build:mantis": "node scripts/build-mantis-bank.mjs",
+    "data:build:smithsonian": "node scripts/build-smithsonian-bank.mjs",
     "test": "node --test",
-    "check": "node --check src/game.js && node --check src/admin.js && node --check src/image-matte.js && node --check src/scoring.js && node --check src/storage.js && node --check src/money.generated.js && node --check src/daily.generated.js && node --check scripts/build-mantis-bank.mjs"
+    "check": "node --check src/game.js && node --check src/admin.js && node --check src/image-matte.js && node --check src/scoring.js && node --check src/storage.js && node --check src/money.generated.js && node --check src/daily.generated.js && node --check scripts/build-mantis-bank.mjs && node --check scripts/build-smithsonian-bank.mjs"
   }
 }

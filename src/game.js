@@ -285,7 +285,12 @@ function targetMethodLabel(method) {
     issuing_authority_city: 'issuing authority city',
     printing_facility: 'printing facility',
     issuing_region: 'issuing region',
+    production_place: 'documented production area',
   }[method] || 'documented origin point';
+}
+
+function recordLabel(item) {
+  return item.id.startsWith('si-') ? 'Smithsonian record' : 'ANS record';
 }
 
 function populateResult(result) {
@@ -299,7 +304,7 @@ function populateResult(result) {
   elements.blurb.textContent = activeMoney.blurb;
   elements.targetNote.textContent = `You guessed ${formatYear(result.yearGuess)}. Date: ${activeMoney.year}. Map accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
   elements.article.href = activeMoney.articleUrl;
-  elements.article.textContent = 'ANS record';
+  elements.article.textContent = recordLabel(activeMoney);
   elements.imageCredit.href = activeMoney.image.filePage;
   elements.imageCredit.title = `${activeMoney.image.author}, ${activeMoney.image.license}`;
   elements.imageCredit.textContent = `Images: ${activeMoney.image.author}, ${activeMoney.image.license}`;

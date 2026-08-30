@@ -6,13 +6,14 @@
     <meta name="theme-color" content="#eef0e9" />
     <meta
       name="description"
-      content="ORIGIN is a daily geography game about real coins and banknotes from the American Numismatic Society. Study both sides, then find where the object was made."
+      content="ORIGIN is a daily geography game about documented coins and banknotes. Study both sides, then find where the object was made."
     />
     <meta property="og:title" content="ORIGIN - A daily money map" />
     <meta property="og:description" content="Study both sides. Find where it was made." />
     <title>ORIGIN - A daily money map</title>
     <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
     <link rel="preconnect" href="https://numismatics.org" crossorigin />
+    <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -100,7 +101,7 @@
         <div class="home-specimen" aria-hidden="true">
           <img id="home-image" alt="" crossorigin="anonymous" decoding="async" />
         </div>
-        <p class="home-source">Objects from the American Numismatic Society</p>
+        <p class="home-source">Objects from ANS and Smithsonian</p>
       </section>
     </div>
 
@@ -115,7 +116,7 @@
           <li>Place one pin at the documented mint or printing location, then estimate its date.</li>
           <li>Lock both guesses. The map contributes 4,000 points and the date contributes 1,000.</li>
         </ol>
-        <p class="dialog-note">Every object is an approved American Numismatic Society record with a documented date, linked production place, matched front and back images, and public-domain image rights. Incomplete and inauthentic records are excluded.</p>
+        <p class="dialog-note">Every object has a documented date, geocoded production place, matched front and back images, and public-domain image rights. Incomplete records are excluded.</p>
       </form>
     </dialog>
 
