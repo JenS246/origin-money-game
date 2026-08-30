@@ -101,3 +101,5 @@ The generated composition study that preceded implementation is preserved at `do
 ## Licensing
 
 Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. Bank of Canada Museum coin photographs are used with attribution under the Bank's website reuse terms; bank-note images from that source are excluded. Every result links to its source record, image terms, and source institution.
+
+The bundled Newsreader and IBM Plex Sans Condensed fonts are redistributed under the SIL Open Font License. Their license texts are included in `assets/fonts/`.

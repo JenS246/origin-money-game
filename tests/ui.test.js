@@ -4,8 +4,27 @@ import { readFile } from 'node:fs/promises';
 
 test('the specimen controls use concise, purposeful copy', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /Flip the coin/);
+  assert.match(html, /Guess its origin/);
+  assert.match(html, /Pin the currency to its place of origin/);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
+});
+
+test('results use the branded share card instead of the native share sheet', async () => {
+  const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
+
+  assert.match(html, /id="share-dialog"/);
+  assert.match(html, /id="share-card"/);
+  assert.doesNotMatch(html, /distance-visual/);
+  assert.match(source, /shareDialog\.showModal\(\)/);
+  assert.match(source, /saveShareCard/);
+  assert.doesNotMatch(source, /navigator\.share/);
+  assert.match(styles, /@font-face/);
+  assert.match(styles, /IBM Plex Sans Condensed/);
+  assert.match(styles, /Newsreader/);
 });
 
 test('the flip demonstration respects reduced motion', async () => {

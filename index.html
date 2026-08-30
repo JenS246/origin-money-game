@@ -16,12 +16,14 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=6" />
   </head>
   <body>
     <div id="app" class="app-shell">
       <header class="topbar">
-        <button id="home-button" class="wordmark" type="button" aria-label="Go to home">ORIGIN</button>
+        <button id="home-button" class="wordmark" type="button" aria-label="Go to home">
+          <span class="wordmark-coin" aria-hidden="true">O</span><span>RIGIN</span>
+        </button>
         <div id="edition-label" class="edition-label" aria-live="polite"></div>
         <nav class="header-actions" aria-label="Game menu">
           <button class="text-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">How</button>
@@ -56,11 +58,6 @@
         </section>
 
         <section id="result-panel" class="result-panel" hidden aria-label="Round result">
-          <div class="distance-visual" aria-hidden="true">
-            <span class="pin-symbol filled"></span>
-            <span class="route-line"></span>
-            <span class="pin-symbol answer"></span>
-          </div>
           <div class="result-number">
             <strong id="distance-value">0</strong>
             <span>km off</span>
@@ -84,7 +81,7 @@
             </div>
           </div>
           <div class="result-actions">
-            <button id="share-button" class="secondary-button" type="button">Share</button>
+            <button id="share-button" class="share-button" type="button">Share</button>
             <button id="next-button" class="primary-button" type="button">Practice</button>
           </div>
         </section>
@@ -92,8 +89,8 @@
 
       <section id="home-screen" class="home-screen" aria-labelledby="home-title">
         <div class="home-copy">
-          <h1 id="home-title">Study both sides.<br />Find where it was made.</h1>
-          <p>A documented object, one map, one pin.</p>
+          <h1 id="home-title">Flip the coin.<br />Guess its origin.</h1>
+          <p>Pin the currency to its place of origin.</p>
           <div class="home-actions">
             <button id="start-daily" class="primary-button large-button" type="button">Play today</button>
             <button id="start-practice" class="secondary-button large-button" type="button">Practice</button>
@@ -102,7 +99,6 @@
         <div class="home-specimen" aria-hidden="true">
           <img id="home-image" alt="" crossorigin="anonymous" decoding="async" />
         </div>
-        <p class="home-source">Objects from museum collections</p>
       </section>
     </div>
 
@@ -137,8 +133,33 @@
       </form>
     </dialog>
 
+    <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-dialog-title">
+      <div class="share-dialog-inner">
+        <div id="share-card" class="share-card">
+          <div class="share-card-head">
+            <h2 id="share-dialog-title" class="share-wordmark"><span aria-hidden="true">O</span>RIGIN</h2>
+            <p id="share-edition"></p>
+          </div>
+          <div class="share-score">
+            <strong id="share-score">0</strong>
+            <span>out of 5,000</span>
+          </div>
+          <div class="share-facts">
+            <p><strong id="share-distance">0</strong><span>km off</span></p>
+            <p><strong id="share-years">0</strong><span>years off</span></p>
+          </div>
+          <p class="share-url">jens246.github.io/origin-money-game</p>
+        </div>
+        <div class="share-dialog-actions">
+          <button id="copy-share-button" class="primary-button" type="button">Copy result</button>
+          <button id="save-share-button" class="secondary-button" type="button">Save card</button>
+          <form method="dialog"><button class="close-button" value="close">Close</button></form>
+        </div>
+      </div>
+    </dialog>
+
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGIN needs JavaScript to run the map and score your guess.</noscript>
-    <script type="module" src="src/game.js"></script>
+    <script type="module" src="src/game.js?v=6"></script>
   </body>
 </html>

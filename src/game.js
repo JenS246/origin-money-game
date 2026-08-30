@@ -46,6 +46,13 @@ const elements = {
   article: document.querySelector('#article-link'),
   imageCredit: document.querySelector('#image-credit-link'),
   share: document.querySelector('#share-button'),
+  shareDialog: document.querySelector('#share-dialog'),
+  shareEdition: document.querySelector('#share-edition'),
+  shareScore: document.querySelector('#share-score'),
+  shareDistance: document.querySelector('#share-distance'),
+  shareYears: document.querySelector('#share-years'),
+  copyShare: document.querySelector('#copy-share-button'),
+  saveShare: document.querySelector('#save-share-button'),
   next: document.querySelector('#next-button'),
   toast: document.querySelector('#toast'),
 };
@@ -403,19 +410,98 @@ function showToast(message) {
   window.setTimeout(() => elements.toast.classList.remove('visible'), 2200);
 }
 
-async function shareResult() {
-  if (!lastResult) return;
+function shareText() {
   const title = mode === 'daily' ? `ORIGIN #${editionNumber()}` : 'ORIGIN Practice';
-  const text = `${title}\n${lastResult.score.toLocaleString()} / 5,000\n${Math.round(lastResult.distance).toLocaleString()} km, ${distanceBand(lastResult.distance)}\n${Math.round(lastResult.dateDistance).toLocaleString()} years off`;
+  return `${title}\n${lastResult.score.toLocaleString()} / 5,000\n${Math.round(lastResult.distance).toLocaleString()} km, ${distanceBand(lastResult.distance)}\n${Math.round(lastResult.dateDistance).toLocaleString()} years off\nhttps://jens246.github.io/origin-money-game/`;
+}
+
+function shareResult() {
+  if (!lastResult) return;
+  elements.shareEdition.textContent = mode === 'daily' ? `Daily ${editionNumber()}` : 'Practice';
+  elements.shareScore.textContent = lastResult.score.toLocaleString();
+  elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
+  elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
+  elements.shareDialog.showModal();
+}
+
+async function copyShareResult() {
+  if (!lastResult) return;
   try {
-    if (navigator.share) await navigator.share({ text });
-    else {
-      await navigator.clipboard.writeText(text);
-      showToast('Result copied');
-    }
-  } catch (error) {
-    if (error?.name !== 'AbortError') showToast('Could not share result');
+    await navigator.clipboard.writeText(shareText());
+    showToast('Result copied');
+  } catch {
+    showToast('Could not copy result');
   }
+}
+
+async function saveShareCard() {
+  if (!lastResult) return;
+  await document.fonts.ready;
+  const canvas = document.createElement('canvas');
+  canvas.width = 1200;
+  canvas.height = 1500;
+  const context = canvas.getContext('2d');
+  context.fillStyle = '#e8ece5';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  context.strokeStyle = '#2e6652';
+  context.lineWidth = 18;
+  context.beginPath();
+  context.arc(600, 340, 218, 0, Math.PI * 2);
+  context.stroke();
+  context.globalAlpha = 0.18;
+  context.lineWidth = 4;
+  context.beginPath();
+  context.arc(600, 340, 184, 0, Math.PI * 2);
+  context.stroke();
+  context.globalAlpha = 1;
+
+  context.fillStyle = '#18211c';
+  context.textAlign = 'center';
+  context.font = '700 118px "Newsreader", serif';
+  context.fillText('ORIGIN', 600, 382);
+  context.font = '600 40px "IBM Plex Sans Condensed", sans-serif';
+  context.fillStyle = '#2e6652';
+  context.fillText(mode === 'daily' ? `DAILY ${editionNumber()}` : 'PRACTICE', 600, 650);
+
+  context.fillStyle = '#18211c';
+  context.font = '700 250px "IBM Plex Sans Condensed", sans-serif';
+  context.fillText(lastResult.score.toLocaleString(), 600, 900);
+  context.font = '400 38px "IBM Plex Sans Condensed", sans-serif';
+  context.fillStyle = '#59645c';
+  context.fillText('OUT OF 5,000', 600, 965);
+
+  const facts = [
+    [Math.round(lastResult.distance).toLocaleString(), 'KM OFF'],
+    [Math.round(lastResult.dateDistance).toLocaleString(), 'YEARS OFF'],
+  ];
+  facts.forEach(([value, label], index) => {
+    const x = index === 0 ? 340 : 860;
+    context.fillStyle = '#18211c';
+    context.font = '700 94px "IBM Plex Sans Condensed", sans-serif';
+    context.fillText(value, x, 1180);
+    context.fillStyle = '#59645c';
+    context.font = '600 30px "IBM Plex Sans Condensed", sans-serif';
+    context.fillText(label, x, 1234);
+  });
+
+  context.fillStyle = '#59645c';
+  context.font = '400 28px "IBM Plex Sans Condensed", sans-serif';
+  context.fillText('jens246.github.io/origin-money-game', 600, 1405);
+
+  canvas.toBlob((blob) => {
+    if (!blob) {
+      showToast('Could not save card');
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = mode === 'daily' ? `origin-${editionNumber()}.png` : 'origin-practice.png';
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    showToast('Card saved');
+  }, 'image/png');
 }
 
 async function initializeMap() {
@@ -462,6 +548,8 @@ function wireEvents() {
   elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));
   elements.flip.addEventListener('click', toggleSide);
   elements.share.addEventListener('click', shareResult);
+  elements.copyShare.addEventListener('click', copyShareResult);
+  elements.saveShare.addEventListener('click', saveShareCard);
   elements.next.addEventListener('click', () => start('practice'));
   for (const button of document.querySelectorAll('[data-open-dialog]')) {
     button.addEventListener('click', () => document.querySelector(`#${button.dataset.openDialog}`).showModal());
