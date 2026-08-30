@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=8" />
+    <link rel="stylesheet" href="styles.css?v=9" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -90,8 +90,17 @@
       </main>
 
       <section id="home-screen" class="home-screen" aria-labelledby="home-title">
+        <div class="home-atmosphere" aria-hidden="true">
+          <div class="home-map"></div>
+          <div class="home-journey">
+            <svg viewBox="0 0 1440 760" preserveAspectRatio="none" focusable="false">
+              <path d="M -80 604 C 182 476 292 748 534 608 C 756 480 824 288 1064 380 C 1254 452 1348 616 1520 552" />
+            </svg>
+            <span class="home-journey-coin"></span>
+          </div>
+        </div>
         <div class="home-copy">
-          <h1 id="home-title">Flip the currency.<br />Guess its origin.</h1>
+          <h1 id="home-title"><span class="home-title-flip" data-copy="Flip the currency."><span>Flip the currency.</span></span><br />Guess its origin.</h1>
           <p>Pin the currency to its place of origin.</p>
           <div class="home-actions">
             <button id="start-daily" class="primary-button large-button" type="button">Play</button>
@@ -162,6 +171,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGIN needs JavaScript to run the map and score your guess.</noscript>
-    <script type="module" src="src/game.js?v=8"></script>
+    <script type="module" src="src/game.js?v=9"></script>
   </body>
 </html>
