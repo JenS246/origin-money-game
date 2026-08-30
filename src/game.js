@@ -18,6 +18,7 @@ const DAY_MS = 86_400_000;
 const SCORE_MODEL = 4;
 
 const elements = {
+  topbar: document.querySelector('.topbar'),
   home: document.querySelector('#home-screen'),
   homeButton: document.querySelector('#home-button'),
   homeImage: document.querySelector('#home-image'),
@@ -352,7 +353,6 @@ function reveal(saved = null) {
   };
   if (mode === 'daily' && (!saved || !canReuseSavedScore)) {
     saveDailyResult(utcDate(), lastResult);
-    elements.startDaily.textContent = 'View today';
   }
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
@@ -384,7 +384,8 @@ function resetRound(item) {
 function start(selectedMode) {
   mode = selectedMode;
   elements.home.classList.add('dismissed');
-  elements.edition.textContent = mode === 'daily' ? `Daily ${editionNumber()}` : 'Practice';
+  elements.topbar.classList.remove('home-state');
+  elements.edition.textContent = mode === 'daily' ? "Today's Currency" : 'Practice';
   const item = mode === 'daily' ? dailyMoney() : practiceMoney();
   resetRound(item);
   const saved = mode === 'daily' ? getDailyResult(utcDate()) : null;
@@ -543,6 +544,8 @@ function wireEvents() {
   elements.homeButton.addEventListener('click', () => {
     clearFlipDemo();
     elements.home.classList.remove('dismissed');
+    elements.topbar.classList.add('home-state');
+    elements.edition.textContent = "Today's Currency";
   });
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
@@ -564,9 +567,8 @@ function boot() {
   }
   const today = dailyMoney();
   loadPreviewImage(elements.homeImage, today.image.url);
-  const saved = getDailyResult(utcDate());
-  elements.startDaily.textContent = saved?.model === SCORE_MODEL && saved?.moneyId === today.id ? 'View today' : 'Play today';
-  elements.edition.textContent = `Daily ${editionNumber()}`;
+  elements.startDaily.textContent = 'Play';
+  elements.edition.textContent = "Today's Currency";
   updateStats();
   wireEvents();
   initializeMap();

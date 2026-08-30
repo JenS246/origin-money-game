@@ -4,11 +4,14 @@ import { readFile } from 'node:fs/promises';
 
 test('the specimen controls use concise, purposeful copy', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(html, /Flip the coin/);
+  const game = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.match(html, /Flip the currency/);
   assert.match(html, /Guess its origin/);
   assert.match(html, /Pin the currency to its place of origin/);
+  assert.match(html, /class="wordmark-coin"/);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
+  assert.doesNotMatch(`${html}\n${game}`, /Flip the coin|View today|Play today/);
 });
 
 test('results use the branded share card instead of the native share sheet', async () => {

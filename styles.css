@@ -42,7 +42,7 @@
   --map-filter: grayscale(0.54) sepia(0.12) hue-rotate(78deg) saturate(0.62) contrast(0.94) brightness(1.03);
   --photo-stage: #e3e6de;
   --radius: 10px;
-  --header-height: 58px;
+  --header-height: 66px;
   --topbar-height: calc(var(--header-height) + env(safe-area-inset-top));
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
@@ -96,6 +96,7 @@ button:focus-visible, a:focus-visible {
   position: relative;
   z-index: 3;
 }
+.topbar.home-state { border-bottom-color: transparent; }
 .wordmark {
   justify-self: start;
   display: inline-flex;
@@ -105,34 +106,61 @@ button:focus-visible, a:focus-visible {
   background: none;
   color: var(--ink);
   font-family: "Newsreader", Georgia, serif;
-  font-size: 23px;
+  font-size: 25px;
   font-weight: 700;
   letter-spacing: 0.095em;
   cursor: pointer;
 }
 .wordmark-coin {
   position: relative;
-  flex: 0 0 26px;
-  width: 26px;
-  height: 26px;
-  display: grid;
-  place-items: center;
-  margin-right: 0.09em;
-  border: 1px solid color-mix(in srgb, var(--accent) 68%, var(--ink));
+  flex: 0 0 30px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  margin-right: 0.12em;
+  border: 1px solid color-mix(in srgb, var(--accent) 54%, var(--ink));
   border-radius: 50%;
-  background: var(--accent);
+  background:
+    radial-gradient(circle at 32% 26%, color-mix(in srgb, var(--accent-ink) 36%, transparent) 0 5%, transparent 6%),
+    conic-gradient(from 32deg,
+      color-mix(in srgb, var(--accent) 80%, var(--ink)),
+      var(--accent) 21%,
+      color-mix(in srgb, var(--accent) 72%, var(--accent-ink)) 43%,
+      color-mix(in srgb, var(--accent) 84%, var(--ink)) 70%,
+      var(--accent));
   box-shadow:
-    inset 0 0 0 2px color-mix(in srgb, var(--accent-ink) 30%, transparent),
-    inset 0 0 0 4px color-mix(in srgb, var(--accent) 82%, var(--ink)),
-    0 1px 1px color-mix(in srgb, var(--ink) 18%, transparent);
-  color: var(--accent-ink);
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0;
-  text-shadow: 0 1px 0 color-mix(in srgb, var(--accent-ink) 36%, transparent);
+    inset 0 0 0 2px color-mix(in srgb, var(--accent-ink) 18%, transparent),
+    inset 0 0 0 5px color-mix(in srgb, var(--accent) 76%, var(--ink)),
+    inset 1px 2px 2px color-mix(in srgb, var(--accent-ink) 26%, transparent),
+    0 1px 2px color-mix(in srgb, var(--ink) 24%, transparent);
+  transform: rotate(-7deg);
 }
-.edition-label { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.wordmark-coin::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--ink));
+  background: var(--page);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent-ink) 20%, transparent);
+  transform: translate(-50%, -50%);
+}
+.wordmark-coin::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 1px solid color-mix(in srgb, var(--accent-ink) 28%, transparent);
+  border-radius: 50%;
+}
+.edition-label {
+  color: var(--ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
 .header-actions { display: flex; justify-self: end; gap: 4px; }
 .text-button, .close-button {
   min-height: 44px;
@@ -140,11 +168,15 @@ button:focus-visible, a:focus-visible {
   border: 0;
   background: none;
   color: var(--muted);
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  font-size: 15px;
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 17px;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   cursor: pointer;
+}
+.text-button {
+  color: var(--ink);
+  font-size: 18px;
 }
 .text-button:hover, .close-button:hover { color: var(--ink); }
 
@@ -458,7 +490,30 @@ button:focus-visible, a:focus-visible {
 .share-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; }
 .share-card-head p, .share-card-head h2 { margin: 0; }
 .share-wordmark { font-family: "Newsreader", Georgia, serif; font-size: clamp(25px, 6vw, 38px); font-weight: 700; letter-spacing: 0.08em; }
-.share-wordmark span { display: inline-grid; width: 1.08em; aspect-ratio: 1; place-items: center; margin-right: 0.06em; border: 1px solid #214b3b; border-radius: 50%; background: #2e6652; box-shadow: inset 0 0 0 2px rgb(232 236 229 / 32%), inset 0 0 0 4px #285946; color: #f4f7f1; font-size: 0.72em; letter-spacing: 0; }
+.share-wordmark-coin {
+  position: relative;
+  display: inline-block;
+  width: 0.82em;
+  aspect-ratio: 1;
+  margin-right: 0.09em;
+  border: 1px solid #214b3b;
+  border-radius: 50%;
+  background: conic-gradient(from 32deg, #214b3b, #2e6652 24%, #80a18f 47%, #285946 72%, #2e6652);
+  box-shadow: inset 0 0 0 2px rgb(232 236 229 / 25%), inset 0 0 0 4px #285946;
+  vertical-align: -0.1em;
+  transform: rotate(-7deg);
+}
+.share-wordmark-coin::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 20%;
+  aspect-ratio: 1;
+  border: 1px solid #214b3b;
+  background: #e8ece5;
+  transform: translate(-50%, -50%);
+}
 
 @media (min-width: 761px) and (max-width: 1100px) {
   .result-panel { grid-template-columns: var(--specimen-width) minmax(0, 1fr); align-items: start; }
@@ -501,17 +556,18 @@ button:focus-visible, a:focus-visible {
 @keyframes flip-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.018); } }
 
 @media (max-width: 760px) {
-  :root { --header-height: 52px; }
+  :root { --header-height: 58px; }
   .topbar {
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
     padding: env(safe-area-inset-top) max(12px, env(safe-area-inset-right)) 0 max(12px, env(safe-area-inset-left));
   }
-  .wordmark { font-size: 21px; }
-  .wordmark-coin { flex-basis: 24px; width: 24px; height: 24px; font-size: 14px; }
+  .wordmark { font-size: 22px; }
+  .wordmark-coin { flex-basis: 26px; width: 26px; height: 26px; }
+  .wordmark-coin::before { width: 6px; height: 6px; }
   .edition-label { display: none; }
   .header-actions { gap: 0; }
-  .text-button { min-height: 42px; padding: 0 8px; font-size: 14px; }
+  .text-button { min-height: 44px; padding: 0 9px; font-size: 16px; }
   .game { grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(214px, 34dvh, 292px) minmax(0, 1fr); }
   .specimen-panel { grid-row: 1; border-right: 0; border-bottom: 1px solid var(--line); }
   .specimen-stage { padding: 12px 20px 6px; }
@@ -602,7 +658,7 @@ button:focus-visible, a:focus-visible {
 
 @media (max-width: 360px) {
   .topbar { gap: 2px; }
-  .text-button { padding-inline: 6px; font-size: 13px; }
+  .text-button { padding-inline: 6px; font-size: 15px; }
   .game { grid-template-rows: clamp(202px, 32dvh, 250px) minmax(0, 1fr); }
   .specimen-stage { padding-inline: 14px; }
   .flip-label { top: 8px; right: 8px; font-size: 10px; }

@@ -16,13 +16,13 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=7" />
+    <link rel="stylesheet" href="styles.css?v=8" />
   </head>
   <body>
     <div id="app" class="app-shell">
-      <header class="topbar">
+      <header class="topbar home-state">
         <button id="home-button" class="wordmark" type="button" aria-label="Go to home">
-          <span class="wordmark-coin" aria-hidden="true">O</span><span>RIGIN</span>
+          <span class="wordmark-coin" aria-hidden="true"></span><span>RIGIN</span>
         </button>
         <div id="edition-label" class="edition-label" aria-live="polite"></div>
         <nav class="header-actions" aria-label="Game menu">
@@ -91,10 +91,10 @@
 
       <section id="home-screen" class="home-screen" aria-labelledby="home-title">
         <div class="home-copy">
-          <h1 id="home-title">Flip the coin.<br />Guess its origin.</h1>
+          <h1 id="home-title">Flip the currency.<br />Guess its origin.</h1>
           <p>Pin the currency to its place of origin.</p>
           <div class="home-actions">
-            <button id="start-daily" class="primary-button large-button" type="button">Play today</button>
+            <button id="start-daily" class="primary-button large-button" type="button">Play</button>
             <button id="start-practice" class="secondary-button large-button" type="button">Practice</button>
           </div>
         </div>
@@ -139,7 +139,7 @@
       <div class="share-dialog-inner">
         <div id="share-card" class="share-card">
           <div class="share-card-head">
-            <h2 id="share-dialog-title" class="share-wordmark"><span aria-hidden="true">O</span>RIGIN</h2>
+            <h2 id="share-dialog-title" class="share-wordmark"><span class="share-wordmark-coin" aria-hidden="true"></span>RIGIN</h2>
             <p id="share-edition"></p>
           </div>
           <div class="share-score">
@@ -162,6 +162,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGIN needs JavaScript to run the map and score your guess.</noscript>
-    <script type="module" src="src/game.js?v=7"></script>
+    <script type="module" src="src/game.js?v=8"></script>
   </body>
 </html>
