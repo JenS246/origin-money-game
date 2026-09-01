@@ -12,11 +12,13 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, /Guess its origin/);
   assert.match(html, /Pin the currency to its place of origin/);
   assert.match(html, /class="wordmark-coin"/);
+  assert.match(html, />RIGINS</);
   assert.match(html, /class="home-title-flip"/);
   assert.match(html, /class="home-map"/);
   assert.match(html, /class="home-journey-coin"/);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
+  assert.doesNotMatch(html, /flip-label|>Obverse<|>Reverse<|points|5,000/i);
   assert.doesNotMatch(`${html}\n${game}`, /Flip the coin|View today|Play today/);
   assert.match(styles, /--coin-copper:/);
   assert.match(styles, /home-world-map\.webp/);
@@ -26,21 +28,29 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.ok(originCoin.byteLength < 50_000, 'the photographic coin mark should stay lightweight');
 });
 
-test('results use the branded share card instead of the native share sheet', async () => {
+test('results use a score-free origin map and branded share card', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
   const source = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
   const styles = await readFile(new URL('../styles.css', import.meta.url), 'utf8');
 
   assert.match(html, /id="share-dialog"/);
   assert.match(html, /id="share-card"/);
-  assert.match(html, /class="result-metrics"/);
-  assert.doesNotMatch(html, /distance-visual/);
+  assert.match(html, /class="result-mini-map"/);
+  assert.match(html, /class="share-map"/);
+  assert.doesNotMatch(`${html}\n${source}`, /score-value|share-score|combinedPoints|pointsForDistance|pointsForYear/);
   assert.match(source, /shareDialog\.showModal\(\)/);
   assert.match(source, /saveShareCard/);
   assert.doesNotMatch(source, /navigator\.share/);
   assert.match(styles, /@font-face/);
   assert.match(styles, /IBM Plex Sans Condensed/);
   assert.match(styles, /Newsreader/);
+});
+
+test('image loading retries the original photo and replaces a dead round', async () => {
+  const source = await readFile(new URL('../src/game.js', import.meta.url), 'utf8');
+  assert.match(source, /image\.removeAttribute\('crossorigin'\)/);
+  assert.match(source, /replaceUnplayableRound/);
+  assert.match(source, /failedImageIds/);
 });
 
 test('the flip demonstration respects reduced motion', async () => {

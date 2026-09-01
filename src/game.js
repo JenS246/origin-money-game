@@ -2,12 +2,8 @@ import { MONEY } from './money.generated.js';
 import { DAILY_IDS } from './daily.generated.js';
 import { removeLightEdgeBackground } from './image-matte.js';
 import {
-  combinedPoints,
-  distanceBand,
   distanceFromAcceptedArea,
   formatYear,
-  pointsForDistance,
-  pointsForYear,
   yearDistance,
 } from './scoring.js';
 import { getDailyResult, getStats, saveDailyResult } from './storage.js';
@@ -15,7 +11,8 @@ import { getDailyResult, getStats, saveDailyResult } from './storage.js';
 const LEAFLET_URL = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js';
 const LAUNCH_DATE = Date.UTC(2026, 7, 29);
 const DAY_MS = 86_400_000;
-const SCORE_MODEL = 4;
+const RESULT_MODEL = 5;
+const THEME_KEY = 'origin-theme';
 
 const elements = {
   topbar: document.querySelector('.topbar'),
@@ -29,7 +26,6 @@ const elements = {
   backImage: document.querySelector('#money-image-back'),
   flip: document.querySelector('#money-flip'),
   card: document.querySelector('#money-card'),
-  flipLabel: document.querySelector('#flip-label'),
   skeleton: document.querySelector('#image-skeleton'),
   yearGuess: document.querySelector('#year-guess'),
   yearGuessValue: document.querySelector('#year-guess-value'),
@@ -39,7 +35,9 @@ const elements = {
   result: document.querySelector('#result-panel'),
   distance: document.querySelector('#distance-value'),
   dateDistance: document.querySelector('#date-distance-value'),
-  score: document.querySelector('#score-value'),
+  resultRoute: document.querySelector('#result-route-line'),
+  resultGuessDot: document.querySelector('#result-guess-dot'),
+  resultAnswerDot: document.querySelector('#result-answer-dot'),
   answerPlace: document.querySelector('#answer-place'),
   answerTitle: document.querySelector('#answer-title'),
   blurb: document.querySelector('#answer-blurb'),
@@ -49,13 +47,14 @@ const elements = {
   share: document.querySelector('#share-button'),
   shareDialog: document.querySelector('#share-dialog'),
   shareEdition: document.querySelector('#share-edition'),
-  shareScore: document.querySelector('#share-score'),
   shareDistance: document.querySelector('#share-distance'),
   shareYears: document.querySelector('#share-years'),
   copyShare: document.querySelector('#copy-share-button'),
   saveShare: document.querySelector('#save-share-button'),
   next: document.querySelector('#next-button'),
   toast: document.querySelector('#toast'),
+  themeColor: document.querySelector('meta[name="theme-color"]'),
+  themeButtons: [...document.querySelectorAll('[data-theme-choice]')],
 };
 
 let L;
@@ -73,7 +72,35 @@ let lastResult = null;
 let yearGuess = 750;
 let imageLoadSequence = 0;
 let flipDemoTimers = [];
+let themeChoice = 'system';
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
+const failedImageIds = new Set();
+
+function applyTheme(choice, persist = true) {
+  themeChoice = ['system', 'light', 'dark'].includes(choice) ? choice : 'system';
+  if (themeChoice === 'system') delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = themeChoice;
+  for (const button of elements.themeButtons) {
+    button.setAttribute('aria-pressed', String(button.dataset.themeChoice === themeChoice));
+  }
+  const isDark = themeChoice === 'dark'
+    || (themeChoice === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  elements.themeColor.setAttribute('content', isDark ? '#141a16' : '#eef0e9');
+  if (!persist) return;
+  try {
+    localStorage.setItem(THEME_KEY, themeChoice);
+  } catch {
+    // Theme selection remains active for this page when storage is unavailable.
+  }
+}
+
+function storedTheme() {
+  try {
+    return localStorage.getItem(THEME_KEY) || 'system';
+  } catch {
+    return 'system';
+  }
+}
 
 function utcDate() {
   return new Date().toISOString().slice(0, 10);
@@ -85,14 +112,19 @@ function editionNumber() {
 }
 
 function dailyMoney() {
-  const scheduledId = DAILY_IDS[(editionNumber() - 1) % DAILY_IDS.length];
-  return moneyById.get(scheduledId) || MONEY[(editionNumber() - 1) % MONEY.length];
+  const startIndex = (editionNumber() - 1) % DAILY_IDS.length;
+  for (let offset = 0; offset < DAILY_IDS.length; offset += 1) {
+    const scheduledId = DAILY_IDS[(startIndex + offset) % DAILY_IDS.length];
+    const item = moneyById.get(scheduledId);
+    if (item && !failedImageIds.has(item.id)) return item;
+  }
+  return MONEY.find((item) => !failedImageIds.has(item.id)) || MONEY[0];
 }
 
 function practiceMoney() {
   if (MONEY.length < 2) return MONEY[0];
-  const choices = MONEY.filter((item) => item.id !== activeMoney?.id);
-  return choices[Math.floor(Math.random() * choices.length)];
+  const choices = MONEY.filter((item) => item.id !== activeMoney?.id && !failedImageIds.has(item.id));
+  return choices[Math.floor(Math.random() * choices.length)] || MONEY[0];
 }
 
 function loadMattedImage(image, source, onReady, onError) {
@@ -102,7 +134,22 @@ function loadMattedImage(image, source, onReady, onError) {
   image.dataset.loadToken = token;
   delete image.dataset.objectUrl;
   delete image.dataset.matteApplied;
+  image.crossOrigin = 'anonymous';
   image.classList.remove('loaded', 'background-removed');
+  const showOriginal = () => {
+    if (image.dataset.loadToken !== token) return;
+    image.onload = () => {
+      if (image.dataset.loadToken !== token) return;
+      image.classList.add('loaded');
+      onReady?.();
+    };
+    image.onerror = () => {
+      if (image.dataset.loadToken === token) onError?.();
+    };
+    image.removeAttribute('crossorigin');
+    image.src = '';
+    image.src = source;
+  };
   image.onload = async () => {
     if (image.dataset.loadToken !== token) return;
     if (image.dataset.matteApplied === 'true') {
@@ -121,19 +168,33 @@ function loadMattedImage(image, source, onReady, onError) {
         return;
       }
     } catch {
-      // If canvas processing is unavailable, keep the original photograph.
+      showOriginal();
+      return;
     }
     image.classList.add('loaded');
     onReady?.();
   };
-  image.onerror = onError;
+  image.onerror = showOriginal;
   image.src = source;
 }
 
 function loadPreviewImage(image, source) {
   image.classList.remove('loaded');
   image.onload = () => image.classList.add('loaded');
+  image.onerror = () => {
+    const replacement = MONEY.find((item) => item.image.url !== source && !failedImageIds.has(item.id));
+    if (replacement) image.src = replacement.image.url;
+  };
   image.src = source;
+}
+
+function replaceUnplayableRound(item) {
+  if (activeMoney?.id !== item.id || failedImageIds.has(item.id)) return;
+  failedImageIds.add(item.id);
+  elements.mapStatus.textContent = 'Loading another currency';
+  const replacement = mode === 'daily' ? dailyMoney() : practiceMoney();
+  if (replacement && replacement.id !== item.id) resetRound(replacement);
+  else elements.mapStatus.textContent = 'Currency images are unavailable. Try again.';
 }
 
 function setImage(item) {
@@ -149,7 +210,6 @@ function setImage(item) {
   elements.flip.disabled = true;
   elements.flip.setAttribute('aria-pressed', 'false');
   elements.flip.setAttribute('aria-label', 'Show reverse side');
-  elements.flipLabel.textContent = 'Obverse';
   elements.skeleton.classList.remove('hidden');
   elements.image.alt = item.image.alt;
   loadMattedImage(elements.image, item.image.url, () => {
@@ -157,18 +217,13 @@ function setImage(item) {
     elements.skeleton.classList.add('hidden');
     elements.card.classList.add('ready');
     maybeStartFlipDemo();
-  }, () => {
-    elements.skeleton.classList.add('hidden');
-    elements.mapStatus.textContent = 'The object image could not be loaded';
-  });
+  }, () => replaceUnplayableRound(item));
   elements.backImage.alt = item.image.backAlt;
   loadMattedImage(elements.backImage, item.image.backUrl, () => {
     backReady = true;
     elements.flip.disabled = false;
     maybeStartFlipDemo();
-  }, () => {
-    elements.flipLabel.textContent = 'Obverse';
-  });
+  }, () => replaceUnplayableRound(item));
 }
 
 function setYearGuess(value) {
@@ -183,7 +238,6 @@ function setFlipSide(flipped) {
   elements.card.classList.toggle('flipped', flipped);
   elements.flip.setAttribute('aria-pressed', String(flipped));
   elements.flip.setAttribute('aria-label', flipped ? 'Show obverse side' : 'Show reverse side');
-  elements.flipLabel.textContent = flipped ? 'Reverse' : 'Obverse';
 }
 
 function clearFlipDemo() {
@@ -286,17 +340,6 @@ function addResultToMap(savedGuess = guess) {
   map.fitBounds(bounds, { padding: window.innerWidth < 760 ? [76, 76] : [180, 180], maxZoom: 5, animate: true, duration: 0.9 });
 }
 
-function targetMethodLabel(method) {
-  return {
-    mint_city: 'mint city',
-    issuing_city: 'issuing city',
-    issuing_authority_city: 'issuing authority city',
-    printing_facility: 'printing facility',
-    issuing_region: 'issuing region',
-    production_place: 'documented production area',
-  }[method] || 'documented origin point';
-}
-
 function recordLabel(item) {
   if (item.id.startsWith('si-')) return 'Smithsonian record';
   if (item.id.startsWith('boc-')) return 'Bank of Canada Museum record';
@@ -304,16 +347,36 @@ function recordLabel(item) {
   return 'ANS record';
 }
 
+function mapPoint(location) {
+  return {
+    x: Math.max(3, Math.min(97, ((Number(location.lng) + 180) / 360) * 100)),
+    y: Math.max(5, Math.min(95, ((90 - Number(location.lat)) / 180) * 100)),
+  };
+}
+
+function positionResultMap(result) {
+  const guessed = mapPoint(result.guess);
+  const answer = mapPoint(activeMoney.anchor);
+  elements.resultGuessDot.style.left = `${guessed.x}%`;
+  elements.resultGuessDot.style.top = `${guessed.y}%`;
+  elements.resultAnswerDot.style.left = `${answer.x}%`;
+  elements.resultAnswerDot.style.top = `${answer.y}%`;
+  elements.resultRoute.setAttribute('x1', guessed.x);
+  elements.resultRoute.setAttribute('y1', guessed.y * 0.52);
+  elements.resultRoute.setAttribute('x2', answer.x);
+  elements.resultRoute.setAttribute('y2', answer.y * 0.52);
+}
+
 function populateResult(result) {
   elements.distance.textContent = Math.round(result.distance).toLocaleString();
   elements.dateDistance.textContent = Math.round(result.dateDistance).toLocaleString();
-  elements.score.textContent = result.score.toLocaleString();
+  positionResultMap(result);
   elements.answerPlace.textContent = activeMoney.anchor.label.toLowerCase() === activeMoney.issuer.toLowerCase()
     ? activeMoney.issuer
     : `${activeMoney.issuer}, ${activeMoney.anchor.label}`;
   elements.answerTitle.textContent = activeMoney.title;
   elements.blurb.textContent = activeMoney.blurb;
-  elements.targetNote.textContent = `You guessed ${formatYear(result.yearGuess)}. Date: ${activeMoney.year}. Map accepted within ${activeMoney.anchor.radiusKm.toLocaleString()} km of the ${targetMethodLabel(activeMoney.anchor.method)}.`;
+  elements.targetNote.textContent = `Your year: ${formatYear(result.yearGuess)}. Documented date: ${activeMoney.year}.`;
   elements.article.href = activeMoney.articleUrl;
   elements.article.textContent = recordLabel(activeMoney);
   elements.imageCredit.href = activeMoney.image.filePage;
@@ -329,29 +392,25 @@ function reveal(saved = null) {
   revealed = true;
   const savedGuess = saved?.guess || guess;
   const measured = distanceFromAcceptedArea(savedGuess, activeMoney.anchor);
-  const canReuseSavedScore = saved?.model === SCORE_MODEL && saved?.moneyId === activeMoney.id;
-  const distance = canReuseSavedScore ? saved.distance : measured.distance;
-  const rawDistance = canReuseSavedScore ? saved.rawDistance : measured.rawDistance;
-  const savedYearGuess = canReuseSavedScore ? saved.yearGuess : yearGuess;
-  const dateDistance = canReuseSavedScore ? saved.dateDistance : yearDistance(savedYearGuess, activeMoney.year);
-  const mapPoints = canReuseSavedScore ? saved.mapPoints : pointsForDistance(distance);
-  const datePoints = canReuseSavedScore ? saved.datePoints : pointsForYear(dateDistance);
-  const score = canReuseSavedScore ? saved.score : combinedPoints(mapPoints, datePoints);
+  const canReuseSavedResult = saved?.moneyId === activeMoney.id;
+  const distance = canReuseSavedResult && Number.isFinite(saved.distance) ? saved.distance : measured.distance;
+  const rawDistance = canReuseSavedResult && Number.isFinite(saved.rawDistance) ? saved.rawDistance : measured.rawDistance;
+  const savedYearGuess = canReuseSavedResult && Number.isFinite(saved.yearGuess) ? saved.yearGuess : yearGuess;
+  const dateDistance = canReuseSavedResult && Number.isFinite(saved.dateDistance)
+    ? saved.dateDistance
+    : yearDistance(savedYearGuess, activeMoney.year);
   setYearGuess(savedYearGuess);
   elements.yearGuess.disabled = true;
   lastResult = {
-    model: SCORE_MODEL,
+    model: RESULT_MODEL,
     moneyId: activeMoney.id,
     distance,
     rawDistance,
     dateDistance,
     yearGuess: savedYearGuess,
-    mapPoints,
-    datePoints,
-    score,
     guess: savedGuess,
   };
-  if (mode === 'daily' && (!saved || !canReuseSavedScore)) {
+  if (mode === 'daily' && (!saved || saved.model !== RESULT_MODEL)) {
     saveDailyResult(utcDate(), lastResult);
   }
   elements.submit.disabled = true;
@@ -389,8 +448,9 @@ function start(selectedMode) {
   const item = mode === 'daily' ? dailyMoney() : practiceMoney();
   resetRound(item);
   const saved = mode === 'daily' ? getDailyResult(utcDate()) : null;
-  if (saved?.model === SCORE_MODEL && saved?.moneyId === item.id) {
+  if (saved?.moneyId === item.id) {
     const waitForMap = () => {
+      if (activeMoney?.id !== item.id) return;
       if (mapReady) reveal(saved);
       else window.setTimeout(waitForMap, 100);
     };
@@ -401,9 +461,9 @@ function start(selectedMode) {
 function updateStats() {
   const stats = getStats();
   document.querySelector('#stat-played').textContent = stats.played.toLocaleString();
-  document.querySelector('#stat-average').textContent = stats.average.toLocaleString();
   document.querySelector('#stat-streak').textContent = stats.streak.toLocaleString();
-  document.querySelector('#stat-best').textContent = stats.best.toLocaleString();
+  document.querySelector('#stat-distance').textContent = stats.averageDistance.toLocaleString();
+  document.querySelector('#stat-years').textContent = stats.averageYears.toLocaleString();
 }
 
 function showToast(message) {
@@ -413,14 +473,13 @@ function showToast(message) {
 }
 
 function shareText() {
-  const title = mode === 'daily' ? `ORIGIN #${editionNumber()}` : 'ORIGIN Practice';
-  return `${title}\n${lastResult.score.toLocaleString()} / 5,000\n${Math.round(lastResult.distance).toLocaleString()} km, ${distanceBand(lastResult.distance)}\n${Math.round(lastResult.dateDistance).toLocaleString()} years off\nhttps://jens246.github.io/origin-money-game/`;
+  const title = mode === 'daily' ? `ORIGINS #${editionNumber()}` : 'ORIGINS Practice';
+  return `${title}\n${Math.round(lastResult.distance).toLocaleString()} km off\n${Math.round(lastResult.dateDistance).toLocaleString()} years off\nhttps://jens246.github.io/origin-money-game/`;
 }
 
 function shareResult() {
   if (!lastResult) return;
-  elements.shareEdition.textContent = mode === 'daily' ? `Daily ${editionNumber()}` : 'Practice';
-  elements.shareScore.textContent = lastResult.score.toLocaleString();
+  elements.shareEdition.textContent = mode === 'daily' ? `Currency ${editionNumber()}` : 'Practice';
   elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
   elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
   elements.shareDialog.showModal();
@@ -446,32 +505,33 @@ async function saveShareCard() {
   context.fillStyle = '#e8ece5';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.strokeStyle = '#2e6652';
-  context.lineWidth = 18;
-  context.beginPath();
-  context.arc(600, 340, 218, 0, Math.PI * 2);
-  context.stroke();
-  context.globalAlpha = 0.18;
-  context.lineWidth = 4;
-  context.beginPath();
-  context.arc(600, 340, 184, 0, Math.PI * 2);
-  context.stroke();
-  context.globalAlpha = 1;
-
   context.fillStyle = '#18211c';
   context.textAlign = 'center';
   context.font = '700 118px "Newsreader", serif';
-  context.fillText('ORIGIN', 600, 382);
+  context.fillText('ORIGINS', 600, 180);
   context.font = '600 40px "IBM Plex Sans Condensed", sans-serif';
   context.fillStyle = '#2e6652';
-  context.fillText(mode === 'daily' ? `DAILY ${editionNumber()}` : 'PRACTICE', 600, 650);
+  context.fillText(mode === 'daily' ? `CURRENCY ${editionNumber()}` : 'PRACTICE', 600, 252);
 
+  context.strokeStyle = '#2e6652';
+  context.lineWidth = 7;
+  context.setLineDash([18, 18]);
+  context.beginPath();
+  context.moveTo(315, 570);
+  context.quadraticCurveTo(610, 345, 890, 610);
+  context.stroke();
+  context.setLineDash([]);
   context.fillStyle = '#18211c';
-  context.font = '700 250px "IBM Plex Sans Condensed", sans-serif';
-  context.fillText(lastResult.score.toLocaleString(), 600, 900);
-  context.font = '400 38px "IBM Plex Sans Condensed", sans-serif';
-  context.fillStyle = '#59645c';
-  context.fillText('OUT OF 5,000', 600, 965);
+  context.beginPath();
+  context.arc(315, 570, 22, 0, Math.PI * 2);
+  context.fill();
+  context.fillStyle = '#2e6652';
+  context.beginPath();
+  context.arc(890, 610, 28, 0, Math.PI * 2);
+  context.fill();
+  context.strokeStyle = '#e8ece5';
+  context.lineWidth = 8;
+  context.stroke();
 
   const facts = [
     [Math.round(lastResult.distance).toLocaleString(), 'KM OFF'],
@@ -481,10 +541,10 @@ async function saveShareCard() {
     const x = index === 0 ? 340 : 860;
     context.fillStyle = '#18211c';
     context.font = '700 94px "IBM Plex Sans Condensed", sans-serif';
-    context.fillText(value, x, 1180);
+    context.fillText(value, x, 1040);
     context.fillStyle = '#59645c';
     context.font = '600 30px "IBM Plex Sans Condensed", sans-serif';
-    context.fillText(label, x, 1234);
+    context.fillText(label, x, 1094);
   });
 
   context.fillStyle = '#59645c';
@@ -499,7 +559,7 @@ async function saveShareCard() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = mode === 'daily' ? `origin-${editionNumber()}.png` : 'origin-practice.png';
+    link.download = mode === 'daily' ? `origins-${editionNumber()}.png` : 'origins-practice.png';
     link.click();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
     showToast('Card saved');
@@ -558,9 +618,21 @@ function wireEvents() {
   for (const button of document.querySelectorAll('[data-open-dialog]')) {
     button.addEventListener('click', () => document.querySelector(`#${button.dataset.openDialog}`).showModal());
   }
+  for (const dialog of document.querySelectorAll('dialog')) {
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  }
+  for (const button of elements.themeButtons) {
+    button.addEventListener('click', () => applyTheme(button.dataset.themeChoice));
+  }
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    if (themeChoice === 'system') applyTheme('system', false);
+  });
 }
 
 function boot() {
+  applyTheme(storedTheme(), false);
   if (!MONEY.length) {
     elements.home.querySelector('.home-copy').innerHTML = '<h1>Currency data is unavailable.</h1><p>Run npm run data:build, then reload.</p>';
     return;

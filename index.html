@@ -6,29 +6,31 @@
     <meta name="theme-color" content="#eef0e9" />
     <meta
       name="description"
-      content="ORIGIN is a daily geography game about documented coins and banknotes. Study both sides, then find where the object was made."
+      content="ORIGINS is a daily geography game about documented coins and banknotes. Study both sides, then find where the object was made."
     />
-    <meta property="og:title" content="ORIGIN - A daily money map" />
+    <meta property="og:title" content="ORIGINS - A daily money map" />
     <meta property="og:description" content="Study both sides. Find where it was made." />
-    <title>ORIGIN - A daily money map</title>
+    <title>ORIGINS - A daily money map</title>
+    <script>
+      try {
+        const savedTheme = localStorage.getItem('origin-theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') document.documentElement.dataset.theme = savedTheme;
+      } catch {}
+    </script>
     <link rel="preconnect" href="https://tiles.openfreemap.org" crossorigin />
     <link rel="preconnect" href="https://numismatics.org" crossorigin />
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=12" />
   </head>
   <body>
     <div id="app" class="app-shell">
       <header class="topbar home-state">
         <button id="home-button" class="wordmark" type="button" aria-label="Go to home">
-          <span class="wordmark-coin" aria-hidden="true"></span><span>RIGIN</span>
+          <span class="wordmark-coin" aria-hidden="true"></span><span>RIGINS</span>
         </button>
         <div id="edition-label" class="edition-label" aria-live="polite"></div>
-        <nav class="header-actions" aria-label="Game menu">
-          <button class="text-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">How</button>
-          <button class="text-button" type="button" data-open-dialog="stats-dialog">Stats</button>
-        </nav>
       </header>
 
       <main id="game" class="game" aria-live="polite">
@@ -37,11 +39,10 @@
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
             <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
               <span id="money-card" class="money-card">
-                <img id="money-image" class="money-image money-image-front" alt="" crossorigin="anonymous" decoding="async" />
-                <img id="money-image-back" class="money-image money-image-back" alt="" crossorigin="anonymous" decoding="async" />
+                <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
+                <img id="money-image-back" class="money-image money-image-back" alt="" decoding="async" />
               </span>
             </button>
-            <span id="flip-label" class="flip-label" aria-hidden="true">Obverse</span>
           </div>
           <div class="date-guess">
             <label for="year-guess">Estimate year</label>
@@ -58,18 +59,15 @@
         </section>
 
         <section id="result-panel" class="result-panel" hidden aria-label="Round result">
-          <div class="result-metrics">
-            <div class="result-number">
-              <strong id="distance-value">0</strong>
-              <span>km off</span>
+          <div class="result-visual">
+            <div class="result-mini-map" aria-hidden="true">
+              <svg viewBox="0 0 100 52" preserveAspectRatio="none"><line id="result-route-line" x1="28" y1="35" x2="72" y2="18" /></svg>
+              <span id="result-guess-dot" class="result-dot result-guess-dot"></span>
+              <span id="result-answer-dot" class="result-dot result-answer-dot"></span>
             </div>
-            <div class="result-number date-result-number">
-              <strong id="date-distance-value">0</strong>
-              <span>years off</span>
-            </div>
-            <div class="result-number score-number">
-              <strong id="score-value">0</strong>
-              <span>points</span>
+            <div class="result-measures">
+              <p><strong id="distance-value">0</strong><span>km off</span></p>
+              <p><strong id="date-distance-value">0</strong><span>years off</span></p>
             </div>
           </div>
           <div class="result-story">
@@ -100,7 +98,7 @@
           </div>
         </div>
         <div class="home-copy">
-          <h1 id="home-title"><span class="home-title-flip" data-copy="Flip the currency."><span>Flip the currency.</span></span><br />Guess its origin.</h1>
+          <h1 id="home-title" aria-label="Flip the currency. Guess its origin."><span class="home-title-flip" data-copy="Flip the currency."><span>Flip the currency.</span></span><br />Guess its origin.</h1>
           <p>Pin the currency to its place of origin.</p>
           <div class="home-actions">
             <button id="start-daily" class="primary-button large-button" type="button">Play</button>
@@ -108,8 +106,13 @@
           </div>
         </div>
         <div class="home-specimen" aria-hidden="true">
-          <img id="home-image" alt="" crossorigin="anonymous" decoding="async" />
+          <img id="home-image" alt="" decoding="async" />
         </div>
+        <nav class="home-footer" aria-label="Home menu">
+          <button class="home-footer-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">How</button>
+          <button class="home-footer-button" type="button" data-open-dialog="stats-dialog">Stats</button>
+          <button class="home-footer-button" type="button" data-open-dialog="settings-dialog">Settings</button>
+        </nav>
       </section>
     </div>
 
@@ -120,27 +123,50 @@
           <button class="close-button" value="close" aria-label="Close">Close</button>
         </div>
         <ol class="rules-list">
-          <li>Study the object. Tap it to inspect both the obverse and reverse.</li>
-          <li>Place one pin at the documented mint or printing location, then estimate its date.</li>
-          <li>Lock both guesses. The map contributes 4,000 points and the date contributes 1,000.</li>
+          <li>Study the currency. Tap it to see the other side.</li>
+          <li>Pin where it was made, then estimate the year.</li>
+          <li>Lock both guesses to reveal the answer.</li>
         </ol>
-        <p class="dialog-note">Every object has a documented date, geocoded production place, matched front and back images, and documented image reuse terms. Incomplete records are excluded.</p>
       </form>
     </dialog>
 
-    <dialog id="stats-dialog" class="sheet-dialog">
-      <form method="dialog">
+    <dialog id="stats-dialog" class="sheet-dialog stats-dialog">
+      <form class="stats-sheet" method="dialog">
         <div class="dialog-head">
-          <h2>Your stats</h2>
+          <h2>Stats</h2>
           <button class="close-button" value="close" aria-label="Close">Close</button>
+        </div>
+        <div class="stats-visual" aria-hidden="true">
+          <div class="stats-map">
+            <span class="stats-coin"></span>
+            <span class="stats-dot stats-dot-guess"></span>
+            <span class="stats-dot stats-dot-answer"></span>
+            <span class="stats-route"></span>
+          </div>
+          <div class="stats-year"><strong id="stat-years">0</strong><span>years</span></div>
         </div>
         <dl class="stats-grid">
           <div><dt>Played</dt><dd id="stat-played">0</dd></div>
-          <div><dt>Average</dt><dd id="stat-average">0</dd></div>
           <div><dt>Streak</dt><dd id="stat-streak">0</dd></div>
-          <div><dt>Best</dt><dd id="stat-best">0</dd></div>
+          <div><dt>Average distance</dt><dd><span id="stat-distance">0</span><small> km</small></dd></div>
         </dl>
-        <p class="dialog-note">Stored only in this browser. Practice rounds do not affect your daily streak.</p>
+      </form>
+    </dialog>
+
+    <dialog id="settings-dialog" class="sheet-dialog settings-dialog">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2>Settings</h2>
+          <button class="close-button" value="close" aria-label="Close">Close</button>
+        </div>
+        <fieldset class="theme-picker">
+          <legend>Appearance</legend>
+          <div class="theme-options">
+            <button type="button" data-theme-choice="system" aria-pressed="true">System</button>
+            <button type="button" data-theme-choice="light" aria-pressed="false">Light</button>
+            <button type="button" data-theme-choice="dark" aria-pressed="false">Dark</button>
+          </div>
+        </fieldset>
       </form>
     </dialog>
 
@@ -148,12 +174,13 @@
       <div class="share-dialog-inner">
         <div id="share-card" class="share-card">
           <div class="share-card-head">
-            <h2 id="share-dialog-title" class="share-wordmark"><span class="share-wordmark-coin" aria-hidden="true"></span>RIGIN</h2>
+            <h2 id="share-dialog-title" class="share-wordmark" aria-label="ORIGINS"><span class="share-wordmark-coin" aria-hidden="true"></span>RIGINS</h2>
             <p id="share-edition"></p>
           </div>
-          <div class="share-score">
-            <strong id="share-score">0</strong>
-            <span>out of 5,000</span>
+          <div class="share-map" aria-hidden="true">
+            <span class="share-map-dot share-map-guess"></span>
+            <span class="share-map-dot share-map-answer"></span>
+            <span class="share-map-route"></span>
           </div>
           <div class="share-facts">
             <p><strong id="share-distance">0</strong><span>km off</span></p>
@@ -170,7 +197,7 @@
     </dialog>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <noscript>ORIGIN needs JavaScript to run the map and score your guess.</noscript>
-    <script type="module" src="src/game.js?v=10"></script>
+    <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
+    <script type="module" src="src/game.js?v=12"></script>
   </body>
 </html>

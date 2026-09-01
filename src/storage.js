@@ -43,13 +43,12 @@ export function saveDailyResult(date, result) {
 export function getStats() {
   const results = read().results;
   const dates = Object.keys(results).sort();
-  const scores = dates.map((date) => Number(results[date].score) || 0);
-  let best = 0;
+  const distances = dates.map((date) => Number(results[date].distance)).filter(Number.isFinite);
+  const yearDistances = dates.map((date) => Number(results[date].dateDistance)).filter(Number.isFinite);
   let run = 0;
   let previous = null;
   for (const date of dates) {
     run = previous === previousDate(date) ? run + 1 : 1;
-    best = Math.max(best, run);
     previous = date;
   }
 
@@ -64,8 +63,12 @@ export function getStats() {
 
   return {
     played: dates.length,
-    average: scores.length ? Math.round(scores.reduce((sum, value) => sum + value, 0) / scores.length) : 0,
+    averageDistance: distances.length
+      ? Math.round(distances.reduce((sum, value) => sum + value, 0) / distances.length)
+      : 0,
+    averageYears: yearDistances.length
+      ? Math.round(yearDistances.reduce((sum, value) => sum + value, 0) / yearDistances.length)
+      : 0,
     streak,
-    best,
   };
 }

@@ -1,8 +1,8 @@
-# ORIGIN
+# ORIGINS
 
-ORIGIN is a daily geography game about real money. A player studies both sides of a documented coin or banknote, estimates its date, places one pin on a world map, and receives a combined score for time and place.
+ORIGINS is a daily geography game about real money. A player studies both sides of a documented coin or banknote, estimates its date, places one pin on a world map, and then sees the distance and year error.
 
-The interface is deliberately spare: one specimen, one map, one decision. After the guess, the map connects the player's pin to the answer and a compact result sheet explains the object, target method, source, and image license.
+The interface is deliberately spare: one specimen, one map, one decision. After the guess, the map connects the player's pin to the answer and a compact result sheet explains the object, source, and image license.
 
 ## How it works
 
@@ -11,12 +11,12 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - Every specimen can be flipped between its matched obverse and reverse photographs.
 - A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
-- Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before scoring. Geography contributes 4,000 points and date accuracy contributes 1,000, preserving a 5,000-point total.
+- Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the result is shown.
 - Each target is a documented mint, printing facility, or production area linked from the source record.
 - Results show the object date, production method, tolerance, museum record, and image rights.
-- Daily results, averages, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
-- Share text includes only the edition, score, distance, and distance band. It never reveals the answer.
-- Light, edge-connected studio backgrounds are removed in the browser after a photograph loads. The original image URL is still used and no processed image library is checked into the repository.
+- Daily results, average distance, average year error, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
+- Share text includes only the edition, distance, and year error. It never reveals the answer.
+- Light, edge-connected studio backgrounds are removed in the browser when the source permits canvas access. If a museum blocks that CORS mode, the original photograph is retried directly. If either side is unavailable, the game automatically selects another playable record.
 
 ## Collection explorer
 
@@ -53,7 +53,7 @@ The ingestion requires network access. The Smithsonian refresh reads 256 public 
 
 ## Run locally
 
-ORIGIN is a static ES-module application with no build step:
+ORIGINS is a static ES-module application with no build step:
 
 ```bash
 npm run dev
@@ -68,7 +68,7 @@ npm test
 npm run check
 ```
 
-The automated tests cover distance and scoring invariants. The game has also been tested at desktop and 390-by-844 mobile viewports through the full home, guess, reveal, and next-round flow.
+The automated tests cover distance, historical date ranges, data quality, and core UI invariants. The game is also tested at desktop and mobile viewports through the full home, guess, reveal, and next-round flow.
 
 ## Accessibility
 
@@ -105,6 +105,6 @@ The generated composition study that preceded implementation is preserved at `do
 
 Application code is MIT licensed. MANTIS metadata is available under ODbL, and Smithsonian Open Access metadata and admitted media are CC0. Bank of Canada Museum coin photographs are used with attribution under the Bank's website reuse terms; bank-note images from that source are excluded. Admitted British Museum photographs are credited to the Trustees and linked to image pages carrying the CC BY-NC-SA 4.0 notice, so those photographs are for non-commercial use and remain under that license. Every result links to its source record, image terms, and source institution.
 
-The ORIGIN wordmark and route marker use a cropped image of an [1876 Canadian cent](https://numismatics.org/collection/0000.999.30169) from the American Numismatic Society, marked as public domain.
+The ORIGINS wordmark uses a cropped image of an [1876 Canadian cent](https://numismatics.org/collection/0000.999.30169) from the American Numismatic Society, marked as public domain.
 
 The bundled Newsreader and IBM Plex Sans Condensed fonts are redistributed under the SIL Open Font License. Their license texts are included in `assets/fonts/`.
