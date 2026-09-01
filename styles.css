@@ -72,9 +72,9 @@
     --photo-stage: #dce1d9;
   }
   :root:not([data-theme="light"]) .home-map {
-    filter: invert(1) grayscale(1) contrast(0.86) brightness(1.18);
+    filter: invert(1) grayscale(1) contrast(1.02) brightness(1.2);
     mix-blend-mode: screen;
-    opacity: 0.36;
+    opacity: 0.49;
   }
 }
 
@@ -97,9 +97,9 @@
   --photo-stage: #dce1d9;
 }
 :root[data-theme="dark"] .home-map {
-  filter: invert(1) grayscale(1) contrast(0.86) brightness(1.18);
+  filter: invert(1) grayscale(1) contrast(1.02) brightness(1.2);
   mix-blend-mode: screen;
-  opacity: 0.36;
+  opacity: 0.49;
 }
 
 * { box-sizing: border-box; }
@@ -177,11 +177,12 @@ button:focus-visible, a:focus-visible {
   margin-right: 0.08em;
 }
 .edition-label {
+  justify-self: center;
   color: var(--ink);
   font-family: "Newsreader", Georgia, serif;
   font-size: 24px;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.065em;
 }
 .topbar.home-state .edition-label { font-size: 28px; }
 .text-button, .close-button {
@@ -350,8 +351,11 @@ button:focus-visible, a:focus-visible {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   background: color-mix(in srgb, var(--surface) 92%, transparent);
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.015em;
   backdrop-filter: blur(10px);
   pointer-events: none;
   white-space: nowrap;
@@ -468,46 +472,31 @@ button:focus-visible, a:focus-visible {
   position: absolute;
   inset: -13%;
   background: url("assets/home-world-map.webp") center / cover no-repeat;
-  filter: grayscale(1) contrast(1.3) brightness(1.16);
+  filter: grayscale(1) contrast(1.45) brightness(1.07);
   mix-blend-mode: multiply;
-  opacity: 0.4;
+  opacity: 0.58;
   transform: scale(1.08) rotate(-0.55deg);
   transform-origin: 50% 48%;
   will-change: transform;
 }
-.home-journey {
+.home-coin-rain {
   position: absolute;
   inset: 0;
+  perspective: 720px;
 }
-.home-journey svg {
-  display: block;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.home-journey path {
-  fill: none;
-  stroke: color-mix(in srgb, var(--coin-copper) 58%, var(--ink));
-  stroke-width: 1.05;
-  stroke-dasharray: 3 8;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-  opacity: 0.24;
-}
-.home-journey-coin {
+.home-coin-rain span {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 24px;
-  height: 24px;
-  border: 0;
+  left: var(--coin-x);
+  top: calc(-1 * var(--coin-size) - 12px);
+  width: var(--coin-size);
+  aspect-ratio: 1;
   border-radius: 50%;
   background: url("assets/origin-coin.webp") center / contain no-repeat;
-  filter: brightness(1.1) saturate(1.1) contrast(1.08) drop-shadow(0 3px 4px color-mix(in srgb, var(--ink) 34%, transparent));
+  filter: brightness(1.1) saturate(1.06) contrast(1.08) drop-shadow(0 5px 5px color-mix(in srgb, var(--ink) 30%, transparent));
   opacity: 0;
+  transform-origin: 50% 50%;
   will-change: transform, opacity;
 }
-.home-journey-coin::after { content: none; }
 .home-copy { position: relative; z-index: 1; align-self: center; }
 .home-copy h1 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-size: clamp(40px, 3.8vw, 58px); line-height: 1.01; letter-spacing: -0.04em; font-weight: 600; }
 .home-title-flip {
@@ -548,7 +537,7 @@ button:focus-visible, a:focus-visible {
   font-family: "Newsreader", Georgia, serif;
   font-size: 18px;
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: 0.075em;
   cursor: pointer;
 }
 .home-footer-button:hover { text-decoration: underline; text-underline-offset: 5px; }
@@ -568,7 +557,7 @@ button:focus-visible, a:focus-visible {
 .sheet-dialog::backdrop { background: color-mix(in srgb, var(--ink) 28%, transparent); backdrop-filter: blur(4px); }
 .sheet-dialog form { padding: 24px; }
 .dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.dialog-head h2 { margin: 0; font-family: "Newsreader", Georgia, serif; font-size: 27px; font-weight: 600; letter-spacing: -0.03em; }
+.dialog-head h2 { margin: 0; font-family: "Newsreader", Georgia, serif; font-size: 27px; font-weight: 700; letter-spacing: 0.065em; }
 .rules-list { margin: 26px 0; padding-left: 22px; }
 .rules-list li { margin: 0 0 16px; padding-left: 8px; font-size: 18px; line-height: 1.5; }
 .stats-sheet { overflow: hidden; }
@@ -708,31 +697,24 @@ button:focus-visible, a:focus-visible {
   0% { transform: rotateX(0deg); }
   100% { transform: rotateX(360deg); }
 }
-@keyframes home-coin-journey {
-  0% { opacity: 0; transform: translate3d(-7vw, 70dvh, 0) rotate(0deg); }
-  4% { opacity: 0.82; transform: translate3d(-2vw, 66dvh, 0) rotate(32deg); }
-  12% { transform: translate3d(6vw, 60dvh, 0) rotate(96deg); }
-  20% { transform: translate3d(14vw, 59dvh, 0) rotate(160deg); }
-  28% { transform: translate3d(23vw, 64dvh, 0) rotate(224deg); }
-  36% { transform: translate3d(34vw, 70dvh, 0) rotate(288deg); }
-  44% { transform: translate3d(44vw, 66dvh, 0) rotate(352deg); }
-  52% { transform: translate3d(53vw, 56dvh, 0) rotate(416deg); }
-  60% { transform: translate3d(61vw, 43dvh, 0) rotate(480deg); }
-  68% { transform: translate3d(69vw, 34dvh, 0) rotate(544deg); }
-  76% { transform: translate3d(77vw, 35dvh, 0) rotate(608deg); }
-  84% { transform: translate3d(86vw, 43dvh, 0) rotate(672deg); }
-  92% { transform: translate3d(97vw, 55dvh, 0) rotate(736deg); }
-  97% { opacity: 0.82; transform: translate3d(105vw, 62dvh, 0) rotate(776deg); }
-  100% { opacity: 0; transform: translate3d(109vw, 64dvh, 0) rotate(800deg); }
+@keyframes home-coin-drop {
+  0% { opacity: 0; transform: translate3d(0, -8vh, 0) rotateY(0deg) rotateZ(-4deg) scale(0.94); }
+  8% { opacity: 0.78; }
+  63% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size)), 0) rotateY(990deg) rotateZ(var(--coin-turn)) scale(1); }
+  69% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size) + 3px), 0) rotateY(1010deg) rotateZ(var(--coin-turn)) scale(1.08, 0.86); }
+  79% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size) - 17px), 0) rotateY(1032deg) rotateZ(calc(var(--coin-turn) - 4deg)) scale(0.98, 1.02); }
+  87% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size) + 1px), 0) rotateY(1050deg) rotateZ(var(--coin-turn)) scale(1.04, 0.91); }
+  94% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size) - 5px), 0) rotateY(1070deg) rotateZ(calc(var(--coin-turn) + 2deg)) scale(1); }
+  100% { opacity: 0.72; transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size)), 0) rotateY(1080deg) rotateZ(var(--coin-turn)) scale(1); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .home-map { animation: home-map-drift 31s ease-in-out infinite alternate; }
   .home-title-flip { animation: home-title-turn 10s var(--ease) 1.6s infinite; }
-  .home-journey-coin { animation: home-coin-journey 20s linear 1.5s infinite; }
+  .home-coin-rain span { animation: home-coin-drop 1.85s cubic-bezier(0.36, 0.02, 0.28, 1) var(--coin-delay) both; }
   .home-screen.dismissed .home-map,
   .home-screen.dismissed .home-title-flip,
-  .home-screen.dismissed .home-journey-coin { animation-play-state: paused; }
+  .home-screen.dismissed .home-coin-rain span { animation-play-state: paused; }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -748,7 +730,8 @@ button:focus-visible, a:focus-visible {
   }
   .wordmark { font-size: 22px; }
   .wordmark-coin { flex-basis: 28px; width: 28px; height: 28px; }
-  .edition-label { display: none; }
+  .edition-label { display: none; font-size: 14px; letter-spacing: 0.055em; }
+  .edition-label:not(:empty) { display: block; }
   .header-actions { gap: 0; }
   .text-button { min-height: 44px; padding: 0 9px; font-size: 16px; }
   .game { grid-template-columns: minmax(0, 1fr); grid-template-rows: clamp(214px, 34dvh, 292px) minmax(0, 1fr); }
@@ -824,7 +807,7 @@ button:focus-visible, a:focus-visible {
     padding: calc(var(--topbar-height) + 10px) max(14px, env(safe-area-inset-right)) calc(14px + env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
     overflow: hidden;
   }
-  .home-journey-coin { display: none; }
+  .home-coin-rain { display: none; }
   .home-copy { align-self: start; min-width: 0; }
   .home-copy h1 { font-size: clamp(33px, 9.3vw, 43px); line-height: 1; }
   .home-copy p { margin: 12px 0 16px; font-size: 18px; line-height: 1.25; }

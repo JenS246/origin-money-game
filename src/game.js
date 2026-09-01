@@ -444,7 +444,7 @@ function start(selectedMode) {
   mode = selectedMode;
   elements.home.classList.add('dismissed');
   elements.topbar.classList.remove('home-state');
-  elements.edition.textContent = mode === 'daily' ? "Today's Currency" : 'Practice';
+  elements.edition.textContent = mode === 'daily' ? '' : 'FREE PLAY';
   const item = mode === 'daily' ? dailyMoney() : practiceMoney();
   resetRound(item);
   const saved = mode === 'daily' ? getDailyResult(utcDate()) : null;
@@ -473,13 +473,13 @@ function showToast(message) {
 }
 
 function shareText() {
-  const title = mode === 'daily' ? `ORIGINS #${editionNumber()}` : 'ORIGINS Practice';
+  const title = mode === 'daily' ? `ORIGINS #${editionNumber()}` : 'ORIGINS Free Play';
   return `${title}\n${Math.round(lastResult.distance).toLocaleString()} km off\n${Math.round(lastResult.dateDistance).toLocaleString()} years off\nhttps://jens246.github.io/origin-money-game/`;
 }
 
 function shareResult() {
   if (!lastResult) return;
-  elements.shareEdition.textContent = mode === 'daily' ? `Currency ${editionNumber()}` : 'Practice';
+  elements.shareEdition.textContent = mode === 'daily' ? `Currency ${editionNumber()}` : 'Free Play';
   elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
   elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
   elements.shareDialog.showModal();
@@ -605,7 +605,7 @@ function wireEvents() {
     clearFlipDemo();
     elements.home.classList.remove('dismissed');
     elements.topbar.classList.add('home-state');
-    elements.edition.textContent = "Today's Currency";
+    elements.edition.textContent = '';
   });
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
@@ -640,7 +640,7 @@ function boot() {
   const today = dailyMoney();
   loadPreviewImage(elements.homeImage, today.image.url);
   elements.startDaily.textContent = 'Play';
-  elements.edition.textContent = "Today's Currency";
+  elements.edition.textContent = '';
   updateStats();
   wireEvents();
   initializeMap();

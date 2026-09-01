@@ -15,7 +15,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, />RIGINS</);
   assert.match(html, /class="home-title-flip"/);
   assert.match(html, /class="home-map"/);
-  assert.match(html, /class="home-journey-coin"/);
+  assert.match(html, /class="home-coin-rain"/);
   assert.match(html, />Match device</);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
@@ -24,7 +24,9 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(styles, /--coin-copper:/);
   assert.match(styles, /home-world-map\.webp/);
   assert.match(styles, /origin-coin\.webp/);
-  assert.match(styles, /home-journey-coin \{ animation: home-coin-journey 20s linear/);
+  assert.match(styles, /home-coin-rain span \{ animation: home-coin-drop 1\.85s/);
+  assert.doesNotMatch(`${html}\n${game}`, /Today's Currency/);
+  assert.match(game, /'FREE PLAY'/);
   assert.match(styles, /\.sheet-dialog \{[\s\S]*font-family: "Newsreader"/);
   assert.match(styles, /@media \(prefers-reduced-motion: no-preference\)/);
   assert.ok(homeMap.byteLength < 100_000, 'the atmospheric map should stay lightweight');

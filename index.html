@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=13" />
+    <link rel="stylesheet" href="styles.css?v=14" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -90,11 +90,17 @@
       <section id="home-screen" class="home-screen" aria-labelledby="home-title">
         <div class="home-atmosphere" aria-hidden="true">
           <div class="home-map"></div>
-          <div class="home-journey">
-            <svg viewBox="0 0 1440 760" preserveAspectRatio="none" focusable="false">
-              <path d="M -80 604 C 182 476 292 748 534 608 C 756 480 824 288 1064 380 C 1254 452 1348 616 1520 552" />
-            </svg>
-            <span class="home-journey-coin"></span>
+          <div class="home-coin-rain">
+            <span style="--coin-x: 6vw; --coin-bottom: 4vh; --coin-size: 38px; --coin-turn: -14deg; --coin-delay: 1.2s"></span>
+            <span style="--coin-x: 11vw; --coin-bottom: 5vh; --coin-size: 46px; --coin-turn: 12deg; --coin-delay: 3.3s"></span>
+            <span style="--coin-x: 17vw; --coin-bottom: 2.5vh; --coin-size: 31px; --coin-turn: 21deg; --coin-delay: 5.5s"></span>
+            <span style="--coin-x: 22vw; --coin-bottom: 3vh; --coin-size: 34px; --coin-turn: -8deg; --coin-delay: 7.7s"></span>
+            <span style="--coin-x: 4vw; --coin-bottom: 8vh; --coin-size: 27px; --coin-turn: 7deg; --coin-delay: 9.8s"></span>
+            <span style="--coin-x: 14vw; --coin-bottom: 9vh; --coin-size: 29px; --coin-turn: -18deg; --coin-delay: 12s"></span>
+            <span style="--coin-x: 9vw; --coin-bottom: 3.5vh; --coin-size: 42px; --coin-turn: -3deg; --coin-delay: 14.1s"></span>
+            <span style="--coin-x: 19vw; --coin-bottom: 7vh; --coin-size: 25px; --coin-turn: 24deg; --coin-delay: 16.2s"></span>
+            <span style="--coin-x: 25vw; --coin-bottom: 2vh; --coin-size: 28px; --coin-turn: 13deg; --coin-delay: 18.4s"></span>
+            <span style="--coin-x: 2.5vw; --coin-bottom: 2vh; --coin-size: 40px; --coin-turn: -20deg; --coin-delay: 20.5s"></span>
           </div>
         </div>
         <div class="home-copy">
@@ -109,9 +115,9 @@
           <img id="home-image" alt="" decoding="async" />
         </div>
         <nav class="home-footer" aria-label="Home menu">
-          <button class="home-footer-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">How</button>
-          <button class="home-footer-button" type="button" data-open-dialog="stats-dialog">Stats</button>
-          <button class="home-footer-button" type="button" data-open-dialog="settings-dialog">Settings</button>
+          <button class="home-footer-button" type="button" data-open-dialog="how-to-dialog" aria-label="How to play">HOW</button>
+          <button class="home-footer-button" type="button" data-open-dialog="stats-dialog">STATS</button>
+          <button class="home-footer-button" type="button" data-open-dialog="settings-dialog">SETTINGS</button>
         </nav>
       </section>
     </div>
@@ -119,7 +125,7 @@
     <dialog id="how-to-dialog" class="sheet-dialog">
       <form method="dialog">
         <div class="dialog-head">
-          <h2>How to play</h2>
+          <h2>HOW TO PLAY</h2>
           <button class="close-button" value="close" aria-label="Close">Close</button>
         </div>
         <ol class="rules-list">
@@ -133,7 +139,7 @@
     <dialog id="stats-dialog" class="sheet-dialog stats-dialog">
       <form class="stats-sheet" method="dialog">
         <div class="dialog-head">
-          <h2>Stats</h2>
+          <h2>STATS</h2>
           <button class="close-button" value="close" aria-label="Close">Close</button>
         </div>
         <div class="stats-visual" aria-hidden="true">
@@ -156,7 +162,7 @@
     <dialog id="settings-dialog" class="sheet-dialog settings-dialog">
       <form method="dialog">
         <div class="dialog-head">
-          <h2>Settings</h2>
+          <h2>SETTINGS</h2>
           <button class="close-button" value="close" aria-label="Close">Close</button>
         </div>
         <fieldset class="theme-picker">
