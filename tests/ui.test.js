@@ -16,7 +16,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, /class="home-title-flip"/);
   assert.match(html, /class="home-map"/);
   assert.match(html, /class="home-coin-rain"/);
-  assert.match(html, />Match device</);
+  assert.doesNotMatch(html, />Match device</);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
   assert.doesNotMatch(html, /flip-label|>Obverse<|>Reverse<|points|5,000/i);

@@ -585,7 +585,7 @@ button:focus-visible, a:focus-visible {
 .stats-grid small { color: var(--muted); font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif; font-size: 14px; font-weight: 400; letter-spacing: 0; }
 .theme-picker { margin: 24px 0 0; padding: 0; border: 0; }
 .theme-picker legend { margin-bottom: 10px; color: var(--muted); font-size: 15px; }
-.theme-options { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.theme-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 7px; }
 .theme-options button { min-height: 46px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); font-family: "Newsreader", Georgia, serif; font-size: 17px; font-weight: 600; cursor: pointer; }
 .theme-options button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
 .share-dialog {
