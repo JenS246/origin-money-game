@@ -42,8 +42,12 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(html, /id="share-card"/);
   assert.match(html, /class="result-mini-map"/);
   assert.match(html, /class="share-map"/);
+  assert.match(html, /id="share-specimen"/);
+  assert.match(html, /id="share-route-line"/);
   assert.doesNotMatch(`${html}\n${source}`, /score-value|share-score|combinedPoints|pointsForDistance|pointsForYear/);
   assert.match(source, /shareDialog\.showModal\(\)/);
+  assert.match(source, /shareSpecimen\.src/);
+  assert.match(source, /mapPoint\(lastResult\.guess\)/);
   assert.match(source, /saveShareCard/);
   assert.doesNotMatch(source, /navigator\.share/);
   assert.match(styles, /@font-face/);

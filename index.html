@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=14" />
+    <link rel="stylesheet" href="styles.css?v=15" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -184,9 +184,11 @@
             <p id="share-edition"></p>
           </div>
           <div class="share-map" aria-hidden="true">
+            <svg viewBox="0 0 100 52" preserveAspectRatio="none"><line id="share-route-line" x1="24" y1="35" x2="72" y2="18" /></svg>
             <span class="share-map-dot share-map-guess"></span>
             <span class="share-map-dot share-map-answer"></span>
-            <span class="share-map-route"></span>
+            <img id="share-specimen" class="share-specimen" alt="" />
+            <p class="share-map-year"><strong id="share-documented-year">0</strong><span>documented</span></p>
           </div>
           <div class="share-facts">
             <p><strong id="share-distance">0</strong><span>km off</span></p>
@@ -204,6 +206,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
-    <script type="module" src="src/game.js?v=13"></script>
+    <script type="module" src="src/game.js?v=14"></script>
   </body>
 </html>

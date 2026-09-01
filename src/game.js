@@ -49,6 +49,11 @@ const elements = {
   shareEdition: document.querySelector('#share-edition'),
   shareDistance: document.querySelector('#share-distance'),
   shareYears: document.querySelector('#share-years'),
+  shareRoute: document.querySelector('#share-route-line'),
+  shareGuessDot: document.querySelector('.share-map-guess'),
+  shareAnswerDot: document.querySelector('.share-map-answer'),
+  shareSpecimen: document.querySelector('#share-specimen'),
+  shareDocumentedYear: document.querySelector('#share-documented-year'),
   copyShare: document.querySelector('#copy-share-button'),
   saveShare: document.querySelector('#save-share-button'),
   next: document.querySelector('#next-button'),
@@ -479,9 +484,23 @@ function shareText() {
 
 function shareResult() {
   if (!lastResult) return;
+  const guessed = mapPoint(lastResult.guess);
+  const answer = mapPoint(activeMoney.anchor);
   elements.shareEdition.textContent = mode === 'daily' ? `Currency ${editionNumber()}` : 'Free Play';
   elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
   elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
+  elements.shareDocumentedYear.textContent = activeMoney.year;
+  elements.shareGuessDot.style.left = `${guessed.x}%`;
+  elements.shareGuessDot.style.top = `${guessed.y}%`;
+  elements.shareAnswerDot.style.left = `${answer.x}%`;
+  elements.shareAnswerDot.style.top = `${answer.y}%`;
+  elements.shareRoute.setAttribute('x1', guessed.x);
+  elements.shareRoute.setAttribute('y1', guessed.y * 0.52);
+  elements.shareRoute.setAttribute('x2', answer.x);
+  elements.shareRoute.setAttribute('y2', answer.y * 0.52);
+  elements.shareSpecimen.style.left = `${Math.max(15, Math.min(85, answer.x))}%`;
+  elements.shareSpecimen.style.top = `${Math.max(19, Math.min(70, answer.y - 14))}%`;
+  elements.shareSpecimen.src = elements.image.currentSrc || activeMoney.image.url;
   elements.shareDialog.showModal();
 }
 
@@ -509,29 +528,68 @@ async function saveShareCard() {
   context.textAlign = 'center';
   context.font = '700 118px "Newsreader", serif';
   context.fillText('ORIGINS', 600, 180);
-  context.font = '600 40px "IBM Plex Sans Condensed", sans-serif';
+  context.font = '700 40px "Newsreader", serif';
   context.fillStyle = '#2e6652';
-  context.fillText(mode === 'daily' ? `CURRENCY ${editionNumber()}` : 'PRACTICE', 600, 252);
+  context.fillText(mode === 'daily' ? `CURRENCY ${editionNumber()}` : 'FREE PLAY', 600, 252);
 
+  const mapImage = new Image();
+  mapImage.src = 'assets/home-world-map.webp';
+  try {
+    await mapImage.decode();
+    context.globalAlpha = 0.72;
+    context.drawImage(mapImage, 105, 315, 990, 540);
+    context.globalAlpha = 1;
+  } catch {}
+
+  const guessed = mapPoint(lastResult.guess);
+  const answer = mapPoint(activeMoney.anchor);
+  const mapX = (point) => 105 + (point.x / 100) * 990;
+  const mapY = (point) => 315 + (point.y / 100) * 540;
+  try {
+    const safetyCanvas = document.createElement('canvas');
+    safetyCanvas.width = 2;
+    safetyCanvas.height = 2;
+    const safetyContext = safetyCanvas.getContext('2d');
+    safetyContext.drawImage(elements.image, 0, 0, 2, 2);
+    safetyCanvas.toDataURL();
+    const specimenScale = Math.min(220 / elements.image.naturalWidth, 150 / elements.image.naturalHeight);
+    const specimenWidth = elements.image.naturalWidth * specimenScale;
+    const specimenHeight = elements.image.naturalHeight * specimenScale;
+    const specimenX = Math.max(105 + specimenWidth / 2, Math.min(1095 - specimenWidth / 2, mapX(answer)));
+    const specimenY = Math.max(330 + specimenHeight / 2, Math.min(730 - specimenHeight / 2, mapY(answer) - 88));
+    context.drawImage(
+      elements.image,
+      specimenX - specimenWidth / 2,
+      specimenY - specimenHeight / 2,
+      specimenWidth,
+      specimenHeight,
+    );
+  } catch {}
   context.strokeStyle = '#2e6652';
   context.lineWidth = 7;
   context.setLineDash([18, 18]);
   context.beginPath();
-  context.moveTo(315, 570);
-  context.quadraticCurveTo(610, 345, 890, 610);
+  context.moveTo(mapX(guessed), mapY(guessed));
+  context.lineTo(mapX(answer), mapY(answer));
   context.stroke();
   context.setLineDash([]);
   context.fillStyle = '#18211c';
   context.beginPath();
-  context.arc(315, 570, 22, 0, Math.PI * 2);
+  context.arc(mapX(guessed), mapY(guessed), 22, 0, Math.PI * 2);
   context.fill();
   context.fillStyle = '#2e6652';
   context.beginPath();
-  context.arc(890, 610, 28, 0, Math.PI * 2);
+  context.arc(mapX(answer), mapY(answer), 28, 0, Math.PI * 2);
   context.fill();
   context.strokeStyle = '#e8ece5';
   context.lineWidth = 8;
   context.stroke();
+
+  context.fillStyle = '#18211c';
+  context.textAlign = 'right';
+  context.font = '700 68px "Newsreader", serif';
+  context.fillText(activeMoney.year, 1060, 812);
+  context.textAlign = 'center';
 
   const facts = [
     [Math.round(lastResult.distance).toLocaleString(), 'KM OFF'],
