@@ -23,6 +23,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.doesNotMatch(`${html}\n${game}`, /Flip the coin|View today|Play today/);
   assert.match(styles, /--coin-copper:/);
   assert.match(styles, /home-world-map\.webp/);
+  assert.match(styles, /background-size: auto 108%/);
   assert.match(styles, /origin-coin\.webp/);
   assert.match(styles, /home-coin-rain span \{ animation: home-coin-drop 1\.85s/);
   assert.doesNotMatch(`${html}\n${game}`, /Today's Currency/);
