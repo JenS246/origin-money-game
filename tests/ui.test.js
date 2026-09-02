@@ -24,8 +24,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(styles, /--coin-copper:/);
   assert.match(styles, /home-world-map\.webp/);
   assert.match(styles, /background-size: auto 108%/);
-  assert.match(styles, /home-coin-rain span:nth-child\(n \+ 6\) \{ display: none; \}/);
-  assert.match(styles, /prefers-reduced-motion: reduce\) and \(max-width: 760px\)/);
+  assert.match(styles, /\.home-coin-rain \{ display: none; \}/);
   assert.match(styles, /origin-coin\.webp/);
   assert.match(styles, /home-coin-rain span \{ animation: home-coin-drop 1\.85s/);
   assert.doesNotMatch(`${html}\n${game}`, /Today's Currency/);

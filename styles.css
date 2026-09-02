@@ -807,17 +807,7 @@ button:focus-visible, a:focus-visible {
     filter: grayscale(1) contrast(1.5) brightness(1.02);
     opacity: 0.67;
   }
-  .home-coin-rain { display: block; }
-  .home-coin-rain span {
-    width: min(var(--coin-size), 32px);
-    filter: brightness(1.2) saturate(1.16) contrast(1.14) drop-shadow(0 5px 4px color-mix(in srgb, var(--ink) 52%, transparent));
-  }
-  .home-coin-rain span:nth-child(1) { --coin-x: 70vw !important; --coin-bottom: 30vh !important; --coin-delay: 0.35s !important; }
-  .home-coin-rain span:nth-child(2) { --coin-x: 79vw !important; --coin-bottom: 29vh !important; --coin-delay: 1.7s !important; }
-  .home-coin-rain span:nth-child(3) { --coin-x: 88vw !important; --coin-bottom: 30.5vh !important; --coin-delay: 3.05s !important; }
-  .home-coin-rain span:nth-child(4) { --coin-x: 74vw !important; --coin-bottom: 26.8vh !important; --coin-delay: 4.4s !important; }
-  .home-coin-rain span:nth-child(5) { --coin-x: 84vw !important; --coin-bottom: 26vh !important; --coin-delay: 5.75s !important; }
-  .home-coin-rain span:nth-child(n + 6) { display: none; }
+  .home-coin-rain { display: none; }
   .home-copy { align-self: start; min-width: 0; }
   .home-copy h1 { font-size: clamp(33px, 9.3vw, 43px); line-height: 1; }
   .home-copy p { margin: 12px 0 16px; font-size: 18px; line-height: 1.25; }
@@ -852,13 +842,6 @@ button:focus-visible, a:focus-visible {
 
 @media (max-width: 760px) {
   :root[data-theme="dark"] .home-map { opacity: 0.7; }
-}
-
-@media (prefers-reduced-motion: reduce) and (max-width: 760px) {
-  .home-coin-rain span {
-    opacity: 0.88;
-    transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size)), 0) rotateZ(var(--coin-turn));
-  }
 }
 
 @media (max-width: 360px) {
