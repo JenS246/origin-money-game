@@ -803,6 +803,11 @@ button:focus-visible, a:focus-visible {
   50% { transform: translate3d(2.8%, -1.8%, 0) scale(1.13) rotate(0.85deg); }
   100% { transform: translate3d(-1.1%, 0.6%, 0) scale(1.1) rotate(-0.3deg); }
 }
+@keyframes home-map-drift-mobile {
+  0% { transform: translate3d(-4.4%, 1.8%, 0) scale(1.08) rotate(-0.9deg); }
+  50% { transform: translate3d(4%, -2.4%, 0) scale(1.145) rotate(0.85deg); }
+  100% { transform: translate3d(-1.8%, 0.9%, 0) scale(1.1) rotate(-0.3deg); }
+}
 @keyframes home-title-turn {
   0%, 72% { transform: rotateX(0deg); }
   80% { transform: rotateX(180deg); }
@@ -967,6 +972,10 @@ button:focus-visible, a:focus-visible {
   .share-dialog-inner { padding: 10px; }
   .share-dialog-actions { grid-template-columns: 1fr 1fr; }
   .share-dialog-actions form { grid-column: 1 / -1; text-align: center; }
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: no-preference) {
+  .home-map { animation: home-map-drift-mobile 18s ease-in-out infinite alternate; }
 }
 
 @media (prefers-color-scheme: dark) and (max-width: 760px) {
