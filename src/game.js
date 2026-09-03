@@ -13,6 +13,56 @@ const LAUNCH_DATE = Date.UTC(2026, 7, 29);
 const DAY_MS = 86_400_000;
 const RESULT_MODEL = 5;
 const THEME_KEY = 'origin-theme';
+const STUDY_GUIDES = [
+  {
+    label: 'United States',
+    image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.29134.obv.noscale.jpg',
+    source: 'https://numismatics.org/collection/0000.999.29134',
+    alt: 'South Carolina two dollar note dated 1776',
+    marks: [
+      { x: 17, y: 17, width: 33, height: 12 },
+      { x: 57, y: 51, width: 31, height: 15 },
+      { x: 33, y: 3, width: 36, height: 13 },
+    ],
+    notes: [
+      ['Issuer', 'State, city, or bank names are often the strongest location clue.'],
+      ['Date', 'Printed dates can place a note within a narrow issue period.'],
+      ['Denomination', 'Words and number styles reveal the language and currency system.'],
+    ],
+  },
+  {
+    label: 'Japan',
+    image: 'https://numismatics.org/collectionimages/19001949/1927/1927.55.1.rev.noscale.jpg',
+    source: 'https://numismatics.org/collection/1927.55.1',
+    alt: 'Japanese trade dollar with imperial crest, script, and plant motifs',
+    marks: [
+      { x: 41, y: 6, width: 21, height: 23 },
+      { x: 42, y: 29, width: 20, height: 43 },
+      { x: 62, y: 20, width: 29, height: 59 },
+    ],
+    notes: [
+      ['Emblem', 'Official crests and seals can identify the issuing authority.'],
+      ['Script', 'The writing system may narrow the region before any word is read.'],
+      ['Plant motifs', 'Repeated national symbols often survive across many issues.'],
+    ],
+  },
+  {
+    label: 'Hong Kong',
+    image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.6012.rev.noscale.jpg',
+    source: 'https://numismatics.org/collection/0000.999.6012',
+    alt: 'Hong Kong dollar dated 1867 with English and Chinese legends',
+    marks: [
+      { x: 13, y: 13, width: 73, height: 33 },
+      { x: 43, y: 21, width: 18, height: 20 },
+      { x: 75, y: 54, width: 15, height: 19 },
+    ],
+    notes: [
+      ['Place name', 'HONG-KONG is written around the field. Read every edge.'],
+      ['Local script', 'A second writing system can reveal a colonial or multilingual issue.'],
+      ['Date', 'The year helps connect a design to its ruler and historical period.'],
+    ],
+  },
+];
 
 const elements = {
   topbar: document.querySelector('.topbar'),
@@ -60,6 +110,12 @@ const elements = {
   toast: document.querySelector('#toast'),
   themeColor: document.querySelector('meta[name="theme-color"]'),
   themeButtons: [...document.querySelectorAll('[data-theme-choice]')],
+  studyButtons: [...document.querySelectorAll('[data-study-example]')],
+  studyImage: document.querySelector('#study-image'),
+  studyImageFrame: document.querySelector('.study-image-frame'),
+  studyMarks: document.querySelector('#study-marks'),
+  studyNotes: document.querySelector('#study-notes'),
+  studySource: document.querySelector('#study-source'),
 };
 
 let L;
@@ -80,6 +136,41 @@ let flipDemoTimers = [];
 let themeChoice = 'system';
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 const failedImageIds = new Set();
+
+function renderStudyGuide(index) {
+  const guide = STUDY_GUIDES[index] || STUDY_GUIDES[0];
+  for (const button of elements.studyButtons) {
+    button.setAttribute('aria-pressed', String(Number(button.dataset.studyExample) === index));
+  }
+  elements.studyImageFrame.classList.remove('image-error');
+  elements.studyImage.src = guide.image;
+  elements.studyImage.alt = guide.alt;
+  elements.studyMarks.replaceChildren();
+  guide.marks.forEach((mark, markIndex) => {
+    const box = document.createElement('span');
+    box.className = 'study-mark';
+    box.style.setProperty('--mark-x', `${mark.x}%`);
+    box.style.setProperty('--mark-y', `${mark.y}%`);
+    box.style.setProperty('--mark-width', `${mark.width}%`);
+    box.style.setProperty('--mark-height', `${mark.height}%`);
+    const number = document.createElement('span');
+    number.textContent = String(markIndex + 1);
+    box.append(number);
+    elements.studyMarks.append(box);
+  });
+  elements.studyNotes.replaceChildren();
+  guide.notes.forEach(([title, detail]) => {
+    const item = document.createElement('li');
+    const copy = document.createElement('span');
+    const heading = document.createElement('strong');
+    heading.textContent = title;
+    copy.append(heading, detail);
+    item.append(copy);
+    elements.studyNotes.append(item);
+  });
+  elements.studySource.href = guide.source;
+  elements.studySource.setAttribute('aria-label', `View museum record for the ${guide.label} example`);
+}
 
 function applyTheme(choice, persist = true) {
   themeChoice = ['system', 'light', 'dark'].includes(choice) ? choice : 'system';
@@ -684,6 +775,11 @@ function wireEvents() {
   for (const button of elements.themeButtons) {
     button.addEventListener('click', () => applyTheme(button.dataset.themeChoice));
   }
+  for (const button of elements.studyButtons) {
+    button.addEventListener('click', () => renderStudyGuide(Number(button.dataset.studyExample)));
+  }
+  elements.studyImage.addEventListener('load', () => elements.studyImageFrame.classList.remove('image-error'));
+  elements.studyImage.addEventListener('error', () => elements.studyImageFrame.classList.add('image-error'));
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (themeChoice === 'system') applyTheme('system', false);
   });
@@ -700,6 +796,7 @@ function boot() {
   elements.startDaily.textContent = 'Play';
   elements.edition.textContent = '';
   updateStats();
+  renderStudyGuide(0);
   wireEvents();
   initializeMap();
 }

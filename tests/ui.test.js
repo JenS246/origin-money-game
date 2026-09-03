@@ -16,6 +16,9 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, /class="home-title-flip"/);
   assert.match(html, /class="home-map"/);
   assert.match(html, /class="home-coin-rain"/);
+  assert.match(html, /class="home-mobile-drop"/);
+  assert.match(html, /id="study-dialog"/);
+  assert.match(html, /data-open-dialog="study-dialog"/);
   assert.doesNotMatch(html, />Match device</);
   assert.match(html, />Estimate year</);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
@@ -27,6 +30,10 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(styles, /\.home-coin-rain \{ display: none; \}/);
   assert.match(styles, /origin-coin\.webp/);
   assert.match(styles, /home-coin-rain span \{ animation: home-coin-drop 1\.85s/);
+  assert.match(styles, /home-mobile-strike/);
+  assert.match(styles, /\.home-mobile-drop \{ display: none !important; \}/);
+  assert.match(game, /const STUDY_GUIDES/);
+  assert.match(game, /renderStudyGuide/);
   assert.doesNotMatch(`${html}\n${game}`, /Today's Currency/);
   assert.match(game, /'FREE PLAY'/);
   assert.match(styles, /\.sheet-dialog \{[\s\S]*font-family: "Newsreader"/);

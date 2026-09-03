@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=19" />
+    <link rel="stylesheet" href="styles.css?v=20" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -37,6 +37,7 @@
         <section class="specimen-panel" aria-label="Currency specimen">
           <div class="specimen-stage">
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
+            <button class="study-trigger" type="button" data-open-dialog="study-dialog" aria-label="Open currency study guide">Guide</button>
             <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
               <span id="money-card" class="money-card">
                 <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
@@ -103,6 +104,7 @@
             <span style="--coin-x: 2.5vw; --coin-bottom: 2vh; --coin-size: 40px; --coin-turn: -20deg; --coin-delay: 20.5s"></span>
           </div>
         </div>
+        <span class="home-mobile-drop" aria-hidden="true"></span>
         <div class="home-copy">
           <h1 id="home-title" aria-label="Flip the currency. Guess its origin."><span class="home-title-flip" data-copy="Flip the currency."><span>Flip the currency.</span></span><br />Guess its origin.</h1>
           <p>Pin the currency to its place of origin.</p>
@@ -133,6 +135,26 @@
           <li>Pin where it was made, then estimate the year.</li>
           <li>Lock both guesses to reveal the answer.</li>
         </ol>
+      </form>
+    </dialog>
+
+    <dialog id="study-dialog" class="sheet-dialog study-dialog" aria-labelledby="study-dialog-title">
+      <form method="dialog">
+        <div class="dialog-head">
+          <h2 id="study-dialog-title">READING CURRENCY</h2>
+          <button class="close-button" value="close" aria-label="Close">Close</button>
+        </div>
+        <div class="study-tabs" aria-label="Currency examples">
+          <button type="button" data-study-example="0" aria-pressed="true">United States</button>
+          <button type="button" data-study-example="1" aria-pressed="false">Japan</button>
+          <button type="button" data-study-example="2" aria-pressed="false">Hong Kong</button>
+        </div>
+        <div class="study-image-frame">
+          <img id="study-image" alt="" decoding="async" />
+          <div id="study-marks" class="study-marks" aria-hidden="true"></div>
+        </div>
+        <ol id="study-notes" class="study-notes"></ol>
+        <a id="study-source" class="study-source" href="#" target="_blank" rel="noreferrer">View museum record</a>
       </form>
     </dialog>
 
@@ -205,6 +227,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
-    <script type="module" src="src/game.js?v=14"></script>
+    <script type="module" src="src/game.js?v=15"></script>
   </body>
 </html>

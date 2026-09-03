@@ -9,6 +9,7 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - One UTC-dated puzzle is shared by every player each day. Its object ID comes from a checked-in generated schedule, so the answer is stable and auditable.
 - Practice mode draws a different random specimen from the same checked-in corpus.
 - Every specimen can be flipped between its matched obverse and reverse photographs.
+- An optional in-game guide uses annotated museum examples from the United States, Japan, and Hong Kong to explain useful clues such as issuers, dates, scripts, emblems, and place names.
 - A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
 - Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the result is shown.
@@ -80,6 +81,7 @@ The automated tests cover distance, historical date ranges, data quality, and co
 - Strong focus indicators and color-independent answer text
 - System light/dark appearance
 - `prefers-reduced-motion` support
+- A low-clutter mobile home animation that is removed entirely when reduced motion is requested
 - Contextual loading and network error states
 
 ## Design reference
