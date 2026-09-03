@@ -517,7 +517,6 @@ button:focus-visible, a:focus-visible {
   transform-origin: 50% 50%;
   will-change: transform, opacity;
 }
-.home-mobile-drop { display: none; }
 .home-copy { position: relative; z-index: 1; align-self: center; }
 .home-copy h1 { max-width: 760px; margin: 0; font-family: "Newsreader", Georgia, serif; font-size: clamp(40px, 3.8vw, 58px); line-height: 1.01; letter-spacing: -0.04em; font-weight: 600; }
 .home-title-flip {
@@ -823,26 +822,13 @@ button:focus-visible, a:focus-visible {
   94% { transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size) - 5px), 0) rotateY(1070deg) rotateZ(calc(var(--coin-turn) + 2deg)) scale(1); }
   100% { opacity: 0.72; transform: translate3d(0, calc(100dvh - var(--coin-bottom) - var(--coin-size)), 0) rotateY(1080deg) rotateZ(var(--coin-turn)) scale(1); }
 }
-@keyframes home-mobile-strike {
-  0%, 3% { opacity: 0; transform: translate3d(0, -58px, 0) rotateY(0deg) rotateZ(-9deg) scale(0.9); }
-  6% { opacity: 0.9; }
-  18% { opacity: 0.95; transform: translate3d(0, 34px, 0) rotateY(610deg) rotateZ(8deg) scale(1); }
-  20% { transform: translate3d(0, 38px, 0) rotateY(626deg) rotateZ(10deg) scale(1.06, 0.9); }
-  24% { transform: translate3d(-7px, 25px, 0) rotateY(670deg) rotateZ(-11deg) scale(0.98, 1.02); }
-  28% { opacity: 0.9; transform: translate3d(-13px, 38px, 0) rotateY(714deg) rotateZ(-23deg) scale(1.02, 0.94); }
-  34% { opacity: 0; transform: translate3d(-28px, 74px, 0) rotateY(810deg) rotateZ(-62deg) scale(0.82); }
-  100% { opacity: 0; transform: translate3d(-28px, 74px, 0) rotateY(810deg) rotateZ(-62deg) scale(0.82); }
-}
-
 @media (prefers-reduced-motion: no-preference) {
   .home-map { animation: home-map-drift 31s ease-in-out infinite alternate; }
   .home-title-flip { animation: home-title-turn 10s var(--ease) 1.6s infinite; }
   .home-coin-rain span { animation: home-coin-drop 1.85s cubic-bezier(0.36, 0.02, 0.28, 1) var(--coin-delay) both; }
-  .home-mobile-drop { animation: home-mobile-strike 9s cubic-bezier(0.3, 0.02, 0.22, 1) 1.4s infinite; }
   .home-screen.dismissed .home-map,
   .home-screen.dismissed .home-title-flip,
-  .home-screen.dismissed .home-coin-rain span,
-  .home-screen.dismissed .home-mobile-drop { animation-play-state: paused; }
+  .home-screen.dismissed .home-coin-rain span { animation-play-state: paused; }
 }
 
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
@@ -944,22 +930,6 @@ button:focus-visible, a:focus-visible {
     opacity: 0.79;
   }
   .home-coin-rain { display: none; }
-  .home-mobile-drop {
-    position: absolute;
-    z-index: 2;
-    top: -5px;
-    right: max(26px, calc(env(safe-area-inset-right) + 18px));
-    display: block;
-    width: 27px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: url("assets/origin-coin.webp") center / contain no-repeat;
-    filter: brightness(1.08) saturate(1.06) contrast(1.08) drop-shadow(0 5px 4px color-mix(in srgb, var(--ink) 34%, transparent));
-    opacity: 0;
-    pointer-events: none;
-    transform-origin: 50% 50%;
-    will-change: transform, opacity;
-  }
   .home-copy { align-self: start; min-width: 0; }
   .home-copy h1 { font-size: clamp(33px, 9.3vw, 43px); line-height: 1; }
   .home-copy p { margin: 12px 0 16px; font-size: 18px; line-height: 1.25; }
@@ -1040,7 +1010,6 @@ button:focus-visible, a:focus-visible {
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  .home-mobile-drop { display: none !important; }
 }
 
 @media (forced-colors: active) {

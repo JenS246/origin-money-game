@@ -81,7 +81,7 @@ The automated tests cover distance, historical date ranges, data quality, and co
 - Strong focus indicators and color-independent answer text
 - System light/dark appearance
 - `prefers-reduced-motion` support
-- A low-clutter mobile home animation that is removed entirely when reduced motion is requested
+- Mobile keeps only the slow background-map drift and title flip; the decorative desktop coin drops are intentionally hidden on narrow screens.
 - Contextual loading and network error states
 
 ## Design reference
