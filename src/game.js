@@ -16,50 +16,170 @@ const THEME_KEY = 'origin-theme';
 const STUDY_GUIDES = [
   {
     label: 'United States',
-    image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.29134.obv.noscale.jpg',
     source: 'https://numismatics.org/collection/0000.999.29134',
-    alt: 'South Carolina two dollar note dated 1776',
-    marks: [
-      { x: 17, y: 17, width: 33, height: 12 },
-      { x: 57, y: 51, width: 31, height: 15 },
-      { x: 33, y: 3, width: 36, height: 13 },
-    ],
-    notes: [
-      ['Issuer', 'State, city, or bank names are often the strongest location clue.'],
-      ['Date', 'Printed dates can place a note within a narrow issue period.'],
-      ['Denomination', 'Words and number styles reveal the language and currency system.'],
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.29134.obv.noscale.jpg',
+        alt: 'Front of a South Carolina two dollar note dated 1776',
+        marks: [
+          { x: 17, y: 17, width: 33, height: 12 },
+          { x: 57, y: 51, width: 31, height: 15 },
+          { x: 33, y: 3, width: 36, height: 13 },
+        ],
+        notes: [
+          ['Issuer', 'SOUTH-CAROLINA names the issuing authority.'],
+          ['Date', 'The act date fixes the note to the Revolutionary period.'],
+          ['Denomination', 'Words, numerals, and spelling identify the currency system.'],
+        ],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.29134.rev.noscale.jpg',
+        alt: 'Back of a South Carolina two dollar note printed in 1777',
+        marks: [
+          { x: 24, y: 9, width: 51, height: 13 },
+          { x: 17, y: 62, width: 58, height: 10 },
+          { x: 15, y: 70, width: 66, height: 12 },
+        ],
+        notes: [
+          ['Denomination', 'The value is repeated prominently on the back.'],
+          ['Place', 'CHARLES-TOWN gives a precise geographic clue.'],
+          ['Printer and year', 'The imprint ties the note to a place and production date.'],
+        ],
+      },
     ],
   },
   {
     label: 'Japan',
-    image: 'https://numismatics.org/collectionimages/19001949/1927/1927.55.1.rev.noscale.jpg',
     source: 'https://numismatics.org/collection/1927.55.1',
-    alt: 'Japanese trade dollar with imperial crest, script, and plant motifs',
-    marks: [
-      { x: 41, y: 6, width: 21, height: 23 },
-      { x: 42, y: 29, width: 20, height: 43 },
-      { x: 62, y: 20, width: 29, height: 59 },
-    ],
-    notes: [
-      ['Emblem', 'Official crests and seals can identify the issuing authority.'],
-      ['Script', 'The writing system may narrow the region before any word is read.'],
-      ['Plant motifs', 'Repeated national symbols often survive across many issues.'],
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1927/1927.55.1.obv.noscale.jpg',
+        alt: 'Front of a Japanese trade dollar with a dragon and bilingual legend',
+        marks: [
+          { x: 27, y: 20, width: 48, height: 54 },
+          { x: 20, y: 5, width: 58, height: 23 },
+          { x: 10, y: 46, width: 82, height: 43 },
+        ],
+        notes: [
+          ['Dragon', 'A recurring state emblem can identify an issue family.'],
+          ['Script', 'The writing system narrows the region before any word is read.'],
+          ['Weight and standard', 'The English legend identifies a trade coin and its silver standard.'],
+        ],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1927/1927.55.1.rev.noscale.jpg',
+        alt: 'Back of a Japanese trade dollar with imperial crest, script, and plant motifs',
+        marks: [
+          { x: 41, y: 6, width: 21, height: 23 },
+          { x: 42, y: 29, width: 20, height: 43 },
+          { x: 62, y: 20, width: 29, height: 59 },
+        ],
+        notes: [
+          ['Imperial crest', 'Official crests can identify the issuing authority.'],
+          ['Script', 'Vertical text carries the denomination and era clues.'],
+          ['Plant motifs', 'Repeated national symbols often survive across many issues.'],
+        ],
+      },
     ],
   },
   {
     label: 'Hong Kong',
-    image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.6012.rev.noscale.jpg',
     source: 'https://numismatics.org/collection/0000.999.6012',
-    alt: 'Hong Kong dollar dated 1867 with English and Chinese legends',
-    marks: [
-      { x: 13, y: 13, width: 73, height: 33 },
-      { x: 43, y: 21, width: 18, height: 20 },
-      { x: 75, y: 54, width: 15, height: 19 },
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.6012.obv.noscale.jpg',
+        alt: 'Front of an 1867 Hong Kong dollar with Queen Victoria',
+        marks: [
+          { x: 29, y: 17, width: 46, height: 61 },
+          { x: 12, y: 2, width: 76, height: 25 },
+          { x: 7, y: 10, width: 21, height: 73 },
+        ],
+        notes: [
+          ['Portrait', 'The ruler places the coin within a political period.'],
+          ['Ruler legend', 'VICTORIA QUEEN reveals British colonial authority.'],
+          ['Rim pattern', 'Repeated border styles can connect coins from the same series.'],
+        ],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.6012.rev.noscale.jpg',
+        alt: 'Back of an 1867 Hong Kong dollar with English and Chinese legends',
+        marks: [
+          { x: 13, y: 13, width: 73, height: 33 },
+          { x: 43, y: 21, width: 18, height: 20 },
+          { x: 75, y: 54, width: 15, height: 19 },
+        ],
+        notes: [
+          ['Place name', 'HONG-KONG is written around the field. Read every edge.'],
+          ['Local script', 'A second writing system reveals a multilingual issue.'],
+          ['Date', 'The year connects the design to its ruler and historical period.'],
+        ],
+      },
     ],
-    notes: [
-      ['Place name', 'HONG-KONG is written around the field. Read every edge.'],
-      ['Local script', 'A second writing system can reveal a colonial or multilingual issue.'],
-      ['Date', 'The year helps connect a design to its ruler and historical period.'],
+  },
+  {
+    label: 'France',
+    source: 'https://numismatics.org/collection/1903.38.53',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1903/1903.38.53.obv.noscale.jpg',
+        alt: 'Front of a French colonial two sous coin with royal emblems',
+        marks: [{ x: 35, y: 8, width: 30, height: 27 }, { x: 21, y: 39, width: 58, height: 43 }, { x: 76, y: 12, width: 18, height: 66 }],
+        notes: [['Crown', 'Royal insignia places the coin before the French Republic.'], ['Fleur-de-lis', 'The repeated emblem is closely tied to the French monarchy.'], ['Ruler legend', 'LOUIS XVI identifies the reign.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1903/1903.38.53.rev.noscale.jpg',
+        alt: 'Back of a French colonial two sous coin dated 1780',
+        marks: [{ x: 24, y: 21, width: 52, height: 29 }, { x: 37, y: 53, width: 28, height: 16 }, { x: 75, y: 9, width: 19, height: 72 }],
+        notes: [['Denomination', 'The central value names the two sous unit.'], ['Date', '1780 places the issue just before the French Revolution.'], ['Colony legend', 'The rim text identifies a coin made for the French colonies.']],
+      },
+    ],
+  },
+  {
+    label: 'Mexico',
+    source: 'https://numismatics.org/collection/1911.105.805',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1911/1911.105.805.obv.noscale.jpg',
+        alt: 'Front of a Mexican quarter real with castle and date',
+        marks: [{ x: 14, y: 39, width: 21, height: 18 }, { x: 32, y: 10, width: 39, height: 63 }, { x: 34, y: 75, width: 34, height: 15 }],
+        notes: [['Mint mark', 'The crowned M identifies Mexico City.'], ['Castle', 'Castile\'s castle points to Spanish royal authority.'], ['Date', '1799 places the coin within the colonial period.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1911/1911.105.805.rev.noscale.jpg',
+        alt: 'Back of a Mexican quarter real with a crowned lion',
+        marks: [{ x: 42, y: 11, width: 17, height: 15 }, { x: 24, y: 18, width: 53, height: 68 }],
+        notes: [['Crown', 'The crown confirms royal authority.'], ['Lion', 'The lion of Leon pairs with the castle of Castile on Spanish issues.']],
+      },
+    ],
+  },
+  {
+    label: 'Brazil',
+    source: 'https://numismatics.org/collection/1916.100.36',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1916/1916.100.36.obv.noscale.jpg',
+        alt: 'Front of a Brazilian coin with Pedro II portrait and Latin legend',
+        marks: [{ x: 29, y: 15, width: 43, height: 70 }, { x: 8, y: 5, width: 28, height: 80 }, { x: 70, y: 7, width: 23, height: 77 }],
+        notes: [['Portrait', 'Pedro II identifies the Empire of Brazil.'], ['Ruler name', 'PETRUS II names the emperor in Latin.'], ['Country abbreviation', 'BRAS in the legend identifies Brazil.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1916/1916.100.36.rev.noscale.jpg',
+        alt: 'Back of a Brazilian coin with imperial coat of arms',
+        marks: [{ x: 39, y: 5, width: 25, height: 24 }, { x: 27, y: 20, width: 48, height: 61 }, { x: 20, y: 1, width: 63, height: 19 }],
+        notes: [['Imperial crown', 'The crown distinguishes imperial from republican designs.'], ['Coat of arms', 'Coffee and tobacco branches surround the national arms.'], ['Motto', 'The Latin legend confirms imperial authority.']],
+      },
     ],
   },
 ];
@@ -113,6 +233,8 @@ const elements = {
   studyButtons: [...document.querySelectorAll('[data-study-example]')],
   studyImage: document.querySelector('#study-image'),
   studyImageFrame: document.querySelector('.study-image-frame'),
+  studyFlip: document.querySelector('#study-flip'),
+  studySideLabel: document.querySelector('#study-side-label'),
   studyMarks: document.querySelector('#study-marks'),
   studyNotes: document.querySelector('#study-notes'),
   studySource: document.querySelector('#study-source'),
@@ -134,19 +256,37 @@ let yearGuess = 750;
 let imageLoadSequence = 0;
 let flipDemoTimers = [];
 let themeChoice = 'system';
+let studyGuideIndex = 0;
+let studySideIndex = 0;
+let studyFlipTimers = [];
+let studyFlipping = false;
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 const failedImageIds = new Set();
 
-function renderStudyGuide(index) {
-  const guide = STUDY_GUIDES[index] || STUDY_GUIDES[0];
-  for (const button of elements.studyButtons) {
-    button.setAttribute('aria-pressed', String(Number(button.dataset.studyExample) === index));
-  }
+function clearStudyFlip() {
+  studyFlipTimers.forEach(clearTimeout);
+  studyFlipTimers = [];
+  studyFlipping = false;
+  elements.studyImageFrame.classList.remove('is-turning');
+}
+
+function renderStudySide(sideIndex) {
+  const guide = STUDY_GUIDES[studyGuideIndex];
+  const side = guide.sides[sideIndex] || guide.sides[0];
+  studySideIndex = guide.sides.indexOf(side);
   elements.studyImageFrame.classList.remove('image-error');
-  elements.studyImage.src = guide.image;
-  elements.studyImage.alt = guide.alt;
+  elements.studyImage.src = side.image;
+  elements.studyImage.alt = side.alt;
+  elements.studySideLabel.textContent = side.name;
+  const nextSide = studySideIndex === 0 ? 'back' : 'front';
+  elements.studyFlip.textContent = `See ${nextSide}`;
+  elements.studyImageFrame.setAttribute('aria-label', `Show ${nextSide} of ${guide.label} example`);
+  elements.studyImageFrame.setAttribute('aria-pressed', String(studySideIndex === 1));
+  for (const button of elements.studyButtons) {
+    button.setAttribute('aria-pressed', String(Number(button.dataset.studyExample) === studyGuideIndex));
+  }
   elements.studyMarks.replaceChildren();
-  guide.marks.forEach((mark, markIndex) => {
+  side.marks.forEach((mark, markIndex) => {
     const box = document.createElement('span');
     box.className = 'study-mark';
     box.style.setProperty('--mark-x', `${mark.x}%`);
@@ -159,7 +299,7 @@ function renderStudyGuide(index) {
     elements.studyMarks.append(box);
   });
   elements.studyNotes.replaceChildren();
-  guide.notes.forEach(([title, detail]) => {
+  side.notes.forEach(([title, detail]) => {
     const item = document.createElement('li');
     const copy = document.createElement('span');
     const heading = document.createElement('strong');
@@ -168,8 +308,28 @@ function renderStudyGuide(index) {
     item.append(copy);
     elements.studyNotes.append(item);
   });
+}
+
+function renderStudyGuide(index) {
+  clearStudyFlip();
+  studyGuideIndex = STUDY_GUIDES[index] ? index : 0;
+  const guide = STUDY_GUIDES[studyGuideIndex];
+  renderStudySide(0);
   elements.studySource.href = guide.source;
   elements.studySource.setAttribute('aria-label', `View museum record for the ${guide.label} example`);
+}
+
+function toggleStudySide() {
+  if (studyFlipping) return;
+  const nextSide = studySideIndex === 0 ? 1 : 0;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    renderStudySide(nextSide);
+    return;
+  }
+  studyFlipping = true;
+  elements.studyImageFrame.classList.add('is-turning');
+  studyFlipTimers.push(window.setTimeout(() => renderStudySide(nextSide), 180));
+  studyFlipTimers.push(window.setTimeout(() => clearStudyFlip(), 400));
 }
 
 function applyTheme(choice, persist = true) {
@@ -778,6 +938,8 @@ function wireEvents() {
   for (const button of elements.studyButtons) {
     button.addEventListener('click', () => renderStudyGuide(Number(button.dataset.studyExample)));
   }
+  elements.studyFlip.addEventListener('click', toggleStudySide);
+  elements.studyImageFrame.addEventListener('click', toggleStudySide);
   elements.studyImage.addEventListener('load', () => elements.studyImageFrame.classList.remove('image-error'));
   elements.studyImage.addEventListener('error', () => elements.studyImageFrame.classList.add('image-error'));
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {

@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=22" />
+    <link rel="stylesheet" href="styles.css?v=23" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -147,10 +147,17 @@
           <button type="button" data-study-example="0" aria-pressed="true">United States</button>
           <button type="button" data-study-example="1" aria-pressed="false">Japan</button>
           <button type="button" data-study-example="2" aria-pressed="false">Hong Kong</button>
+          <button type="button" data-study-example="3" aria-pressed="false">France</button>
+          <button type="button" data-study-example="4" aria-pressed="false">Mexico</button>
+          <button type="button" data-study-example="5" aria-pressed="false">Brazil</button>
         </div>
-        <div class="study-image-frame">
+        <button id="study-image-frame" class="study-image-frame" type="button" aria-label="Show back of example" aria-pressed="false">
           <img id="study-image" alt="" decoding="async" />
           <div id="study-marks" class="study-marks" aria-hidden="true"></div>
+        </button>
+        <div class="study-side-controls">
+          <span id="study-side-label">Front</span>
+          <button id="study-flip" type="button">See back</button>
         </div>
         <ol id="study-notes" class="study-notes"></ol>
         <a id="study-source" class="study-source" href="#" target="_blank" rel="noreferrer">View museum record</a>
@@ -226,6 +233,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
-    <script type="module" src="src/game.js?v=15"></script>
+    <script type="module" src="src/game.js?v=16"></script>
   </body>
 </html>

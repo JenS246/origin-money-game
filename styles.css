@@ -582,13 +582,19 @@ button:focus-visible, a:focus-visible {
 .rules-list li { margin: 0 0 16px; padding-left: 8px; font-size: 18px; line-height: 1.5; }
 .study-dialog { width: min(690px, calc(100vw - 28px)); }
 .study-tabs {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
   gap: 6px;
   margin-top: 20px;
+  padding-bottom: 5px;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  scrollbar-color: var(--line) transparent;
+  scrollbar-width: thin;
 }
 .study-tabs button {
-  min-width: 0;
+  flex: 0 0 auto;
+  min-width: 104px;
   min-height: 42px;
   padding: 7px 10px;
   border: 1px solid var(--line);
@@ -599,16 +605,32 @@ button:focus-visible, a:focus-visible {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
+  scroll-snap-align: start;
 }
 .study-tabs button[aria-pressed="true"] { border-color: var(--accent); background: var(--accent); color: var(--accent-ink); }
 .study-image-frame {
+  display: block;
   position: relative;
+  width: 100%;
   margin-top: 16px;
+  padding: 0;
   overflow: hidden;
+  border: 0;
   border-radius: var(--radius);
   background: var(--photo-stage);
+  color: inherit;
+  cursor: pointer;
+  transform-origin: center;
+  backface-visibility: hidden;
 }
 .study-image-frame img { display: block; width: 100%; height: auto; }
+.study-image-frame.is-turning { animation: study-side-turn 400ms cubic-bezier(0.3, 0.8, 0.35, 1); }
+@keyframes study-side-turn {
+  0% { transform: perspective(900px) rotateY(0deg); opacity: 1; }
+  47% { transform: perspective(900px) rotateY(84deg) scale(0.98); opacity: 0.62; }
+  50% { transform: perspective(900px) rotateY(-84deg) scale(0.98); opacity: 0.62; }
+  100% { transform: perspective(900px) rotateY(0deg); opacity: 1; }
+}
 .study-image-frame.image-error { min-height: 180px; }
 .study-image-frame.image-error img,
 .study-image-frame.image-error .study-marks { display: none; }
@@ -648,9 +670,35 @@ button:focus-visible, a:focus-visible {
   font-size: 13px;
   font-weight: 700;
 }
+.study-side-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin-top: 3px;
+}
+.study-side-controls span {
+  color: var(--ink);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 17px;
+  font-weight: 700;
+}
+.study-side-controls button {
+  min-height: 44px;
+  padding: 0 2px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
 .study-notes {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 14px;
   margin: 18px 0 14px;
   padding: 0;
@@ -956,8 +1004,9 @@ button:focus-visible, a:focus-visible {
   .study-dialog form { padding: 18px 16px 20px; }
   .study-dialog .dialog-head h2 { font-size: 23px; letter-spacing: 0.045em; }
   .study-tabs { gap: 4px; margin-top: 16px; }
-  .study-tabs button { min-height: 40px; padding-inline: 5px; font-size: 13px; }
+  .study-tabs button { min-width: 96px; min-height: 40px; padding-inline: 10px; font-size: 13px; }
   .study-image-frame { margin-top: 12px; }
+  .study-side-controls { margin-top: 1px; }
   .study-mark { border-width: 1.5px; box-shadow: 0 0 0 1px rgb(247 248 242 / 0.62); }
   .study-mark span { top: -10px; left: -10px; width: 20px; height: 20px; font-size: 11px; }
   .study-notes { grid-template-columns: minmax(0, 1fr); gap: 9px; margin-block: 14px 11px; }
