@@ -38,6 +38,7 @@
           <div class="specimen-stage">
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
             <button class="study-trigger" type="button" data-open-dialog="study-dialog" aria-label="Open currency study guide">Guide</button>
+            <button id="image-zoom-button" class="zoom-trigger" type="button" aria-label="Zoom currency image" disabled>Zoom</button>
             <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
               <span id="money-card" class="money-card">
                 <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
@@ -74,7 +75,7 @@
           <div class="result-story">
             <p id="answer-place" class="answer-place"></p>
             <h1 id="answer-title"></h1>
-            <button class="result-details-button" type="button" data-open-dialog="answer-dialog">Read about it</button>
+            <button class="result-details-button" type="button" data-open-dialog="answer-dialog">Learn more</button>
           </div>
           <div class="result-actions">
             <button id="share-button" class="share-button" type="button">Share</button>
@@ -156,11 +157,28 @@
         </button>
         <div class="study-side-controls">
           <span id="study-side-label">Front</span>
-          <button id="study-flip" type="button">See back</button>
+          <div>
+            <button id="study-zoom" type="button">Zoom</button>
+            <button id="study-flip" type="button">See back</button>
+          </div>
         </div>
         <ol id="study-notes" class="study-notes"></ol>
         <a id="study-source" class="study-source" href="#" target="_blank" rel="noreferrer">View museum record</a>
       </form>
+    </dialog>
+
+    <dialog id="image-zoom-dialog" class="image-zoom-dialog" aria-labelledby="image-zoom-title">
+      <div class="image-zoom-head">
+        <p id="image-zoom-title">Currency detail</p>
+        <div class="image-zoom-controls">
+          <button id="zoom-out" type="button" aria-label="Zoom out">−</button>
+          <button id="zoom-in" type="button" aria-label="Zoom in">+</button>
+          <button id="zoom-close" type="button">Close</button>
+        </div>
+      </div>
+      <div id="image-zoom-viewport" class="image-zoom-viewport">
+        <img id="image-zoom-image" alt="" />
+      </div>
     </dialog>
 
     <dialog id="stats-dialog" class="sheet-dialog stats-dialog">
@@ -253,6 +271,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
-    <script type="module" src="src/game.js?v=18"></script>
+    <script type="module" src="src/game.js?v=19"></script>
   </body>
 </html>

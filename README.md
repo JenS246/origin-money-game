@@ -9,7 +9,7 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - One UTC-dated puzzle is shared by every player each day. Its object ID comes from a checked-in generated schedule, so the answer is stable and auditable.
 - Practice mode draws a different random specimen from the same checked-in corpus.
 - Every specimen can be flipped between its matched obverse and reverse photographs.
-- An optional in-game guide uses ten annotated, two-sided museum examples from the United States, Japan, Hong Kong, France, Mexico, Brazil, China, Greece, Egypt, and Peru to explain useful clues such as issuers, dates, scripts, emblems, mint marks, and place names.
+- An optional in-game guide uses ten annotated, two-sided, museum-verified examples from the United States, Japan, Hong Kong, France, Mexico, Brazil, China, Greece, Egypt, and Peru to explain useful clues such as issuers, dates, scripts, emblems, mint marks, and place names. Gameplay specimens and guide examples open in a full-screen detail viewer with adjustable zoom.
 - A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
 - Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the result is shown.

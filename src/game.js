@@ -129,16 +129,16 @@ const STUDY_GUIDES = [
       {
         name: 'Front',
         image: 'https://numismatics.org/collectionimages/19001949/1903/1903.38.53.obv.noscale.jpg',
-        alt: 'Front of a French colonial two sous coin with royal emblems',
-        marks: [{ x: 35, y: 8, width: 30, height: 27 }, { x: 21, y: 39, width: 58, height: 43 }, { x: 76, y: 12, width: 18, height: 66 }],
-        notes: [['Crown', 'Royal insignia places the coin before the French Republic.'], ['Fleur-de-lis', 'The repeated emblem is closely tied to the French monarchy.'], ['Ruler legend', 'LOUIS XVI identifies the reign.']],
+        alt: 'Front of a French colonial two sous coin with denomination and date',
+        marks: [{ x: 24, y: 21, width: 52, height: 29 }, { x: 37, y: 53, width: 28, height: 16 }, { x: 75, y: 9, width: 19, height: 72 }],
+        notes: [['Denomination', 'The central value names the two sous unit.'], ['Date', '1780 places the issue just before the French Revolution.'], ['Colony legend', 'COLONIE DE CAYENNE identifies the intended colonial circulation.']],
       },
       {
         name: 'Back',
         image: 'https://numismatics.org/collectionimages/19001949/1903/1903.38.53.rev.noscale.jpg',
-        alt: 'Back of a French colonial two sous coin dated 1780',
-        marks: [{ x: 24, y: 21, width: 52, height: 29 }, { x: 37, y: 53, width: 28, height: 16 }, { x: 75, y: 9, width: 19, height: 72 }],
-        notes: [['Denomination', 'The central value names the two sous unit.'], ['Date', '1780 places the issue just before the French Revolution.'], ['Colony legend', 'The rim text identifies a coin made for the French colonies.']],
+        alt: 'Back of a French colonial two sous coin with crown and fleur-de-lis',
+        marks: [{ x: 35, y: 8, width: 30, height: 27 }, { x: 21, y: 39, width: 58, height: 43 }, { x: 76, y: 12, width: 18, height: 66 }],
+        notes: [['Rounded crown', 'The ANS notes this crown shape may indicate a contemporary forgery.'], ['Fleur-de-lis', 'Three fleur-de-lis form the royal French design.'], ['Ruler legend', 'LOUIS XVI identifies the authority named on the coin.']],
       },
     ],
   },
@@ -151,14 +151,14 @@ const STUDY_GUIDES = [
         image: 'https://numismatics.org/collectionimages/19001949/1911/1911.105.805.obv.noscale.jpg',
         alt: 'Front of a Mexican quarter real with castle and date',
         marks: [{ x: 14, y: 39, width: 21, height: 18 }, { x: 32, y: 10, width: 39, height: 63 }, { x: 34, y: 75, width: 34, height: 15 }],
-        notes: [['Mint mark', 'The crowned M identifies Mexico City.'], ['Castle', 'Castile\'s castle points to Spanish royal authority.'], ['Date', '1799 places the coin within the colonial period.']],
+        notes: [['Mint mark', 'The Mo mark identifies the Mexico City mint.'], ['Castle', 'Castile\'s castle points to Spanish royal authority.'], ['Date', '1799 places the coin within the colonial period.']],
       },
       {
         name: 'Back',
         image: 'https://numismatics.org/collectionimages/19001949/1911/1911.105.805.rev.noscale.jpg',
         alt: 'Back of a Mexican quarter real with a crowned lion',
         marks: [{ x: 42, y: 11, width: 17, height: 15 }, { x: 24, y: 18, width: 53, height: 68 }],
-        notes: [['Crown', 'The crown confirms royal authority.'], ['Lion', 'The lion of Leon pairs with the castle of Castile on Spanish issues.']],
+        notes: [['Crowned lion', 'The small crown reinforces royal authority.'], ['Lion', 'The lion of Leon pairs with the castle of Castile on Spanish issues.']],
       },
     ],
   },
@@ -191,7 +191,7 @@ const STUDY_GUIDES = [
         image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.2918.obv.noscale.jpg',
         alt: 'Front of a Chinese ten cash coin with Chinese and English denominations',
         marks: [{ x: 39, y: 18, width: 22, height: 43 }, { x: 25, y: 76, width: 52, height: 14 }, { x: 18, y: 10, width: 66, height: 67 }],
-        notes: [['Chinese numerals', 'The central characters state the ten cash value.'], ['English denomination', 'TEN CASH confirms the unit without requiring the local script.'], ['Wreath', 'The republican wreath separates this design from older imperial dragon coins.']],
+        notes: [['Value characters', 'The central characters read ten cash.'], ['English denomination', 'TEN CASH confirms the unit without requiring the local script.'], ['Wheat wreath', 'The paired wheat stems frame the denomination.']],
       },
       {
         name: 'Back',
@@ -218,7 +218,7 @@ const STUDY_GUIDES = [
         image: 'https://media.britishmuseum.org/media/Repository/Documents/2016_6/30_13/cfda89d5_033d_459c_9f69_a63500e1faeb/large_CGR47119_rev.jpg',
         alt: 'Back of an Athenian tetradrachm with owl, olive spray, and city letters',
         marks: [{ x: 42, y: 30, width: 31, height: 43 }, { x: 37, y: 31, width: 13, height: 23 }, { x: 63, y: 40, width: 10, height: 27 }],
-        notes: [['Owl', 'Athena\'s owl is the clearest symbol of an Athenian coin.'], ['Olive spray', 'The small branch beside the owl repeats the city\'s sacred plant.'], ['City letters', 'The Greek letters A, theta, and E abbreviate Athens.']],
+        notes: [['Owl', 'Athena\'s owl is the clearest symbol of an Athenian coin.'], ['Olive spray', 'The small branch beside the owl repeats the city\'s sacred plant.'], ['City letters', 'The Greek letters ΑΘΕ abbreviate the Athenians.']],
       },
     ],
   },
@@ -251,7 +251,7 @@ const STUDY_GUIDES = [
         image: 'https://numismatics.org/collectionimages/19001949/1919/1919.267.1.obv.noscale.jpg',
         alt: 'Front of a Spanish colonial eight reales coin minted in Lima in 1697',
         marks: [{ x: 26, y: 22, width: 51, height: 57 }, { x: 13, y: 36, width: 21, height: 22 }, { x: 40, y: 78, width: 25, height: 15 }],
-        notes: [['Royal arms', 'Castles and lions identify Spanish royal authority.'], ['Lima mint mark', 'The large L at left points directly to Lima.'], ['Date', '1697 appears below the cross.']],
+        notes: [['Royal arms', 'Castles and lions identify Spanish royal authority.'], ['Lima mint mark', 'The large L at left points directly to Lima.'], ['Date', 'The final digits 97 appear below the cross; the catalog dates the coin to 1697.']],
       },
       {
         name: 'Back',
@@ -275,6 +275,7 @@ const elements = {
   image: document.querySelector('#money-image'),
   backImage: document.querySelector('#money-image-back'),
   flip: document.querySelector('#money-flip'),
+  imageZoomButton: document.querySelector('#image-zoom-button'),
   card: document.querySelector('#money-card'),
   skeleton: document.querySelector('#image-skeleton'),
   yearGuess: document.querySelector('#year-guess'),
@@ -317,10 +318,18 @@ const elements = {
   studyImage: document.querySelector('#study-image'),
   studyImageFrame: document.querySelector('.study-image-frame'),
   studyFlip: document.querySelector('#study-flip'),
+  studyZoom: document.querySelector('#study-zoom'),
   studySideLabel: document.querySelector('#study-side-label'),
   studyMarks: document.querySelector('#study-marks'),
   studyNotes: document.querySelector('#study-notes'),
   studySource: document.querySelector('#study-source'),
+  imageZoomDialog: document.querySelector('#image-zoom-dialog'),
+  imageZoomTitle: document.querySelector('#image-zoom-title'),
+  imageZoomImage: document.querySelector('#image-zoom-image'),
+  imageZoomViewport: document.querySelector('#image-zoom-viewport'),
+  zoomIn: document.querySelector('#zoom-in'),
+  zoomOut: document.querySelector('#zoom-out'),
+  zoomClose: document.querySelector('#zoom-close'),
 };
 
 let L;
@@ -343,6 +352,7 @@ let studyGuideIndex = 0;
 let studySideIndex = 0;
 let studyFlipTimers = [];
 let studyFlipping = false;
+let imageZoomLevel = 1;
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 const failedImageIds = new Set();
 
@@ -413,6 +423,32 @@ function toggleStudySide() {
   elements.studyImageFrame.classList.add('is-turning');
   studyFlipTimers.push(window.setTimeout(() => renderStudySide(nextSide), 180));
   studyFlipTimers.push(window.setTimeout(() => clearStudyFlip(), 400));
+}
+
+function setImageZoom(level) {
+  imageZoomLevel = Math.max(1, Math.min(3, level));
+  elements.imageZoomImage.style.setProperty('--image-zoom', `${imageZoomLevel * 100}%`);
+  elements.zoomOut.disabled = imageZoomLevel === 1;
+  elements.zoomIn.disabled = imageZoomLevel === 3;
+}
+
+function openImageZoom(image, title) {
+  if (!image?.src) return;
+  elements.imageZoomImage.src = image.src;
+  elements.imageZoomImage.alt = image.alt;
+  elements.imageZoomTitle.textContent = title;
+  setImageZoom(window.innerWidth < 760 ? 1.5 : 1);
+  elements.imageZoomViewport.scrollTo({ top: 0, left: 0 });
+  elements.imageZoomDialog.showModal();
+}
+
+function openSpecimenZoom() {
+  const flipped = elements.card.classList.contains('flipped');
+  openImageZoom(flipped ? elements.backImage : elements.image, flipped ? 'Back detail' : 'Front detail');
+}
+
+function openStudyZoom() {
+  openImageZoom(elements.studyImage, `${STUDY_GUIDES[studyGuideIndex].label} detail`);
 }
 
 function applyTheme(choice, persist = true) {
@@ -547,6 +583,7 @@ function setImage(item) {
   elements.backImage.classList.remove('loaded');
   elements.card.classList.remove('ready', 'flipped');
   elements.flip.disabled = true;
+  elements.imageZoomButton.disabled = true;
   elements.flip.setAttribute('aria-pressed', 'false');
   elements.flip.setAttribute('aria-label', 'Show reverse side');
   elements.skeleton.classList.remove('hidden');
@@ -555,6 +592,7 @@ function setImage(item) {
     frontReady = true;
     elements.skeleton.classList.add('hidden');
     elements.card.classList.add('ready');
+    elements.imageZoomButton.disabled = false;
     maybeStartFlipDemo();
   }, () => replaceUnplayableRound(item));
   elements.backImage.alt = item.image.backAlt;
@@ -1017,6 +1055,7 @@ function wireEvents() {
   elements.mobileSubmit.addEventListener('click', () => reveal());
   elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));
   elements.flip.addEventListener('click', toggleSide);
+  elements.imageZoomButton.addEventListener('click', openSpecimenZoom);
   elements.share.addEventListener('click', shareResult);
   elements.copyShare.addEventListener('click', copyShareResult);
   elements.saveShare.addEventListener('click', saveShareCard);
@@ -1036,9 +1075,14 @@ function wireEvents() {
     button.addEventListener('click', () => renderStudyGuide(Number(button.dataset.studyExample)));
   }
   elements.studyFlip.addEventListener('click', toggleStudySide);
+  elements.studyZoom.addEventListener('click', openStudyZoom);
   elements.studyImageFrame.addEventListener('click', toggleStudySide);
   elements.studyImage.addEventListener('load', () => elements.studyImageFrame.classList.remove('image-error'));
   elements.studyImage.addEventListener('error', () => elements.studyImageFrame.classList.add('image-error'));
+  elements.zoomIn.addEventListener('click', () => setImageZoom(imageZoomLevel + 0.5));
+  elements.zoomOut.addEventListener('click', () => setImageZoom(imageZoomLevel - 0.5));
+  elements.zoomClose.addEventListener('click', () => elements.imageZoomDialog.close());
+  elements.imageZoomImage.addEventListener('dblclick', () => setImageZoom(imageZoomLevel >= 3 ? 1 : imageZoomLevel + 0.5));
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
     if (themeChoice === 'system') applyTheme('system', false);
   });

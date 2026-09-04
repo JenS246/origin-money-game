@@ -24,6 +24,14 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, /id="study-flip"/);
   assert.doesNotMatch(html, />Match device</);
   assert.match(html, />Estimate year</);
+  assert.match(html, /id="image-zoom-dialog"/);
+  assert.match(html, /id="image-zoom-button"/);
+  assert.match(game, /openSpecimenZoom/);
+  assert.match(game, /openStudyZoom/);
+  assert.match(game, /COLONIE DE CAYENNE identifies the intended colonial circulation/);
+  assert.match(game, /may indicate a contemporary forgery/);
+  assert.match(game, /The Mo mark identifies the Mexico City mint/);
+  assert.match(game, /The final digits 97 appear below the cross/);
   assert.doesNotMatch(html, /Place its mint|tap to flip/i);
   assert.doesNotMatch(html, /flip-label|>Obverse<|>Reverse<|points|5,000/i);
   assert.doesNotMatch(`${html}\n${game}`, /Flip the coin|View today|Play today/);
@@ -57,7 +65,7 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(html, /id="share-dialog"/);
   assert.match(html, /id="share-card"/);
   assert.match(html, /id="answer-dialog"/);
-  assert.match(html, />Read about it</);
+  assert.match(html, />Learn more</);
   assert.match(html, />Copy card</);
   assert.match(html, /class="result-mini-map"/);
   assert.match(html, /class="share-map"/);
