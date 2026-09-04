@@ -182,6 +182,86 @@ const STUDY_GUIDES = [
       },
     ],
   },
+  {
+    label: 'China',
+    source: 'https://numismatics.org/collection/0000.999.2918',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.2918.obv.noscale.jpg',
+        alt: 'Front of a Chinese ten cash coin with Chinese and English denominations',
+        marks: [{ x: 39, y: 18, width: 22, height: 43 }, { x: 25, y: 76, width: 52, height: 14 }, { x: 18, y: 10, width: 66, height: 67 }],
+        notes: [['Chinese numerals', 'The central characters state the ten cash value.'], ['English denomination', 'TEN CASH confirms the unit without requiring the local script.'], ['Wreath', 'The republican wreath separates this design from older imperial dragon coins.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/00001899/0000/0000.999.2918.rev.noscale.jpg',
+        alt: 'Back of a Chinese Republic ten cash coin with crossed flags and Chinese legend',
+        marks: [{ x: 25, y: 5, width: 55, height: 18 }, { x: 25, y: 19, width: 52, height: 54 }, { x: 22, y: 75, width: 60, height: 15 }],
+        notes: [['State legend', 'The top characters name the Republic of China.'], ['Crossed flags', 'Early republican flags replace the imperial dragon.'], ['Issue text', 'Lower characters carry the commemorative issue wording.']],
+      },
+    ],
+  },
+  {
+    label: 'Greece',
+    source: 'https://www.britishmuseum.org/collection/object/C_1920-0805-316',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://media.britishmuseum.org/media/Repository/Documents/2016_6/30_13/c5101042_ad8a_4400_89d0_a63500e1a98c/large_CGR47119_obv.jpg',
+        alt: 'Front of an Athenian tetradrachm with Athena wearing a crested helmet',
+        marks: [{ x: 43, y: 27, width: 31, height: 49 }, { x: 39, y: 20, width: 39, height: 31 }, { x: 52, y: 20, width: 16, height: 14 }],
+        notes: [['Athena', 'The city goddess is the defining portrait of Athenian silver.'], ['Crested helmet', 'Helmet shape and decoration distinguish Athena from a ruler portrait.'], ['Olive leaves', 'The olive ornament reinforces the connection to Athens.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://media.britishmuseum.org/media/Repository/Documents/2016_6/30_13/cfda89d5_033d_459c_9f69_a63500e1faeb/large_CGR47119_rev.jpg',
+        alt: 'Back of an Athenian tetradrachm with owl, olive spray, and city letters',
+        marks: [{ x: 42, y: 30, width: 31, height: 43 }, { x: 37, y: 31, width: 13, height: 23 }, { x: 63, y: 40, width: 10, height: 27 }],
+        notes: [['Owl', 'Athena\'s owl is the clearest symbol of an Athenian coin.'], ['Olive spray', 'The small branch beside the owl repeats the city\'s sacred plant.'], ['City letters', 'The Greek letters A, theta, and E abbreviate Athens.']],
+      },
+    ],
+  },
+  {
+    label: 'Egypt',
+    source: 'https://numismatics.org/collection/1941.131.1158',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1941/1941.131.1158.obv.noscale.jpg',
+        alt: 'Front of an Alexandrian bronze coin with a portrait of Cleopatra VII',
+        marks: [{ x: 34, y: 16, width: 50, height: 69 }, { x: 24, y: 8, width: 49, height: 36 }, { x: 23, y: 31, width: 27, height: 33 }],
+        notes: [['Cleopatra VII', 'The royal portrait identifies the late Ptolemaic period.'], ['Diadem', 'The narrow royal band is a Hellenistic sign of kingship.'], ['Hair knot', 'The tied bun is a useful feature on Cleopatra portrait types.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1941/1941.131.1158.rev.noscale.jpg',
+        alt: 'Back of an Alexandrian bronze coin with an eagle and Greek legend',
+        marks: [{ x: 28, y: 17, width: 47, height: 66 }, { x: 57, y: 29, width: 19, height: 20 }, { x: 8, y: 8, width: 84, height: 81 }],
+        notes: [['Eagle', 'An eagle on a thunderbolt is a hallmark of Ptolemaic coinage.'], ['Denomination mark', 'The Greek letter pi marks the large 80 drachm value.'], ['Greek legend', 'The royal Greek inscription reflects Alexandria\'s Ptolemaic court.']],
+      },
+    ],
+  },
+  {
+    label: 'Peru',
+    source: 'https://numismatics.org/collection/1919.267.1',
+    sides: [
+      {
+        name: 'Front',
+        image: 'https://numismatics.org/collectionimages/19001949/1919/1919.267.1.obv.noscale.jpg',
+        alt: 'Front of a Spanish colonial eight reales coin minted in Lima in 1697',
+        marks: [{ x: 26, y: 22, width: 51, height: 57 }, { x: 13, y: 36, width: 21, height: 22 }, { x: 40, y: 78, width: 25, height: 15 }],
+        notes: [['Royal arms', 'Castles and lions identify Spanish royal authority.'], ['Lima mint mark', 'The large L at left points directly to Lima.'], ['Date', '1697 appears below the cross.']],
+      },
+      {
+        name: 'Back',
+        image: 'https://numismatics.org/collectionimages/19001949/1919/1919.267.1.rev.noscale.jpg',
+        alt: 'Back of a Spanish colonial eight reales coin with pillars and waves',
+        marks: [{ x: 31, y: 16, width: 42, height: 61 }, { x: 20, y: 66, width: 62, height: 18 }, { x: 40, y: 17, width: 22, height: 20 }],
+        notes: [['Pillars', 'The Pillars of Hercules are a signature Spanish colonial device.'], ['Waves', 'Wave lines under the pillars are common on Lima and Potosi issues.'], ['Denomination', 'The central 8 states the eight reales value.']],
+      },
+    ],
+  },
 ];
 
 const elements = {

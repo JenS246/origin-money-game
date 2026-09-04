@@ -19,7 +19,8 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.doesNotMatch(html, /class="home-mobile-drop"/);
   assert.match(html, /id="study-dialog"/);
   assert.match(html, /data-open-dialog="study-dialog"/);
-  assert.match(html, /data-study-example="5"/);
+  assert.match(html, /data-study-example="9"/);
+  assert.match(html, />China<|>Greece<|>Egypt<|>Peru</);
   assert.match(html, /id="study-flip"/);
   assert.doesNotMatch(html, />Match device</);
   assert.match(html, />Estimate year</);
