@@ -55,6 +55,9 @@ test('results use a score-free origin map and branded share card', async () => {
 
   assert.match(html, /id="share-dialog"/);
   assert.match(html, /id="share-card"/);
+  assert.match(html, /id="answer-dialog"/);
+  assert.match(html, />Read about it</);
+  assert.match(html, />Copy card</);
   assert.match(html, /class="result-mini-map"/);
   assert.match(html, /class="share-map"/);
   assert.match(html, /id="share-specimen"/);
@@ -64,7 +67,9 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(source, /shareSpecimen\.src/);
   assert.match(source, /mapPoint\(lastResult\.guess\)/);
   assert.match(source, /saveShareCard/);
-  assert.doesNotMatch(source, /navigator\.share/);
+  assert.match(source, /new ClipboardItem\(\{ 'image\/png': blob \}\)/);
+  assert.match(source, /navigator\.clipboard\?\.write/);
+  assert.doesNotMatch(source, /writeText|navigator\.share/);
   assert.match(styles, /@font-face/);
   assert.match(styles, /IBM Plex Sans Condensed/);
   assert.match(styles, /Newsreader/);

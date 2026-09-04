@@ -210,8 +210,11 @@ const elements = {
   resultAnswerDot: document.querySelector('#result-answer-dot'),
   answerPlace: document.querySelector('#answer-place'),
   answerTitle: document.querySelector('#answer-title'),
+  answerDetailPlace: document.querySelector('#answer-detail-place'),
+  answerDetailTitle: document.querySelector('#answer-detail-title'),
+  answerGuessYear: document.querySelector('#answer-guess-year'),
+  answerDocumentedYear: document.querySelector('#answer-documented-year'),
   blurb: document.querySelector('#answer-blurb'),
-  targetNote: document.querySelector('#target-note'),
   article: document.querySelector('#article-link'),
   imageCredit: document.querySelector('#image-credit-link'),
   share: document.querySelector('#share-button'),
@@ -631,8 +634,11 @@ function populateResult(result) {
     ? activeMoney.issuer
     : `${activeMoney.issuer}, ${activeMoney.anchor.label}`;
   elements.answerTitle.textContent = activeMoney.title;
+  elements.answerDetailPlace.textContent = elements.answerPlace.textContent;
+  elements.answerDetailTitle.textContent = activeMoney.title;
   elements.blurb.textContent = activeMoney.blurb;
-  elements.targetNote.textContent = `Your year: ${formatYear(result.yearGuess)}. Documented date: ${activeMoney.year}.`;
+  elements.answerGuessYear.textContent = formatYear(result.yearGuess);
+  elements.answerDocumentedYear.textContent = activeMoney.year;
   elements.article.href = activeMoney.articleUrl;
   elements.article.textContent = recordLabel(activeMoney);
   elements.imageCredit.href = activeMoney.image.filePage;
@@ -728,11 +734,6 @@ function showToast(message) {
   window.setTimeout(() => elements.toast.classList.remove('visible'), 2200);
 }
 
-function shareText() {
-  const title = mode === 'daily' ? `ORIGINS #${editionNumber()}` : 'ORIGINS Free Play';
-  return `${title}\n${Math.round(lastResult.distance).toLocaleString()} km off\n${Math.round(lastResult.dateDistance).toLocaleString()} years off\nhttps://jens246.github.io/origin-money-game/`;
-}
-
 function shareResult() {
   if (!lastResult) return;
   const guessed = mapPoint(lastResult.guess);
@@ -755,17 +756,7 @@ function shareResult() {
   elements.shareDialog.showModal();
 }
 
-async function copyShareResult() {
-  if (!lastResult) return;
-  try {
-    await navigator.clipboard.writeText(shareText());
-    showToast('Result copied');
-  } catch {
-    showToast('Could not copy result');
-  }
-}
-
-async function saveShareCard() {
+async function renderShareCardBlob() {
   if (!lastResult) return;
   await document.fonts.ready;
   const canvas = document.createElement('canvas');
@@ -860,19 +851,45 @@ async function saveShareCard() {
   context.font = '400 28px "IBM Plex Sans Condensed", sans-serif';
   context.fillText('jens246.github.io/origin-money-game', 600, 1405);
 
-  canvas.toBlob((blob) => {
-    if (!blob) {
-      showToast('Could not save card');
-      return;
+  return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
+}
+
+function downloadShareCard(blob) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = mode === 'daily' ? `origins-${editionNumber()}.png` : 'origins-practice.png';
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function copyShareResult() {
+  if (!lastResult) return;
+  try {
+    const blob = await renderShareCardBlob();
+    if (!blob) throw new Error('Card rendering failed');
+    if (navigator.clipboard?.write && typeof ClipboardItem !== 'undefined') {
+      try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+        showToast('Card copied');
+        return;
+      } catch {}
     }
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = mode === 'daily' ? `origins-${editionNumber()}.png` : 'origins-practice.png';
-    link.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
-    showToast('Card saved');
-  }, 'image/png');
+    downloadShareCard(blob);
+    showToast('Card downloaded');
+  } catch {
+    showToast('Could not create card');
+  }
+}
+
+async function saveShareCard() {
+  const blob = await renderShareCardBlob();
+  if (!blob) {
+    showToast('Could not save card');
+    return;
+  }
+  downloadShareCard(blob);
+  showToast('Card saved');
 }
 
 async function initializeMap() {

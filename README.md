@@ -13,6 +13,8 @@ The interface is deliberately spare: one specimen, one map, one decision. After 
 - A compact year slider records the player's date estimate before the round is locked.
 - Pins can be moved or dragged until the player selects **Lock pin**.
 - Distance uses the haversine formula. A record's reviewed tolerance radius is subtracted before the result is shown.
+- Round results keep the map and error measures compact, with the full object history and sources in a dedicated reading dialog.
+- Share cards can be copied as an image for pasting into messages and social apps, with a PNG download fallback when image clipboard access is unavailable.
 - Each target is a documented mint, printing facility, or production area linked from the source record.
 - Results show the object date, production method, tolerance, museum record, and image rights.
 - Daily results, average distance, average year error, and streaks are stored in browser `localStorage`. There are no accounts, cookies, analytics, or backend.
