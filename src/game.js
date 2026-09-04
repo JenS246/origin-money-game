@@ -327,6 +327,7 @@ const elements = {
   imageZoomTitle: document.querySelector('#image-zoom-title'),
   imageZoomImage: document.querySelector('#image-zoom-image'),
   imageZoomViewport: document.querySelector('#image-zoom-viewport'),
+  zoomFlip: document.querySelector('#zoom-flip'),
   zoomIn: document.querySelector('#zoom-in'),
   zoomOut: document.querySelector('#zoom-out'),
   zoomClose: document.querySelector('#zoom-close'),
@@ -353,6 +354,7 @@ let studySideIndex = 0;
 let studyFlipTimers = [];
 let studyFlipping = false;
 let imageZoomLevel = 1;
+let imageZoomContext = '';
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 const failedImageIds = new Set();
 
@@ -432,23 +434,57 @@ function setImageZoom(level) {
   elements.zoomIn.disabled = imageZoomLevel === 3;
 }
 
-function openImageZoom(image, title) {
+function replaceZoomImage(image, title, preservePosition = false) {
   if (!image?.src) return;
+  const maxScrollX = Math.max(1, elements.imageZoomViewport.scrollWidth - elements.imageZoomViewport.clientWidth);
+  const maxScrollY = Math.max(1, elements.imageZoomViewport.scrollHeight - elements.imageZoomViewport.clientHeight);
+  const scrollRatioX = elements.imageZoomViewport.scrollLeft / maxScrollX;
+  const scrollRatioY = elements.imageZoomViewport.scrollTop / maxScrollY;
+  const restorePosition = () => {
+    if (!preservePosition) {
+      elements.imageZoomViewport.scrollTo({ top: 0, left: 0 });
+      return;
+    }
+    const nextMaxX = Math.max(0, elements.imageZoomViewport.scrollWidth - elements.imageZoomViewport.clientWidth);
+    const nextMaxY = Math.max(0, elements.imageZoomViewport.scrollHeight - elements.imageZoomViewport.clientHeight);
+    elements.imageZoomViewport.scrollTo({ left: nextMaxX * scrollRatioX, top: nextMaxY * scrollRatioY });
+  };
   elements.imageZoomImage.src = image.src;
   elements.imageZoomImage.alt = image.alt;
   elements.imageZoomTitle.textContent = title;
+  if (elements.imageZoomImage.complete) requestAnimationFrame(restorePosition);
+  else elements.imageZoomImage.addEventListener('load', restorePosition, { once: true });
+}
+
+function openImageZoom(image, title, context) {
+  if (!image?.src) return;
+  imageZoomContext = context;
   setImageZoom(window.innerWidth < 760 ? 1.5 : 1);
-  elements.imageZoomViewport.scrollTo({ top: 0, left: 0 });
+  replaceZoomImage(image, title);
   elements.imageZoomDialog.showModal();
 }
 
 function openSpecimenZoom() {
   const flipped = elements.card.classList.contains('flipped');
-  openImageZoom(flipped ? elements.backImage : elements.image, flipped ? 'Back detail' : 'Front detail');
+  openImageZoom(flipped ? elements.backImage : elements.image, flipped ? 'Back detail' : 'Front detail', 'specimen');
 }
 
 function openStudyZoom() {
-  openImageZoom(elements.studyImage, `${STUDY_GUIDES[studyGuideIndex].label} detail`);
+  openImageZoom(elements.studyImage, `${STUDY_GUIDES[studyGuideIndex].label} detail`, 'study');
+}
+
+function flipZoomedImage() {
+  if (imageZoomContext === 'specimen') {
+    const flipped = !elements.card.classList.contains('flipped');
+    clearFlipDemo();
+    setFlipSide(flipped);
+    replaceZoomImage(flipped ? elements.backImage : elements.image, flipped ? 'Back detail' : 'Front detail', true);
+    return;
+  }
+  if (imageZoomContext === 'study') {
+    renderStudySide(studySideIndex === 0 ? 1 : 0);
+    replaceZoomImage(elements.studyImage, `${STUDY_GUIDES[studyGuideIndex].label} detail`, true);
+  }
 }
 
 function applyTheme(choice, persist = true) {
@@ -1079,6 +1115,7 @@ function wireEvents() {
   elements.studyImageFrame.addEventListener('click', toggleStudySide);
   elements.studyImage.addEventListener('load', () => elements.studyImageFrame.classList.remove('image-error'));
   elements.studyImage.addEventListener('error', () => elements.studyImageFrame.classList.add('image-error'));
+  elements.zoomFlip.addEventListener('click', flipZoomedImage);
   elements.zoomIn.addEventListener('click', () => setImageZoom(imageZoomLevel + 0.5));
   elements.zoomOut.addEventListener('click', () => setImageZoom(imageZoomLevel - 0.5));
   elements.zoomClose.addEventListener('click', () => elements.imageZoomDialog.close());

@@ -26,8 +26,11 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, />Estimate year</);
   assert.match(html, /id="image-zoom-dialog"/);
   assert.match(html, /id="image-zoom-button"/);
+  assert.match(html, /id="zoom-flip"[^>]*>Flip</);
   assert.match(game, /openSpecimenZoom/);
   assert.match(game, /openStudyZoom/);
+  assert.match(game, /flipZoomedImage/);
+  assert.match(game, /replaceZoomImage\([\s\S]*true\)/);
   assert.match(game, /COLONIE DE CAYENNE identifies the intended colonial circulation/);
   assert.match(game, /may indicate a contemporary forgery/);
   assert.match(game, /The Mo mark identifies the Mexico City mint/);

@@ -786,8 +786,8 @@ button:focus-visible, a:focus-visible {
   padding: 0 14px 0 18px;
   border-bottom: 1px solid var(--line);
 }
-.image-zoom-head p { margin: 0; font-family: "Newsreader", Georgia, serif; font-size: 18px; font-weight: 700; }
-.image-zoom-controls { display: flex; align-items: center; gap: 6px; }
+.image-zoom-head p { min-width: 0; margin: 0; overflow: hidden; font-family: "Newsreader", Georgia, serif; font-size: 18px; font-weight: 700; text-overflow: ellipsis; white-space: nowrap; }
+.image-zoom-controls { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
 .image-zoom-controls button {
   min-width: 42px;
   min-height: 42px;
@@ -1106,6 +1106,8 @@ button:focus-visible, a:focus-visible {
   .study-side-controls { margin-top: 1px; }
   .image-zoom-dialog { width: 100vw; height: 100dvh; max-width: none; max-height: none; border: 0; border-radius: 0; }
   .image-zoom-head { height: calc(58px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) max(10px, env(safe-area-inset-right)) 0 max(14px, env(safe-area-inset-left)); }
+  .image-zoom-controls { gap: 4px; }
+  .image-zoom-controls button { min-width: 38px; min-height: 38px; padding-inline: 9px; font-size: 16px; }
   .image-zoom-viewport { height: calc(100% - 58px - env(safe-area-inset-top)); }
   .study-mark { border-width: 1.5px; box-shadow: 0 0 0 1px rgb(247 248 242 / 0.62); }
   .study-mark span { top: -10px; left: -10px; width: 20px; height: 20px; font-size: 11px; }
