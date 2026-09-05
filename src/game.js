@@ -304,6 +304,7 @@ const elements = {
   shareEdition: document.querySelector('#share-edition'),
   shareDistance: document.querySelector('#share-distance'),
   shareYears: document.querySelector('#share-years'),
+  shareMap: document.querySelector('.share-map'),
   shareRoute: document.querySelector('#share-route-line'),
   shareGuessDot: document.querySelector('.share-map-guess'),
   shareAnswerDot: document.querySelector('.share-map-answer'),
@@ -927,6 +928,19 @@ function mapPoint(location) {
   };
 }
 
+function shareMapLayout(result) {
+  const guessed = mapPoint(result.guess);
+  const answer = mapPoint(activeMoney.anchor);
+  const separation = Math.hypot((guessed.x - answer.x) * 10.4, (guessed.y - answer.y) * 5.6);
+  const close = separation < 48;
+  if (!close) return { guessed, answer, close };
+  const shared = {
+    x: (guessed.x + answer.x) / 2,
+    y: (guessed.y + answer.y) / 2,
+  };
+  return { guessed: shared, answer: shared, close };
+}
+
 function positionResultMap(result) {
   const guessed = mapPoint(result.guess);
   const answer = mapPoint(activeMoney.anchor);
@@ -1050,12 +1064,12 @@ function showToast(message) {
 
 function shareResult() {
   if (!lastResult) return;
-  const guessed = mapPoint(lastResult.guess);
-  const answer = mapPoint(activeMoney.anchor);
+  const { guessed, answer, close } = shareMapLayout(lastResult);
   elements.shareEdition.textContent = mode === 'daily' ? `Currency ${editionNumber()}` : 'Free Play';
   elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
   elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
   elements.shareDocumentedYear.textContent = activeMoney.year;
+  elements.shareMap.classList.toggle('is-close', close);
   elements.shareGuessDot.style.left = `${guessed.x}%`;
   elements.shareGuessDot.style.top = `${guessed.y}%`;
   elements.shareAnswerDot.style.left = `${answer.x}%`;
@@ -1064,8 +1078,8 @@ function shareResult() {
   elements.shareRoute.setAttribute('y1', guessed.y * 0.52);
   elements.shareRoute.setAttribute('x2', answer.x);
   elements.shareRoute.setAttribute('y2', answer.y * 0.52);
-  elements.shareSpecimen.style.left = `${Math.max(15, Math.min(85, answer.x))}%`;
-  elements.shareSpecimen.style.top = `${Math.max(19, Math.min(70, answer.y - 14))}%`;
+  elements.shareSpecimen.style.left = answer.x > 50 ? '17%' : '83%';
+  elements.shareSpecimen.style.top = '18%';
   elements.shareSpecimen.src = elements.image.currentSrc || activeMoney.image.url;
   elements.shareDialog.showModal();
 }
@@ -1080,27 +1094,32 @@ async function renderShareCardBlob() {
   context.fillStyle = '#e8ece5';
   context.fillRect(0, 0, canvas.width, canvas.height);
 
-  context.fillStyle = '#18211c';
-  context.textAlign = 'center';
-  context.font = '700 118px "Newsreader", serif';
-  context.fillText('ORIGINS', 600, 180);
-  context.font = '700 40px "Newsreader", serif';
-  context.fillStyle = '#2e6652';
-  context.fillText(mode === 'daily' ? `CURRENCY ${editionNumber()}` : 'FREE PLAY', 600, 252);
-
   const mapImage = new Image();
   mapImage.src = 'assets/home-world-map.webp';
   try {
     await mapImage.decode();
-    context.globalAlpha = 0.72;
-    context.drawImage(mapImage, 105, 315, 990, 540);
+    context.globalAlpha = 0.38;
+    context.drawImage(mapImage, 0, 270, 1200, 620);
     context.globalAlpha = 1;
   } catch {}
 
-  const guessed = mapPoint(lastResult.guess);
-  const answer = mapPoint(activeMoney.anchor);
-  const mapX = (point) => 105 + (point.x / 100) * 990;
-  const mapY = (point) => 315 + (point.y / 100) * 540;
+  context.strokeStyle = 'rgba(24, 33, 28, 0.25)';
+  context.lineWidth = 3;
+  context.strokeRect(48, 48, 1104, 1404);
+  context.lineWidth = 1;
+  context.strokeRect(62, 62, 1076, 1376);
+
+  context.fillStyle = '#18211c';
+  context.textAlign = 'left';
+  context.font = '700 110px "Newsreader", serif';
+  context.fillText('ORIGINS', 94, 176);
+  context.font = '650 46px "Newsreader", serif';
+  context.fillStyle = '#2e6652';
+  context.fillText(mode === 'daily' ? `Currency ${editionNumber()}` : 'Free Play', 98, 242);
+
+  const { guessed, answer, close } = shareMapLayout(lastResult);
+  const mapX = (point) => 80 + (point.x / 100) * 1040;
+  const mapY = (point) => 300 + (point.y / 100) * 560;
   try {
     const safetyCanvas = document.createElement('canvas');
     safetyCanvas.width = 2;
@@ -1111,8 +1130,8 @@ async function renderShareCardBlob() {
     const specimenScale = Math.min(220 / elements.image.naturalWidth, 150 / elements.image.naturalHeight);
     const specimenWidth = elements.image.naturalWidth * specimenScale;
     const specimenHeight = elements.image.naturalHeight * specimenScale;
-    const specimenX = Math.max(105 + specimenWidth / 2, Math.min(1095 - specimenWidth / 2, mapX(answer)));
-    const specimenY = Math.max(330 + specimenHeight / 2, Math.min(730 - specimenHeight / 2, mapY(answer) - 88));
+    const specimenX = answer.x > 50 ? 250 : 950;
+    const specimenY = 390;
     context.drawImage(
       elements.image,
       specimenX - specimenWidth / 2,
@@ -1121,49 +1140,84 @@ async function renderShareCardBlob() {
       specimenHeight,
     );
   } catch {}
-  context.strokeStyle = '#2e6652';
-  context.lineWidth = 7;
-  context.setLineDash([18, 18]);
-  context.beginPath();
-  context.moveTo(mapX(guessed), mapY(guessed));
-  context.lineTo(mapX(answer), mapY(answer));
-  context.stroke();
-  context.setLineDash([]);
-  context.fillStyle = '#18211c';
-  context.beginPath();
-  context.arc(mapX(guessed), mapY(guessed), 22, 0, Math.PI * 2);
-  context.fill();
-  context.fillStyle = '#2e6652';
-  context.beginPath();
-  context.arc(mapX(answer), mapY(answer), 28, 0, Math.PI * 2);
-  context.fill();
-  context.strokeStyle = '#e8ece5';
-  context.lineWidth = 8;
-  context.stroke();
+  if (close) {
+    context.fillStyle = 'rgba(232, 236, 229, 0.82)';
+    context.strokeStyle = '#2e6652';
+    context.lineWidth = 14;
+    context.beginPath();
+    context.arc(mapX(answer), mapY(answer), 42, 0, Math.PI * 2);
+    context.fill();
+    context.stroke();
+    context.fillStyle = '#18211c';
+    context.beginPath();
+    context.arc(mapX(guessed), mapY(guessed), 17, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = '#e8ece5';
+    context.lineWidth = 7;
+    context.stroke();
+  } else {
+    context.strokeStyle = '#2e6652';
+    context.lineWidth = 7;
+    context.setLineDash([18, 18]);
+    context.beginPath();
+    context.moveTo(mapX(guessed), mapY(guessed));
+    context.lineTo(mapX(answer), mapY(answer));
+    context.stroke();
+    context.setLineDash([]);
+    context.fillStyle = '#18211c';
+    context.beginPath();
+    context.arc(mapX(guessed), mapY(guessed), 22, 0, Math.PI * 2);
+    context.fill();
+    context.fillStyle = '#2e6652';
+    context.beginPath();
+    context.arc(mapX(answer), mapY(answer), 28, 0, Math.PI * 2);
+    context.fill();
+    context.strokeStyle = '#e8ece5';
+    context.lineWidth = 8;
+    context.stroke();
+  }
 
   context.fillStyle = '#18211c';
   context.textAlign = 'right';
-  context.font = '700 68px "Newsreader", serif';
-  context.fillText(activeMoney.year, 1060, 812);
-  context.textAlign = 'center';
+  context.font = '700 76px "Newsreader", serif';
+  context.fillText(activeMoney.year, 1080, 814);
+  context.fillStyle = '#3f5148';
+  context.font = '650 32px "Newsreader", serif';
+  context.fillText('documented', 1080, 858);
+
+  context.textAlign = 'left';
+  context.fillStyle = '#18211c';
+  context.beginPath();
+  context.arc(100, 824, 11, 0, Math.PI * 2);
+  context.fill();
+  context.font = '650 31px "Newsreader", serif';
+  context.fillText('Your guess', 126, 835);
+  context.strokeStyle = '#2e6652';
+  context.lineWidth = 7;
+  context.beginPath();
+  context.arc(100, 866, 13, 0, Math.PI * 2);
+  context.stroke();
+  context.fillText('Origin', 126, 877);
 
   const facts = [
     [Math.round(lastResult.distance).toLocaleString(), 'KM OFF'],
     [Math.round(lastResult.dateDistance).toLocaleString(), 'YEARS OFF'],
   ];
   facts.forEach(([value, label], index) => {
-    const x = index === 0 ? 340 : 860;
+    const x = index === 0 ? 98 : 700;
     context.fillStyle = '#18211c';
-    context.font = '700 94px "IBM Plex Sans Condensed", sans-serif';
-    context.fillText(value, x, 1040);
-    context.fillStyle = '#59645c';
-    context.font = '600 30px "IBM Plex Sans Condensed", sans-serif';
-    context.fillText(label, x, 1094);
+    context.textAlign = 'left';
+    context.font = index === 0 ? '650 132px "Newsreader", serif' : '650 108px "Newsreader", serif';
+    context.fillText(value, x, 1130);
+    context.fillStyle = '#3f5148';
+    context.font = '650 39px "Newsreader", serif';
+    context.fillText(label.toLowerCase(), x, 1190);
   });
 
-  context.fillStyle = '#59645c';
-  context.font = '400 28px "IBM Plex Sans Condensed", sans-serif';
-  context.fillText('jens246.github.io/origin-money-game', 600, 1405);
+  context.fillStyle = '#334a3f';
+  context.textAlign = 'center';
+  context.font = '600 39px "Newsreader", serif';
+  context.fillText('jens246.github.io/origin-money-game', 600, 1398);
 
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
 }

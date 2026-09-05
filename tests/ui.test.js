@@ -79,10 +79,14 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(html, /class="share-map"/);
   assert.match(html, /id="share-specimen"/);
   assert.match(html, /id="share-route-line"/);
+  assert.match(html, /class="share-map-legend"/);
   assert.doesNotMatch(`${html}\n${source}`, /score-value|share-score|combinedPoints|pointsForDistance|pointsForYear/);
   assert.match(source, /shareDialog\.showModal\(\)/);
   assert.match(source, /shareSpecimen\.src/);
-  assert.match(source, /mapPoint\(lastResult\.guess\)/);
+  assert.match(source, /answer\.x > 50 \? '17%' : '83%'/);
+  assert.match(source, /mapPoint\(result\.guess\)/);
+  assert.match(source, /shareMapLayout/);
+  assert.match(source, /classList\.toggle\('is-close', close\)/);
   assert.match(source, /saveShareCard/);
   assert.match(source, /new ClipboardItem\(\{ 'image\/png': blob \}\)/);
   assert.match(source, /navigator\.clipboard\?\.write/);
@@ -90,6 +94,8 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(styles, /@font-face/);
   assert.match(styles, /IBM Plex Sans Condensed/);
   assert.match(styles, /Newsreader/);
+  assert.match(styles, /\.share-map\.is-close \.share-map-answer/);
+  assert.match(styles, /share-card[\s\S]*home-world-map\.webp/);
 });
 
 test('image loading retries the original photo and replaces a dead round', async () => {
