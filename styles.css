@@ -355,13 +355,39 @@ button:focus-visible, a:focus-visible {
   background: var(--surface);
 }
 .date-guess label { color: var(--ink); font-size: 17px; font-weight: 600; letter-spacing: 0.01em; white-space: nowrap; }
-.date-guess output {
+.year-stepper {
+  display: grid;
+  grid-template-columns: 40px minmax(58px, auto) 40px;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.year-stepper button {
+  min-width: 40px;
+  min-height: 42px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 23px;
+  font-weight: 650;
+  cursor: pointer;
+}
+.year-stepper button:first-child { border-right: 1px solid var(--line); }
+.year-stepper button:last-child { border-left: 1px solid var(--line); }
+.year-stepper button:hover:not(:disabled) { background: var(--surface-strong); }
+.year-stepper button:active:not(:disabled) { transform: translateY(1px); }
+.year-stepper button:disabled { color: var(--muted); opacity: 0.38; cursor: default; }
+.year-stepper output {
   min-width: 0;
+  padding-inline: 6px;
   color: var(--ink);
   font-size: 19px;
-  font-family: "IBM Plex Sans Condensed", "Arial Narrow", sans-serif;
-  font-weight: 700;
-  text-align: left;
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 650;
+  text-align: center;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
@@ -937,8 +963,8 @@ button:focus-visible, a:focus-visible {
   .result-actions { grid-column: 2; grid-row: 2; flex-direction: row; padding: 12px clamp(18px, 2vw, 28px) 0; }
   .result-actions button { flex: 1; }
 }
-#share-edition { color: #334a3f; font-family: "Newsreader", Georgia, serif; font-size: clamp(19px, 4.7vw, 24px); font-weight: 650; }
-.share-map { position: absolute; left: 5%; right: 5%; top: 19%; height: 49%; overflow: hidden; background: rgb(217 222 215 / 28%) url("assets/home-world-map.webp") center / 108% auto no-repeat; }
+#share-edition { color: #334a3f; font-family: "Newsreader", Georgia, serif; font-size: clamp(22px, 5.2vw, 28px); font-weight: 650; }
+.share-map { position: absolute; left: 5%; right: 5%; top: 19%; height: 45%; overflow: hidden; background: rgb(217 222 215 / 28%) url("assets/home-world-map.webp") center / 108% auto no-repeat; }
 .share-map::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(232 236 229 / 8%), transparent 45%, rgb(232 236 229 / 76%)); pointer-events: none; }
 .share-map svg { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .share-map line { stroke: #2e6652; stroke-width: 0.8; stroke-dasharray: 1.5 1.5; vector-effect: non-scaling-stroke; }
@@ -964,18 +990,20 @@ button:focus-visible, a:focus-visible {
 .share-specimen { position: absolute; z-index: 2; width: 24%; height: 24%; object-fit: contain; filter: drop-shadow(0 7px 9px rgb(24 33 28 / 28%)); transform: translate(-50%, -50%); }
 .share-map-year { position: absolute; z-index: 5; right: 4%; bottom: 3%; margin: 0; color: #18211c; text-align: right; }
 .share-map-year strong { display: block; font-family: "Newsreader", Georgia, serif; font-size: clamp(30px, 8vw, 46px); font-weight: 700; line-height: 0.9; }
-.share-map-year span { display: block; margin-top: 5px; color: #3f5148; font-family: "Newsreader", Georgia, serif; font-size: clamp(14px, 3.5vw, 17px); font-weight: 600; }
-.share-map-legend { position: absolute; z-index: 5; left: 3%; bottom: 3%; display: flex; flex-direction: column; gap: 4px; color: #26372f; font-family: "Newsreader", Georgia, serif; font-size: clamp(13px, 3.2vw, 16px); font-weight: 650; }
+.share-map-year.is-range { max-width: 55%; }
+.share-map-year.is-range strong { font-size: clamp(18px, 5vw, 30px); letter-spacing: -0.04em; white-space: nowrap; }
+.share-map-year span { display: block; margin-top: 5px; color: #3f5148; font-family: "Newsreader", Georgia, serif; font-size: clamp(16px, 3.9vw, 20px); font-weight: 600; }
+.share-map-legend { position: absolute; z-index: 5; left: 3%; bottom: 3%; display: flex; flex-direction: column; gap: 4px; color: #26372f; font-family: "Newsreader", Georgia, serif; font-size: clamp(15px, 3.7vw, 19px); font-weight: 650; }
 .share-map-legend span { display: flex; align-items: center; gap: 7px; }
 .share-map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
 .share-legend-guess { background: #18211c; }
 .share-legend-answer { border: 3px solid #2e6652; background: #e8ece5; }
-.share-facts { position: absolute; left: clamp(28px, 6vw, 44px); right: clamp(28px, 6vw, 44px); bottom: 12%; display: grid; grid-template-columns: 1.18fr 0.82fr; align-items: end; gap: 20px; }
+.share-facts { position: absolute; left: clamp(28px, 6vw, 44px); right: clamp(28px, 6vw, 44px); bottom: 18%; display: grid; grid-template-columns: 1.18fr 0.82fr; align-items: end; gap: 20px; }
 .share-facts p { margin: 0; text-align: left; }
 .share-facts strong { display: block; overflow: hidden; font-family: "Newsreader", Georgia, serif; font-size: clamp(42px, 11vw, 68px); font-weight: 650; line-height: 0.86; letter-spacing: -0.045em; font-variant-numeric: lining-nums tabular-nums; text-overflow: ellipsis; }
 .share-facts p:last-child strong { font-size: clamp(34px, 9vw, 56px); }
-.share-facts span { display: block; margin-top: 9px; color: #3f5148; font-family: "Newsreader", Georgia, serif; font-size: clamp(17px, 4.1vw, 21px); font-weight: 650; }
-.share-url { position: absolute; left: 0; right: 0; bottom: clamp(20px, 5vw, 30px); margin: 0; color: #334a3f; font-family: "Newsreader", Georgia, serif; font-size: clamp(16px, 3.9vw, 20px); font-weight: 600; text-align: center; }
+.share-facts span { display: block; margin-top: 9px; color: #3f5148; font-family: "Newsreader", Georgia, serif; font-size: clamp(19px, 4.6vw, 24px); font-weight: 650; }
+.share-url { position: absolute; left: 0; right: 0; bottom: clamp(20px, 5vw, 30px); margin: 0; color: #334a3f; font-family: "Newsreader", Georgia, serif; font-size: clamp(15px, 3.7vw, 20px); font-weight: 600; letter-spacing: -0.015em; text-align: center; white-space: nowrap; }
 .share-dialog-actions { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 8px; padding-top: 12px; }
 .share-dialog-actions form { margin: 0; }
 .share-dialog-actions .close-button { padding-inline: 12px; }
@@ -1060,9 +1088,11 @@ button:focus-visible, a:focus-visible {
   .zoom-trigger { right: 10px; bottom: 8px; min-width: 54px; min-height: 38px; padding-inline: 10px; font-size: 14px; }
   .money-image { max-height: calc(34dvh - 58px); filter: drop-shadow(0 10px 18px color-mix(in srgb, var(--ink) 12%, transparent)); }
   .image-skeleton { width: min(44%, 150px); }
-  .date-guess { grid-template-columns: auto minmax(100px, 1fr) 58px; gap: 10px; min-height: 58px; padding: 8px 14px; }
+  .date-guess { grid-template-columns: auto minmax(70px, 1fr) auto; gap: 8px; min-height: 58px; padding: 8px 14px; }
   .date-guess label { font-size: 15px; }
-  .date-guess output { font-size: 17px; }
+  .year-stepper { grid-template-columns: 38px minmax(50px, auto) 38px; }
+  .year-stepper button { min-width: 38px; min-height: 42px; }
+  .year-stepper output { font-size: 17px; }
   .date-guess .primary-button { display: none; }
   .map-panel { grid-row: 2; }
   .map-status { top: 10px; padding: 8px 11px; font-size: 12px; }

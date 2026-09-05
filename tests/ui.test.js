@@ -24,6 +24,8 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, /id="study-flip"/);
   assert.doesNotMatch(html, />Match device</);
   assert.match(html, />Estimate year</);
+  assert.match(html, /id="year-down"[^>]*aria-label="Subtract one year"/);
+  assert.match(html, /id="year-up"[^>]*aria-label="Add one year"/);
   assert.match(html, /id="image-zoom-dialog"/);
   assert.match(html, /id="image-zoom-button"/);
   assert.match(html, /id="money-gesture-layer"/);
@@ -35,6 +37,8 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(game, /beginSpecimenGesture/);
   assert.match(game, /moveSpecimenGesture/);
   assert.match(game, /setPointerCapture/);
+  assert.match(game, /setYearGuess\(yearGuess - 1\)/);
+  assert.match(game, /setYearGuess\(yearGuess \+ 1\)/);
   assert.match(game, /COLONIE DE CAYENNE identifies the intended colonial circulation/);
   assert.match(game, /may indicate a contemporary forgery/);
   assert.match(game, /The Mo mark identifies the Mexico City mint/);
@@ -87,6 +91,7 @@ test('results use a score-free origin map and branded share card', async () => {
   assert.match(source, /mapPoint\(result\.guess\)/);
   assert.match(source, /shareMapLayout/);
   assert.match(source, /classList\.toggle\('is-close', close\)/);
+  assert.match(source, /classList\.toggle\('is-range'/);
   assert.match(source, /saveShareCard/);
   assert.match(source, /new ClipboardItem\(\{ 'image\/png': blob \}\)/);
   assert.match(source, /navigator\.clipboard\?\.write/);

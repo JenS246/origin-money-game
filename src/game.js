@@ -281,6 +281,8 @@ const elements = {
   skeleton: document.querySelector('#image-skeleton'),
   yearGuess: document.querySelector('#year-guess'),
   yearGuessValue: document.querySelector('#year-guess-value'),
+  yearDown: document.querySelector('#year-down'),
+  yearUp: document.querySelector('#year-up'),
   submit: document.querySelector('#submit-button'),
   mobileSubmit: document.querySelector('#mobile-submit-button'),
   mapStatus: document.querySelector('#map-status'),
@@ -653,11 +655,22 @@ function setImage(item) {
 }
 
 function setYearGuess(value) {
-  yearGuess = Number(value);
+  const minimum = Number(elements.yearGuess.min);
+  const maximum = Number(elements.yearGuess.max);
+  yearGuess = clamp(Number(value), minimum, maximum);
   const label = formatYear(yearGuess);
   elements.yearGuess.value = String(yearGuess);
   elements.yearGuessValue.value = label;
   elements.yearGuess.setAttribute('aria-valuetext', label);
+  elements.yearDown.disabled = elements.yearGuess.disabled || yearGuess <= minimum;
+  elements.yearUp.disabled = elements.yearGuess.disabled || yearGuess >= maximum;
+}
+
+function setYearControlDisabled(disabled) {
+  elements.yearGuess.disabled = disabled;
+  elements.yearDown.disabled = disabled;
+  elements.yearUp.disabled = disabled;
+  if (!disabled) setYearGuess(yearGuess);
 }
 
 function setFlipSide(flipped) {
@@ -990,7 +1003,7 @@ function reveal(saved = null) {
     ? saved.dateDistance
     : yearDistance(savedYearGuess, activeMoney.year);
   setYearGuess(savedYearGuess);
-  elements.yearGuess.disabled = true;
+  setYearControlDisabled(true);
   lastResult = {
     model: RESULT_MODEL,
     moneyId: activeMoney.id,
@@ -1023,7 +1036,7 @@ function resetRound(item) {
   elements.mobileSubmit.removeAttribute('style');
   elements.submit.disabled = true;
   elements.mobileSubmit.disabled = true;
-  elements.yearGuess.disabled = false;
+  setYearControlDisabled(false);
   setYearGuess(750);
   elements.mapStatus.textContent = mapReady ? 'Tap anywhere on the map' : 'Loading map';
   setImage(item);
@@ -1069,6 +1082,7 @@ function shareResult() {
   elements.shareDistance.textContent = Math.round(lastResult.distance).toLocaleString();
   elements.shareYears.textContent = Math.round(lastResult.dateDistance).toLocaleString();
   elements.shareDocumentedYear.textContent = activeMoney.year;
+  elements.shareDocumentedYear.parentElement.classList.toggle('is-range', activeMoney.year.length > 9);
   elements.shareMap.classList.toggle('is-close', close);
   elements.shareGuessDot.style.left = `${guessed.x}%`;
   elements.shareGuessDot.style.top = `${guessed.y}%`;
@@ -1113,7 +1127,7 @@ async function renderShareCardBlob() {
   context.textAlign = 'left';
   context.font = '700 110px "Newsreader", serif';
   context.fillText('ORIGINS', 94, 176);
-  context.font = '650 46px "Newsreader", serif';
+  context.font = '650 52px "Newsreader", serif';
   context.fillStyle = '#2e6652';
   context.fillText(mode === 'daily' ? `Currency ${editionNumber()}` : 'Free Play', 98, 242);
 
@@ -1179,10 +1193,10 @@ async function renderShareCardBlob() {
 
   context.fillStyle = '#18211c';
   context.textAlign = 'right';
-  context.font = '700 76px "Newsreader", serif';
+  context.font = activeMoney.year.length > 9 ? '700 58px "Newsreader", serif' : '700 76px "Newsreader", serif';
   context.fillText(activeMoney.year, 1080, 814);
   context.fillStyle = '#3f5148';
-  context.font = '650 32px "Newsreader", serif';
+  context.font = '650 38px "Newsreader", serif';
   context.fillText('documented', 1080, 858);
 
   context.textAlign = 'left';
@@ -1190,7 +1204,7 @@ async function renderShareCardBlob() {
   context.beginPath();
   context.arc(100, 824, 11, 0, Math.PI * 2);
   context.fill();
-  context.font = '650 31px "Newsreader", serif';
+  context.font = '650 36px "Newsreader", serif';
   context.fillText('Your guess', 126, 835);
   context.strokeStyle = '#2e6652';
   context.lineWidth = 7;
@@ -1210,13 +1224,13 @@ async function renderShareCardBlob() {
     context.font = index === 0 ? '650 132px "Newsreader", serif' : '650 108px "Newsreader", serif';
     context.fillText(value, x, 1130);
     context.fillStyle = '#3f5148';
-    context.font = '650 39px "Newsreader", serif';
+    context.font = '650 48px "Newsreader", serif';
     context.fillText(label.toLowerCase(), x, 1190);
   });
 
   context.fillStyle = '#334a3f';
   context.textAlign = 'center';
-  context.font = '600 39px "Newsreader", serif';
+  context.font = '600 46px "Newsreader", serif';
   context.fillText('jens246.github.io/origin-money-game', 600, 1398);
 
   return new Promise((resolve) => canvas.toBlob(resolve, 'image/png'));
@@ -1304,6 +1318,8 @@ function wireEvents() {
   elements.submit.addEventListener('click', () => reveal());
   elements.mobileSubmit.addEventListener('click', () => reveal());
   elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));
+  elements.yearDown.addEventListener('click', () => setYearGuess(yearGuess - 1));
+  elements.yearUp.addEventListener('click', () => setYearGuess(yearGuess + 1));
   elements.flip.addEventListener('click', toggleSide);
   elements.gestureLayer.addEventListener('pointerdown', beginSpecimenGesture);
   elements.gestureLayer.addEventListener('pointermove', moveSpecimenGesture);
