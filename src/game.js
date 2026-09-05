@@ -274,6 +274,7 @@ const elements = {
   edition: document.querySelector('#edition-label'),
   image: document.querySelector('#money-image'),
   backImage: document.querySelector('#money-image-back'),
+  gestureLayer: document.querySelector('#money-gesture-layer'),
   flip: document.querySelector('#money-flip'),
   imageZoomButton: document.querySelector('#image-zoom-button'),
   card: document.querySelector('#money-card'),
@@ -355,6 +356,16 @@ let studyFlipTimers = [];
 let studyFlipping = false;
 let imageZoomLevel = 1;
 let imageZoomContext = '';
+const specimenGesture = {
+  pointers: new Map(),
+  zoom: 1,
+  panX: 0,
+  panY: 0,
+  start: null,
+  moved: false,
+  suppressClick: false,
+  releaseTimer: 0,
+};
 const moneyById = new Map(MONEY.map((item) => [item.id, item]));
 const failedImageIds = new Set();
 
@@ -610,6 +621,7 @@ function replaceUnplayableRound(item) {
 
 function setImage(item) {
   clearFlipDemo();
+  resetSpecimenGesture();
   let frontReady = false;
   let backReady = false;
   const maybeStartFlipDemo = () => {
@@ -675,10 +687,158 @@ function startFlipDemo() {
   ];
 }
 
-function toggleSide() {
+function toggleSide(event) {
+  if (specimenGesture.suppressClick) {
+    event?.preventDefault();
+    specimenGesture.suppressClick = false;
+    return;
+  }
   if (elements.flip.disabled) return;
   clearFlipDemo();
   setFlipSide(!elements.card.classList.contains('flipped'));
+}
+
+function clamp(value, minimum, maximum) {
+  return Math.min(maximum, Math.max(minimum, value));
+}
+
+function specimenMidpoint(first, second) {
+  return { x: (first.x + second.x) / 2, y: (first.y + second.y) / 2 };
+}
+
+function specimenDistance(first, second) {
+  return Math.hypot(second.x - first.x, second.y - first.y);
+}
+
+function clampSpecimenPan(panX, panY, zoom = specimenGesture.zoom) {
+  const stage = elements.gestureLayer.parentElement;
+  const maxX = Math.max(0, stage.clientWidth * (zoom - 1) / 2);
+  const maxY = Math.max(0, stage.clientHeight * (zoom - 1) / 2);
+  return {
+    x: clamp(panX, -maxX, maxX),
+    y: clamp(panY, -maxY, maxY),
+  };
+}
+
+function renderSpecimenGesture() {
+  const bounded = clampSpecimenPan(specimenGesture.panX, specimenGesture.panY);
+  specimenGesture.panX = bounded.x;
+  specimenGesture.panY = bounded.y;
+  elements.gestureLayer.style.setProperty('--specimen-pan-x', `${bounded.x}px`);
+  elements.gestureLayer.style.setProperty('--specimen-pan-y', `${bounded.y}px`);
+  elements.gestureLayer.style.setProperty('--specimen-zoom', specimenGesture.zoom);
+  elements.gestureLayer.classList.toggle('is-zoomed', specimenGesture.zoom > 1.01);
+}
+
+function resetSpecimenGesture() {
+  specimenGesture.pointers.clear();
+  specimenGesture.zoom = 1;
+  specimenGesture.panX = 0;
+  specimenGesture.panY = 0;
+  specimenGesture.start = null;
+  specimenGesture.moved = false;
+  specimenGesture.suppressClick = false;
+  window.clearTimeout(specimenGesture.releaseTimer);
+  elements.gestureLayer.classList.remove('is-gesturing', 'is-zoomed');
+  renderSpecimenGesture();
+}
+
+function startSpecimenPinch() {
+  const [first, second] = [...specimenGesture.pointers.values()];
+  if (!second) return;
+  specimenGesture.start = {
+    kind: 'pinch',
+    distance: Math.max(1, specimenDistance(first, second)),
+    midpoint: specimenMidpoint(first, second),
+    zoom: specimenGesture.zoom,
+    panX: specimenGesture.panX,
+    panY: specimenGesture.panY,
+  };
+}
+
+function startSpecimenPan(pointer) {
+  specimenGesture.start = {
+    kind: 'pan',
+    pointerId: pointer.id,
+    x: pointer.x,
+    y: pointer.y,
+    panX: specimenGesture.panX,
+    panY: specimenGesture.panY,
+  };
+}
+
+function beginSpecimenGesture(event) {
+  if (event.pointerType !== 'touch' || elements.flip.disabled) return;
+  clearFlipDemo();
+  elements.gestureLayer.setPointerCapture(event.pointerId);
+  specimenGesture.pointers.set(event.pointerId, { id: event.pointerId, x: event.clientX, y: event.clientY });
+  specimenGesture.moved = false;
+  elements.gestureLayer.classList.add('is-gesturing');
+  if (specimenGesture.pointers.size > 1) startSpecimenPinch();
+  else startSpecimenPan(specimenGesture.pointers.get(event.pointerId));
+}
+
+function moveSpecimenGesture(event) {
+  if (!specimenGesture.pointers.has(event.pointerId)) return;
+  event.preventDefault();
+  specimenGesture.pointers.set(event.pointerId, { id: event.pointerId, x: event.clientX, y: event.clientY });
+  const points = [...specimenGesture.pointers.values()];
+
+  if (points.length > 1 && specimenGesture.start?.kind === 'pinch') {
+    const midpoint = specimenMidpoint(points[0], points[1]);
+    const nextZoom = clamp(
+      specimenGesture.start.zoom * specimenDistance(points[0], points[1]) / specimenGesture.start.distance,
+      1,
+      4,
+    );
+    const stageRect = elements.gestureLayer.parentElement.getBoundingClientRect();
+    const stageCenter = { x: stageRect.left + stageRect.width / 2, y: stageRect.top + stageRect.height / 2 };
+    const focalX = (specimenGesture.start.midpoint.x - stageCenter.x - specimenGesture.start.panX) / specimenGesture.start.zoom;
+    const focalY = (specimenGesture.start.midpoint.y - stageCenter.y - specimenGesture.start.panY) / specimenGesture.start.zoom;
+    specimenGesture.zoom = nextZoom;
+    specimenGesture.panX = midpoint.x - stageCenter.x - focalX * nextZoom;
+    specimenGesture.panY = midpoint.y - stageCenter.y - focalY * nextZoom;
+    specimenGesture.moved = specimenGesture.moved
+      || Math.abs(nextZoom - specimenGesture.start.zoom) > 0.025
+      || Math.hypot(midpoint.x - specimenGesture.start.midpoint.x, midpoint.y - specimenGesture.start.midpoint.y) > 4;
+    renderSpecimenGesture();
+    return;
+  }
+
+  const pointer = points[0];
+  if (!pointer || specimenGesture.zoom <= 1.01 || specimenGesture.start?.kind !== 'pan') return;
+  const deltaX = pointer.x - specimenGesture.start.x;
+  const deltaY = pointer.y - specimenGesture.start.y;
+  specimenGesture.panX = specimenGesture.start.panX + deltaX;
+  specimenGesture.panY = specimenGesture.start.panY + deltaY;
+  specimenGesture.moved = specimenGesture.moved || Math.hypot(deltaX, deltaY) > 4;
+  renderSpecimenGesture();
+}
+
+function endSpecimenGesture(event) {
+  if (!specimenGesture.pointers.has(event.pointerId)) return;
+  specimenGesture.pointers.delete(event.pointerId);
+  if (specimenGesture.moved) {
+    specimenGesture.suppressClick = true;
+    window.clearTimeout(specimenGesture.releaseTimer);
+    specimenGesture.releaseTimer = window.setTimeout(() => {
+      specimenGesture.suppressClick = false;
+    }, 500);
+  }
+  const remaining = [...specimenGesture.pointers.values()];
+  if (remaining.length > 1) startSpecimenPinch();
+  else if (remaining.length === 1) startSpecimenPan(remaining[0]);
+  else {
+    specimenGesture.start = null;
+    specimenGesture.moved = false;
+    elements.gestureLayer.classList.remove('is-gesturing');
+    if (specimenGesture.zoom <= 1.01) {
+      specimenGesture.zoom = 1;
+      specimenGesture.panX = 0;
+      specimenGesture.panY = 0;
+      renderSpecimenGesture();
+    }
+  }
 }
 
 function markerElement(className) {
@@ -1091,6 +1251,10 @@ function wireEvents() {
   elements.mobileSubmit.addEventListener('click', () => reveal());
   elements.yearGuess.addEventListener('input', (event) => setYearGuess(event.target.value));
   elements.flip.addEventListener('click', toggleSide);
+  elements.gestureLayer.addEventListener('pointerdown', beginSpecimenGesture);
+  elements.gestureLayer.addEventListener('pointermove', moveSpecimenGesture);
+  elements.gestureLayer.addEventListener('pointerup', endSpecimenGesture);
+  elements.gestureLayer.addEventListener('pointercancel', endSpecimenGesture);
   elements.imageZoomButton.addEventListener('click', openSpecimenZoom);
   elements.share.addEventListener('click', shareResult);
   elements.copyShare.addEventListener('click', copyShareResult);

@@ -26,11 +26,15 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(html, />Estimate year</);
   assert.match(html, /id="image-zoom-dialog"/);
   assert.match(html, /id="image-zoom-button"/);
+  assert.match(html, /id="money-gesture-layer"/);
   assert.match(html, /id="zoom-flip"[^>]*>Flip</);
   assert.match(game, /openSpecimenZoom/);
   assert.match(game, /openStudyZoom/);
   assert.match(game, /flipZoomedImage/);
   assert.match(game, /replaceZoomImage\([\s\S]*true\)/);
+  assert.match(game, /beginSpecimenGesture/);
+  assert.match(game, /moveSpecimenGesture/);
+  assert.match(game, /setPointerCapture/);
   assert.match(game, /COLONIE DE CAYENNE identifies the intended colonial circulation/);
   assert.match(game, /may indicate a contemporary forgery/);
   assert.match(game, /The Mo mark identifies the Mexico City mint/);
@@ -42,6 +46,7 @@ test('the specimen controls use concise, purposeful copy', async () => {
   assert.match(styles, /home-world-map\.webp/);
   assert.match(styles, /background-size: auto 108%/);
   assert.match(styles, /home-map-drift-mobile 18s/);
+  assert.match(styles, /\.money-gesture-layer \{[\s\S]*touch-action: none/);
   assert.match(styles, /\.home-coin-rain \{ display: none; \}/);
   assert.match(styles, /origin-coin\.webp/);
   assert.match(styles, /home-coin-rain span \{ animation: home-coin-drop 1\.85s/);

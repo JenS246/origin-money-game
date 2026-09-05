@@ -272,6 +272,27 @@ button:focus-visible, a:focus-visible {
 .zoom-trigger:hover { border-color: var(--accent); color: var(--accent); }
 .zoom-trigger:active { transform: translateY(1px); }
 .zoom-trigger:disabled { opacity: 0; pointer-events: none; }
+.money-gesture-layer {
+  --specimen-pan-x: 0px;
+  --specimen-pan-y: 0px;
+  --specimen-zoom: 1;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  touch-action: none;
+  user-select: none;
+  transform: translate3d(var(--specimen-pan-x), var(--specimen-pan-y), 0) scale(var(--specimen-zoom));
+  transform-origin: center;
+  transition: transform 180ms var(--ease);
+}
+.money-gesture-layer.is-gesturing {
+  cursor: grabbing;
+  transition: none;
+  will-change: transform;
+}
+.money-gesture-layer.is-zoomed .money-flip { cursor: grab; }
+.money-gesture-layer.is-zoomed.is-gesturing .money-flip { cursor: grabbing; }
 .money-flip {
   width: 100%;
   height: 100%;

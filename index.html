@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://ids.si.edu" crossorigin />
     <link rel="preconnect" href="https://www.bankofcanadamuseum.ca" crossorigin />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="styles.css?v=24" />
+    <link rel="stylesheet" href="styles.css?v=25" />
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -39,12 +39,14 @@
             <div id="image-skeleton" class="image-skeleton" aria-hidden="true"></div>
             <button class="study-trigger" type="button" data-open-dialog="study-dialog" aria-label="Open currency study guide">Guide</button>
             <button id="image-zoom-button" class="zoom-trigger" type="button" aria-label="Zoom currency image" disabled>Zoom</button>
-            <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
-              <span id="money-card" class="money-card">
-                <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
-                <img id="money-image-back" class="money-image money-image-back" alt="" decoding="async" />
-              </span>
-            </button>
+            <div id="money-gesture-layer" class="money-gesture-layer">
+              <button id="money-flip" class="money-flip" type="button" aria-label="Show reverse side" aria-pressed="false" disabled>
+                <span id="money-card" class="money-card">
+                  <img id="money-image" class="money-image money-image-front" alt="" decoding="async" />
+                  <img id="money-image-back" class="money-image money-image-back" alt="" decoding="async" />
+                </span>
+              </button>
+            </div>
           </div>
           <div class="date-guess">
             <label for="year-guess">Estimate year</label>
@@ -272,6 +274,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <noscript>ORIGINS needs JavaScript to run the map and check your guess.</noscript>
-    <script type="module" src="src/game.js?v=20"></script>
+    <script type="module" src="src/game.js?v=21"></script>
   </body>
 </html>
